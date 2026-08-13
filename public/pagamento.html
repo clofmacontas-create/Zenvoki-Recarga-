@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Pagamento - Zenvoki Recarga</title>
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
+
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Pagamento via Pix
+      </p>
+
+    </header>
+
+
+    <section class="hero">
+
+      <h2>
+        💳 Finalizar pagamento
+      </h2>
+
+      <p>
+        Confira os dados do pedido e gere seu pagamento Pix.
+      </p>
+
+
+      <div
+        style="
+          margin-top: 22px;
+          padding: 18px;
+          border-radius: 16px;
+          background: rgba(255,255,255,0.04);
+          border: 1px solid rgba(255,255,255,0.07);
+          line-height: 2;
+        "
+      >
+
+        <div>
+          📡 Operadora:
+          <strong id="operadora"></strong>
+        </div>
+
+        <div>
+          💰 Recarga:
+          <strong>
+            R$ <span id="recarga"></span>
+          </strong>
+        </div>
+
+        <div>
+          💳 Valor a pagar:
+          <strong>
+            R$ <span id="preco"></span>
+          </strong>
+        </div>
+
+        <div>
+          📱 Número:
+          <strong id="numero"></strong>
+        </div>
+
+      </div>
+
+
+      <button
+        id="btnPix"
+        class="btn-recarregar"
+        type="button"
+        onclick="gerarPix()"
+      >
+        💠 Gerar Pix
+      </button>
+
+
+      <div
+        id="resultadoPix"
+        style="
+          display: none;
+          margin-top: 20px;
+          text-align: center;
+        "
+      >
+
+        <h3 style="margin-bottom: 12px;">
+          📲 Pague via Pix
+        </h3>
+
+
+        <img
+          id="qrCode"
+          src=""
+          alt="QR Code Pix"
+          style="
+            width: 220px;
+            max-width: 100%;
+            border-radius: 12px;
+            background: white;
+            padding: 10px;
+          "
+        >
+
+
+        <p
+          style="
+            margin-top: 15px;
+            margin-bottom: 8px;
+            color: #9ca7b5;
+          "
+        >
+          Pix copia e cola:
+        </p>
+
+
+        <textarea
+          id="pixCopiaCola"
+          readonly
+          style="
+            width: 100%;
+            min-height: 100px;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.10);
+            background: rgba(255,255,255,0.05);
+            color: #ffffff;
+            resize: none;
+            font-size: 12px;
+          "
+        ></textarea>
+
+
+        <button
+          class="btn-recarregar"
+          type="button"
+          onclick="copiarPix()"
+        >
+          📋 Copiar Pix
+        </button>
+
+
+        <button
+          id="btnAcompanharPedido"
+          class="btn-recarregar"
+          type="button"
+          onclick="acompanharPedido()"
+          style="
+            margin-top: 15px;
+            width: 100%;
+          "
+        >
+          📦 Acompanhar meu pedido
+        </button>
+
+
+      </div>
+
+
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="history.back()"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
+      >
+        ← Voltar
+      </button>
+
+
+    </section>
+
+  </main>
+
+
+<script>
+
+
+const parametros =
+  new URLSearchParams(
+    window.location.search
+  );
+
+
+const operadora =
+  parametros.get("operadora") || "";
+
+
+const recarga =
+  parametros.get("recarga") || "";
+
+
+const preco =
+  parametros.get("preco") || "";
+
+
+const numero =
+  parametros.get("numero") || "";
+
+
+
+document.getElementById(
+  "operadora"
+).textContent =
+  operadora;
+
+
+document.getElementById(
+  "recarga"
+).textContent =
+  recarga;
+
+
+document.getElementById(
+  "preco"
+).textContent =
+  preco;
+
+
+
+if (numero.length === 11) {
+
+  document.getElementById(
+    "numero"
+  ).textContent =
+
+    "(" +
+    numero.substring(0, 2) +
+    ") " +
+    numero.substring(2, 7) +
+    "-" +
+    numero.substring(7);
+
+} else {
+
+  document.getElementById(
+    "numero"
+  ).textContent =
+    numero;
+
+}
+
+
+
+// =========================
+// GERAR PIX
+// =========================
+
+async function gerarPix() {
+
+  const botao =
+    document.getElementById(
+      "btnPix"
+    );
+
+
+  botao.disabled = true;
+
+  botao.textContent =
+    "⏳ Gerando Pix...";
+
+
+  try {
+
+
+    const resposta =
+      await fetch(
+        "/api/pix",
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+
+              operadora:
+                operadora,
+
+              recarga:
+                recarga,
+
+              preco:
+                preco,
+
+              numero:
+                numero
+
+            })
+
+        }
+      );
+
+
+    const dados =
+      await resposta.json();
+
+
+    // =========================
+    // SALVAR ID DO PEDIDO
+    // =========================
+
+    if (
+      dados.success &&
+      dados.pedido &&
+      dados.pedido.id
+    ) {
+
+      localStorage.setItem(
+        "zenvoki_pedido_id",
+        dados.pedido.id
+      );
+
+    }
+
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Não foi possível gerar o Pix."
+      );
+
+    }
+
+
+    // =========================
+    // MOSTRAR PIX
+    // =========================
+
+    document.getElementById(
+      "qrCode"
+    ).src =
+      dados.pix.qr_code_base64;
+
+
+    document.getElementById(
+      "pixCopiaCola"
+    ).value =
+      dados.pix.pix_code;
+
+
+    document.getElementById(
+      "resultadoPix"
+    ).style.display =
+      "block";
+
+
+    botao.style.display =
+      "none";
+
+
+  } catch (erro) {
+
+
+    alert(
+      "Erro ao gerar Pix: " +
+      erro.message
+    );
+
+
+    botao.disabled =
+      false;
+
+
+    botao.textContent =
+      "💠 Gerar Pix";
+
+
+  }
+
+}
+
+
+
+// =========================
+// COPIAR PIX
+// =========================
+
+async function copiarPix() {
+
+  const campo =
+    document.getElementById(
+      "pixCopiaCola"
+    );
+
+
+  await navigator.clipboard.writeText(
+    campo.value
+  );
+
+
+  alert(
+    "Pix copiado!"
+  );
+
+}
+
+
+
+// =========================
+// ACOMPANHAR PEDIDO
+// =========================
+
+function acompanharPedido() {
+
+  const pedidoId =
+    localStorage.getItem(
+      "zenvoki_pedido_id"
+    );
+
+
+  if (!pedidoId) {
+
+    alert(
+      "Não foi possível encontrar o pedido."
+    );
+
+    return;
+
+  }
+
+
+  window.location.href =
+    `/pedido.html?id=${encodeURIComponent(
+      pedidoId
+    )}`;
+
+}
+
+
+</script>
+
+</body>
+
+</html>

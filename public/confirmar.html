@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Confirmar Recarga - Zenvoki</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+      <h1>Zenvoki <span>Recarga</span></h1>
+      <p>Confirme seu pedido</p>
+    </header>
+
+    <section class="hero">
+
+      <h2>Confira os dados</h2>
+
+      <p>
+        Verifique se as informações estão corretas antes de continuar.
+      </p>
+
+      <div style="
+        margin-top: 22px;
+        padding: 18px;
+        border-radius: 16px;
+        background: rgba(255,255,255,0.04);
+        border: 1px solid rgba(255,255,255,0.07);
+        line-height: 2;
+      ">
+
+        <div>
+          📡 Operadora:
+          <strong id="operadora"></strong>
+        </div>
+
+        <div>
+          💰 Recarga:
+          <strong>R$ <span id="recarga"></span></strong>
+        </div>
+
+        <div>
+          💳 Valor a pagar:
+          <strong>R$ <span id="preco"></span></strong>
+        </div>
+
+        <div>
+          📱 Número:
+          <strong id="numero"></strong>
+        </div>
+
+      </div>
+
+      <div
+        id="modoRecarga"
+        style="
+          margin-top: 22px;
+          padding: 18px;
+          border-radius: 16px;
+          background: rgba(0, 140, 255, 0.06);
+          border: 1px solid rgba(0, 140, 255, 0.18);
+          text-align: left;
+        "
+      >
+
+        <div style="
+          font-size: 13px;
+          opacity: 0.7;
+          margin-bottom: 8px;
+        ">
+          🔐 Modo da recarga
+        </div>
+
+        <strong
+          id="modoRecargaTitulo"
+          style="
+            display: block;
+            font-size: 17px;
+            margin-bottom: 6px;
+          "
+        >
+          Carregando...
+        </strong>
+
+        <span
+          id="modoRecargaDescricao"
+          style="
+            font-size: 13px;
+            opacity: 0.75;
+            line-height: 1.5;
+          "
+        >
+          Consultando configuração...
+        </span>
+
+      </div>
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="continuarPedido()"
+      >
+        Continuar →
+      </button>
+
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="history.back()"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
+      >
+        ← Voltar
+      </button>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const parametros = new URLSearchParams(window.location.search);
+
+    const operadora = parametros.get("operadora") || "";
+    const recarga = parametros.get("recarga") || "";
+    const preco = parametros.get("preco") || "";
+    const numero = parametros.get("numero") || "";
+
+    document.getElementById("operadora").textContent = operadora;
+    document.getElementById("recarga").textContent = recarga;
+    document.getElementById("preco").textContent = preco;
+
+    if (numero.length === 11) {
+      document.getElementById("numero").textContent =
+        "(" + numero.substring(0, 2) + ") " +
+        numero.substring(2, 7) + "-" +
+        numero.substring(7);
+    } else {
+      document.getElementById("numero").textContent = numero;
+    }
+
+    let modoRecarga = "sem_codigo";
+
+async function carregarModoRecarga() {
+
+  try {
+
+    const resposta =
+      await fetch("/api/recharge-mode");
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Não foi possível carregar o modo da recarga."
+      );
+    }
+
+    modoRecarga =
+      dados.modoRecarga || "sem_codigo";
+
+    const titulo =
+      document.getElementById(
+        "modoRecargaTitulo"
+      );
+
+    const descricao =
+      document.getElementById(
+        "modoRecargaDescricao"
+      );
+
+    if (modoRecarga === "com_codigo") {
+
+      titulo.textContent =
+        "🔐 Recarga com código";
+
+      descricao.textContent =
+        "Após o pagamento, será necessário informar o código recebido por SMS para que a recarga seja realizada.";
+
+    } else {
+
+      titulo.textContent =
+        "🔓 Recarga sem código";
+
+      descricao.textContent =
+        "Após a confirmação do pagamento, a recarga será processada sem a necessidade de informar um código.";
+
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Erro ao carregar modo:",
+      error
+    );
+
+    document.getElementById(
+      "modoRecargaTitulo"
+    ).textContent =
+      "⚠️ Não foi possível carregar o modo";
+
+    document.getElementById(
+      "modoRecargaDescricao"
+    ).textContent =
+      "Atualize a página e tente novamente.";
+
+  }
+
+}
+
+
+function continuarPedido() {
+
+  window.location.href =
+    "/pagamento.html?" +
+    "operadora=" +
+    encodeURIComponent(operadora) +
+
+    "&recarga=" +
+    encodeURIComponent(recarga) +
+
+    "&preco=" +
+    encodeURIComponent(preco) +
+
+    "&numero=" +
+    encodeURIComponent(numero) +
+
+    "&modoRecarga=" +
+    encodeURIComponent(modoRecarga);
+
+}
+
+
+carregarModoRecarga();
+
+  </script>
+
+</body>
+</html>

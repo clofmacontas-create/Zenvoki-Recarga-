@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Pedido - Zenvoki Recarga</title>
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
+
+  <style>
+
+    .pedido-container {
+      max-width: 500px;
+      margin: 60px auto;
+      padding: 25px;
+    }
+
+    .pedido-card {
+      background: #111;
+      border: 1px solid #292929;
+      border-radius: 18px;
+      padding: 25px;
+      color: white;
+    }
+
+    .status {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 14px;
+      background: #181818;
+      text-align: center;
+    }
+
+    .status-icon {
+      font-size: 45px;
+      margin-bottom: 10px;
+    }
+
+    .status h2 {
+      margin: 5px 0;
+    }
+
+    .info {
+      margin-top: 20px;
+      line-height: 1.8;
+    }
+
+    .loading {
+      text-align: center;
+      color: #aaa;
+    }
+
+    /* =========================
+       TIMELINE DO PEDIDO
+       ========================= */
+
+    .timeline {
+      margin-top: 25px;
+      padding: 20px;
+      border-radius: 14px;
+      background: #181818;
+    }
+
+    .timeline-title {
+      margin-bottom: 20px;
+      font-size: 18px;
+    }
+
+    .timeline-item {
+      position: relative;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      min-height: 55px;
+    }
+
+    .timeline-item:not(:last-child)::after {
+      content: "";
+      position: absolute;
+      left: 14px;
+      top: 30px;
+      width: 2px;
+      height: 35px;
+      background: #333;
+    }
+
+    .timeline-icon {
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: #242424;
+      flex-shrink: 0;
+      z-index: 1;
+    }
+
+    .timeline-text {
+      padding-top: 4px;
+      font-size: 14px;
+    }
+
+    .timeline-text strong {
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    .timeline-text span {
+      color: #888;
+      font-size: 12px;
+    }
+
+    .timeline-item.active .timeline-icon {
+      background: #1f7a3a;
+    }
+
+    .timeline-item.current .timeline-icon {
+      background: #2563eb;
+    }
+
+    .timeline-item.cancelled .timeline-icon {
+      background: #7f1d1d;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <main class="pedido-container">
+
+    <div class="pedido-card">
+
+      <h1>
+        Zenvoki Recarga
+      </h1>
+
+      <p>
+        Acompanhamento do pedido
+      </p>
+
+      <div
+        id="conteudo"
+        class="loading"
+      >
+
+        Carregando pedido...
+
+      </div>
+
+    </div>
+
+  </main>
+
+
+<script>
+
+const parametros =
+  new URLSearchParams(
+    window.location.search
+  );
+
+const pedidoId =
+  parametros.get("id");
+
+
+async function carregarPedido() {
+
+  const conteudo =
+    document.getElementById(
+      "conteudo"
+    );
+
+
+  if (!pedidoId) {
+
+    conteudo.innerHTML = `
+
+      <div class="status">
+
+        <div class="status-icon">
+          ⚠️
+        </div>
+
+        <h2>
+          Pedido não informado
+        </h2>
+
+        <p>
+          Não foi possível identificar
+          o pedido.
+        </p>
+
+      </div>
+
+    `;
+
+    return;
+
+  }
+
+
+  try {
+
+    const resposta =
+      await fetch(
+        `/api/orders/${pedidoId}`
+      );
+
+
+    const dados =
+      await resposta.json();
+
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Erro ao consultar pedido."
+      );
+
+    }
+
+
+    const pedido =
+      dados.order;
+
+
+    let icone;
+    let titulo;
+    let mensagem;
+
+
+    if (
+      pedido.status ===
+      "pending"
+    ) {
+
+      icone = "⏳";
+
+      titulo =
+        "Aguardando pagamento";
+
+      mensagem =
+        "Seu pedido está aguardando a confirmação do pagamento.";
+
+    }
+
+    else if (
+      pedido.status ===
+      "paid"
+    ) {
+
+      icone = "💳";
+
+      titulo =
+        "Pagamento confirmado";
+
+      mensagem =
+        "Pagamento confirmado. Aguarde o processamento da recarga.";
+
+    }
+
+    else if (
+      pedido.status ===
+      "completed"
+    ) {
+
+      icone = "✅";
+
+      titulo =
+        "Recarga Finalizada";
+
+      mensagem =
+        "Sua recarga foi realizada com sucesso.";
+
+    }
+
+    else if (
+      pedido.status ===
+      "cancelled"
+    ) {
+
+      icone = "❌";
+
+      titulo =
+        "Pedido Cancelado";
+
+      mensagem =
+        "Este pedido foi cancelado.";
+
+    }
+
+    else {
+
+      icone = "🔄";
+
+      titulo =
+        "Processando";
+
+      mensagem =
+        "Seu pedido está sendo processado.";
+
+    }
+
+
+    conteudo.className =
+      "";
+
+
+    let timeline = "";
+
+
+    if (
+      pedido.status ===
+      "cancelled"
+    ) {
+
+      timeline = `
+
+        <div class="timeline">
+
+          <div class="timeline-title">
+            📋 Status do pedido
+          </div>
+
+
+          <div class="timeline-item active">
+
+            <div class="timeline-icon">
+              ✅
+            </div>
+
+            <div class="timeline-text">
+
+              <strong>
+                Pedido criado
+              </strong>
+
+              <span>
+                Seu pedido foi recebido.
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="timeline-item cancelled">
+
+            <div class="timeline-icon">
+              ❌
+            </div>
+
+            <div class="timeline-text">
+
+              <strong>
+                Pedido cancelado
+              </strong>
+
+              <span>
+                Este pedido não será processado.
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+    else {
+
+      let pagamentoIcone = "💳";
+      let pagamentoTexto = "Pagamento";
+
+      let processamentoIcone = "🔄";
+      let processamentoTexto = "Processando recarga";
+
+      let finalIcone = "✅";
+      let finalTexto = "Recarga finalizada";
+
+
+      if (
+        pedido.status ===
+        "pending"
+      ) {
+
+        pagamentoIcone = "⏳";
+
+      }
+
+
+      if (
+        pedido.status ===
+        "paid"
+      ) {
+
+        pagamentoIcone = "✅";
+
+        processamentoIcone = "🔄";
+
+      }
+
+
+      if (
+        pedido.status ===
+        "completed"
+      ) {
+
+        pagamentoIcone = "✅";
+
+        processamentoIcone = "✅";
+
+      }
+
+
+      timeline = `
+
+        <div class="timeline">
+
+          <div class="timeline-title">
+            📋 Acompanhamento
+          </div>
+
+
+          <div class="timeline-item active">
+
+            <div class="timeline-icon">
+              ✅
+            </div>
+
+            <div class="timeline-text">
+
+              <strong>
+                Pedido criado
+              </strong>
+
+              <span>
+                Seu pedido foi recebido.
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="timeline-item ${
+            pedido.status === "pending"
+              ? "current"
+              : "active"
+          }">
+
+            <div class="timeline-icon">
+              ${pagamentoIcone}
+            </div>
+
+            <div class="timeline-text">
+
+              <strong>
+                ${pagamentoTexto}
+              </strong>
+
+              <span>
+                ${
+                  pedido.status === "pending"
+                    ? "Aguardando confirmação."
+                    : "Pagamento confirmado."
+                }
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="timeline-item ${
+            pedido.status === "paid"
+              ? "current"
+              : pedido.status === "completed"
+                ? "active"
+                : ""
+          }">
+
+            <div class="timeline-icon">
+              ${processamentoIcone}
+            </div>
+
+            <div class="timeline-text">
+
+              <strong>
+                ${processamentoTexto}
+              </strong>
+
+              <span>
+                ${
+                  pedido.status === "completed"
+                    ? "Recarga processada."
+                    : "Aguardando processamento."
+                }
+              </span>
+
+            </div>
+
+          </div>
+
+
+          <div class="timeline-item ${
+            pedido.status === "completed"
+              ? "active"
+              : ""
+          }">
+
+            <div class="timeline-icon">
+              ${finalIcone}
+            </div>
+
+            <div class="timeline-text">
+
+              <strong>
+                ${finalTexto}
+              </strong>
+
+              <span>
+                ${
+                  pedido.status === "completed"
+                    ? "Recarga realizada com sucesso."
+                    : "Ainda não finalizada."
+                }
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      `;
+
+    }
+
+
+    conteudo.innerHTML = `
+
+      <div class="status">
+
+        <div class="status-icon">
+          ${icone}
+        </div>
+
+        <h2>
+          ${titulo}
+        </h2>
+
+        <p>
+          ${mensagem}
+        </p>
+
+      </div>
+
+
+      ${timeline}
+
+
+      <div class="info">
+
+        <strong>
+          📱 Número:
+        </strong>
+
+        ${pedido.numero}
+
+        <br>
+
+
+        <strong>
+          📡 Operadora:
+        </strong>
+
+        ${pedido.operadora}
+
+        <br>
+
+
+        <strong>
+          💰 Recarga:
+        </strong>
+
+        R$ ${pedido.recarga}
+
+        <br>
+
+
+        <strong>
+          💳 Valor pago:
+        </strong>
+
+        R$ ${Number(
+          pedido.preco
+        ).toFixed(2)}
+
+      </div>
+
+    `;
+
+
+  } catch (erro) {
+
+    conteudo.innerHTML = `
+
+      <div class="status">
+
+        <div class="status-icon">
+          ⚠️
+        </div>
+
+        <h2>
+          Erro
+        </h2>
+
+        <p>
+          ${erro.message}
+        </p>
+
+      </div>
+
+    `;
+
+  }
+
+}
+
+
+carregarPedido();
+
+
+// Atualiza automaticamente
+// a cada 5 segundos.
+
+setInterval(
+  carregarPedido,
+  5000
+);
+
+</script>
+
+</body>
+
+</html>

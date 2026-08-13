@@ -1,0 +1,13 @@
+node_modules/
+.env
+cookies.txt
+db.json
+*.log
+db.backup.json
+server.js.backup
+server.js.bak
+nano
+xx,
+*.bak
+*.bak2
+*.backup

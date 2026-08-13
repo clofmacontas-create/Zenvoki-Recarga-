@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Entrar - Zenvoki Recarga</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+      <h1>Zenvoki <span>Recarga</span></h1>
+      <p>Acesse sua conta</p>
+    </header>
+
+    <section class="hero">
+
+      <h2>🔐 Entrar</h2>
+
+      <p>
+        Entre para acompanhar suas recargas e pedidos.
+      </p>
+
+      <form id="loginForm">
+
+        <div class="campo">
+          <label for="login">E-mail ou usuário</label>
+
+          <input
+            id="login"
+            type="text"
+            placeholder="Digite seu e-mail ou usuário"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+
+          <input
+            id="senha"
+            type="password"
+            placeholder="Digite sua senha"
+            autocomplete="current-password"
+            required
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="btn-recarregar"
+        >
+          🔐 Entrar
+        </button>
+
+      </form>
+
+      <p
+        id="mensagem"
+        style="
+          margin-top: 15px;
+          text-align: center;
+        "
+      ></p>
+
+      <button
+        type="button"
+        class="btn-recarregar"
+        onclick="window.location.href='/cadastro.html'"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
+      >
+        👤 Criar minha conta
+      </button>
+
+      <button
+        type="button"
+        onclick="history.back()"
+        style="
+          width: 100%;
+          margin-top: 10px;
+          padding: 12px;
+          border: none;
+          background: transparent;
+          color: #8d9bad;
+          cursor: pointer;
+        "
+      >
+        ← Voltar
+      </button>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    document
+      .getElementById("loginForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const mensagem =
+          document.getElementById("mensagem");
+
+        const botao =
+          this.querySelector("button[type='submit']");
+
+        const login =
+          document.getElementById("login").value.trim();
+
+        const senha =
+          document.getElementById("senha").value;
+
+        botao.disabled = true;
+        botao.textContent = "⏳ Entrando...";
+
+        mensagem.textContent = "";
+
+        try {
+
+          const resposta = await fetch("/api/login", {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              login,
+              senha
+            })
+          });
+
+          const dados = await resposta.json();
+
+          if (!resposta.ok) {
+            throw new Error(
+              dados.error || "Não foi possível entrar."
+            );
+          }
+
+          mensagem.style.color = "#4ade80";
+          mensagem.textContent =
+            "✅ Login realizado!";
+
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 700);
+
+        } catch (erro) {
+
+          mensagem.style.color = "#ff6b6b";
+          mensagem.textContent =
+            "❌ " + erro.message;
+
+          botao.disabled = false;
+          botao.textContent = "🔐 Entrar";
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>

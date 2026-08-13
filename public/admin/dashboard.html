@@ -1,0 +1,1157 @@
+,<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>Dashboard - Zenvoki Recarga</title>
+
+  <link
+    rel="stylesheet"
+    href="/admin/style.css"
+  >
+
+</head>
+
+<body>
+
+  <header class="admin-header">
+
+    <div>
+
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Painel Administrativo
+      </p>
+
+    </div>
+
+    <button id="btnSair">
+      🚪 Sair
+    </button>
+
+  </header>
+
+
+  <main class="dashboard">
+
+    <section class="welcome">
+
+      <h2>
+        📊 Dashboard
+      </h2>
+
+      <p>
+        Bem-vindo ao painel administrativo
+        da Zenvoki Recarga.
+      </p>
+
+    </section>
+
+
+    <section class="cards">
+
+      <div class="card">
+
+        <span>📦</span>
+
+        <h3 id="totalPedidos">
+          0
+        </h3>
+
+        <p>
+          Total de pedidos
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <span>⏳</span>
+
+        <h3 id="pedidosPendentes">
+          0
+        </h3>
+
+        <p>
+          Pedidos pendentes
+       </p>
+
+      </d,iv>
+
+
+      <div class="card">
+
+        <span>💳</span>
+
+        <h3 id="pedidosPagos">
+          0
+        </h3>
+
+        <p>
+          Pagamentos confirmados
+        </p>
+
+      </div>
+
+
+      <div class="card">
+
+        <span>👥</span>
+
+        <h3 id="totalClientes">
+          0
+        </h3>
+
+        <p>
+          Clientes
+        </p>
+
+      </div>
+
+    </section>
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+      <h2>🔐 Modo de Recarga</h2>
+
+      <p>
+        Escolha como a recarga será processada.
+      </p>
+    </div>
+
+  </div>
+
+  <div class="recharge-mode">
+
+    <label>
+      <input
+        type="radio"
+        name="modoRecarga"
+        value="sem_codigo"
+      >
+
+      <span>
+        <strong>⚡ Sem código</strong>
+        <small>
+          A recarga será processada sem solicitar código.
+        </small>
+      </span>
+    </label>
+
+    <label>
+      <input
+        type="radio"
+        name="modoRecarga"
+        value="com_codigo"
+      >
+
+      <span>
+        <strong>🔐 Com código</strong>
+        <small>
+          O cliente deverá enviar o código solicitado.
+        </small>
+      </span>
+    </label>
+
+  </div>
+
+  <button
+    id="btnSalvarModoRecarga"
+    type="button"
+  >
+    💾 Salvar modo
+  </button>
+
+  <p id="statusModoRecarga"></p>
+
+</section>
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <h2>⚙️ Gerenciar Recargas</h2>
+
+      <p>
+        Altere valores, preços e disponibilidade.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div id="configRecargas">
+
+    <p>
+      Carregando configurações...
+    </p>
+
+  </div>
+
+</section>
+    <section class="panel">
+
+      <div class="panel-header">
+
+        <div>
+
+          <h2>
+            📦 Pedidos recentes
+          </h2>
+
+          <p>
+            Acompanhe as últimas recargas.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <div
+        id="listaPedidos"
+        class="empty"
+      >
+
+        <div class="empty-icon">
+          📭
+        </div>
+
+        <h3>
+          Carregando pedidos...
+        </h3>
+
+        <p>
+          Aguarde.
+        </p>
+
+      </div>
+
+    </section>
+<section class="panel">
+  </main>
+
+
+<script>
+
+async function verificarAdmin() {
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/me"
+      );
+const dados = await resposta.json();
+
+if (
+  dados.success &&
+  dados.pedido &&
+  dados.pedido.id
+) {
+  localStorage.setItem(
+    "zenvoki_pedido_id",
+    dados.pedido.id
+  );
+}
+
+if (!resposta.ok) {
+  throw new Error(
+    dados.error || "Não foi possível gerar o Pix."
+  );
+}
+    if (!resposta.ok) {
+
+      window.location.href =
+        "/admin/";
+
+      return false;
+
+    }
+
+    return true;
+
+  } catch (erro) {
+
+    window.location.href =
+      "/admin/";
+
+    return false;
+
+  }
+
+}
+
+
+// =========================
+// CARREGAR ESTATÍSTICAS
+// =========================
+
+async function carregarDashboard() {
+
+  const autorizado =
+    await verificarAdmin();
+
+  if (!autorizado) return;
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/stats"
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar estatísticas."
+      );
+
+    }
+
+    const stats =
+      dados.stats;
+
+    document.getElementById(
+      "totalPedidos"
+    ).textContent =
+      stats.totalPedidos;
+
+    document.getElementById(
+      "pedidosPendentes"
+    ).textContent =
+      stats.pedidosPendentes;
+
+    document.getElementById(
+      "pedidosPagos"
+    ).textContent =
+      stats.pedidosPagos;
+
+    document.getElementById(
+      "totalClientes"
+    ).textContent =
+      stats.totalClientes;
+
+  } catch (erro) {
+
+    console.error(
+      "Erro no Dashboard:",
+      erro
+    );
+
+  }
+
+}
+
+
+// =========================
+// CARREGAR PEDIDOS
+// =========================
+
+async function carregarPedidos() {
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/orders"
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar pedidos."
+      );
+
+    }
+
+    const pedidos =
+      dados.orders || [];
+
+    const lista =
+      document.getElementById(
+        "listaPedidos"
+      );
+
+
+    if (
+      pedidos.length === 0
+    ) {
+
+      lista.className =
+        "empty";
+
+      lista.innerHTML = `
+
+        <div class="empty-icon">
+          📭
+        </div>
+
+        <h3>
+          Nenhum pedido ainda
+        </h3>
+
+        <p>
+          Os pedidos dos clientes
+          aparecerão aqui.
+        </p>
+
+      `;
+
+      return;
+
+    }
+
+
+    lista.className =
+      "orders-list";
+
+
+    lista.innerHTML =
+      pedidos
+        .slice()
+        .reverse()
+        .map(
+          pedido => {
+
+            const finalizado =
+              pedido.status ===
+              "completed";
+
+            const cancelado =
+              pedido.status ===
+              "cancelled";
+
+
+            return `
+
+              <div
+                class="order-item"
+                style="
+                  display:flex;
+                  justify-content:space-between;
+                  gap:20px;
+                  padding:20px;
+                  margin-bottom:15px;
+                  border-radius:15px;
+                  background:#151515;
+                  border:1px solid #292929;
+                "
+              >
+
+                <div>
+
+                  <h3>
+                    📱 ${pedido.numero}
+                  </h3>
+
+                  <p>
+                    <strong>
+                      ${pedido.operadora}
+                    </strong>
+
+                    • Recarga:
+                    R$ ${pedido.recarga}
+                  </p>
+
+                  <p>
+                    Cliente:
+                    ${pedido.nomeCliente || "Visitante"}
+                  </p>
+
+                  <p>
+                    Status:
+                    <strong>
+                      ${pedido.status}
+                    </strong>
+                  </p>
+
+                </div>
+
+
+                <div
+                  style="
+                    text-align:right;
+                    min-width:150px;
+                  "
+                >
+
+                  <h3>
+                    R$
+                    ${Number(
+                      pedido.preco
+                    ).toFixed(2)}
+                  </h3>
+
+
+                  ${
+                    !finalizado &&
+                    !cancelado
+
+                    ? `
+
+                      <button
+                        onclick="
+                          alterarStatusPedido(
+                            '${pedido.id}',
+                            'completed'
+                          )
+                        "
+                        style="
+                          padding:10px;
+                          margin:4px;
+                          border:0;
+                          border-radius:8px;
+                          cursor:pointer;
+                        "
+                      >
+                        ✅ Finalizar
+                      </button>
+
+
+                      <button
+                        onclick="
+                          alterarStatusPedido(
+                            '${pedido.id}',
+                            'cancelled'
+                          )
+                        "
+                        style="
+                          padding:10px;
+                          margin:4px;
+                          border:0;
+                          border-radius:8px;
+                          cursor:pointer;
+                        "
+                      >
+                        ❌ Cancelar
+                      </button>
+
+                    `
+
+                    : finalizado
+
+                    ? `
+                      <strong>
+                        ✅ Finalizado
+                      </strong>
+                    `
+
+                    : `
+                      <strong>
+                        ❌ Cancelado
+                      </strong>
+                    `
+
+                  }
+
+                </div>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join("");
+
+  } catch (erro) {
+
+    console.error(
+      "Erro ao carregar pedidos:",
+      erro
+    );
+
+    document.getElementById(
+      "listaPedidos"
+    ).innerHTML = `
+
+      <div class="empty-icon">
+        ⚠️
+      </div>
+
+      <h3>
+        Erro ao carregar pedidos
+      </h3>
+
+      <p>
+        ${erro.message}
+      </p>
+
+    `;
+
+  }
+
+}
+
+
+// =========================
+// ALTERAR STATUS
+// =========================
+
+async function alterarStatusPedido(
+  id,
+  status
+) {
+
+  const mensagem =
+    status === "completed"
+
+      ? "Deseja realmente finalizar este pedido?"
+
+      : "Deseja realmente cancelar este pedido?";
+
+
+  if (
+    !confirm(mensagem)
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const resposta =
+      await fetch(
+        `/api/admin/orders/${id}/status`,
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+              status
+            })
+
+        }
+      );
+
+
+    const dados =
+      await resposta.json();
+
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Não foi possível atualizar o pedido."
+      );
+
+    }
+
+
+    alert(
+      dados.message
+    );
+
+
+    await carregarDashboard();
+
+    await carregarPedidos();
+
+
+  } catch (erro) {
+
+    alert(
+      "Erro: " +
+      erro.message
+    );
+
+  }
+
+}
+
+
+// =========================
+// SAIR
+// =========================
+
+document
+  .getElementById(
+    "btnSair"
+  )
+  .addEventListener(
+    "click",
+    async () => {
+
+      await fetch(
+        "/api/admin/logout",
+        {
+          method:
+            "POST"
+        }
+      );
+
+      window.location.href =
+        "/admin/";
+
+    }
+  );
+
+
+// =========================
+// INICIAR
+// =========================
+
+carregarDashboard();
+
+carregarPedidos();
+
+async function carregarConfiguracoesRecargas() {
+
+  const container =
+    document.getElementById("configRecargas");
+
+  try {
+
+    const resposta =
+      await fetch("/api/admin/recharges");
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar recargas."
+      );
+    }
+
+    const recargas =
+      dados.recharges || {};
+
+    let html = "";
+
+    for (const operadora of ["TIM", "CLARO"]) {
+
+      html += `
+        <div style="
+          margin-top:20px;
+          padding:18px;
+          border-radius:14px;
+          background:#181818;
+        ">
+
+          <h3>
+            ${operadora === "TIM"
+              ? "🔵 TIM"
+              : "🔴 CLARO"}
+          </h3>
+      `;
+
+      const valores =
+        recargas[operadora] || {};
+
+      for (const recarga of Object.keys(valores)) {
+
+        const configuracao =
+          valores[recarga];
+
+        const preco =
+          typeof configuracao === "object"
+            ? configuracao.preco
+            : "";
+
+        const ativo =
+          typeof configuracao === "object"
+            ? configuracao.ativo
+            : Boolean(configuracao);
+
+        html += `
+          <div style="
+            display:flex;
+            align-items:center;
+            gap:10px;
+            margin-top:12px;
+            padding:12px;
+            border-radius:10px;
+            background:#222;
+            flex-wrap:wrap;
+          ">
+
+            <strong style="min-width:80px;">
+              R$ ${recarga}
+            </strong>
+
+            <input
+              id="preco-${operadora}-${recarga}"
+              type="number"
+              step="0.01"
+              value="${preco}"
+              style="
+                width:110px;
+                padding:10px;
+                border-radius:8px;
+                border:1px solid #444;
+                background:#111;
+                color:white;
+              "
+            >
+
+            <button
+              type="button"
+              onclick="
+                salvarRecarga(
+                  '${operadora}',
+                  '${recarga}'
+                )
+              "
+              style="
+                padding:10px 14px;
+                border:0;
+                border-radius:8px;
+                cursor:pointer;
+              "
+            >
+              💾 Salvar
+            </button>
+
+            <button
+              type="button"
+              onclick="
+                alternarRecarga(
+                  '${operadora}',
+                  '${recarga}',
+                  ${ativo}
+                )
+              "
+              style="
+                padding:10px 14px;
+                border:0;
+                border-radius:8px;
+                cursor:pointer;
+              "
+            >
+              ${ativo ? "🟢 ON" : "🔴 OFF"}
+            </button>
+
+          </div>
+        `;
+
+      }
+
+      html += `</div>`;
+
+    }
+
+    container.innerHTML = html;
+
+  } catch (erro) {
+
+    container.innerHTML = `
+      <p style="color:#ff6b6b;">
+        Erro: ${erro.message}
+      </p>
+    `;
+
+  }
+
+}
+
+
+async function salvarRecarga(
+  operadora,
+  recarga
+) {
+
+  const campo =
+    document.getElementById(
+      `preco-${operadora}-${recarga}`
+    );
+
+  const preco =
+    Number(campo.value);
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/recharges",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            operadora:
+              operadora,
+
+            recarga:
+              recarga,
+
+            preco:
+              preco,
+
+            ativo:
+              true
+
+          })
+
+        }
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Erro ao salvar."
+      );
+    }
+
+    alert(
+      "✅ Recarga salva com sucesso!"
+    );
+
+    carregarConfiguracoesRecargas();
+
+  } catch (erro) {
+
+    alert(
+      "❌ Erro: " +
+      erro.message
+    );
+
+  }
+
+}
+
+
+async function alternarRecarga(
+  operadora,
+  recarga,
+  ativoAtual
+) {
+
+  const campo =
+    document.getElementById(
+      `preco-${operadora}-${recarga}`
+    );
+
+  const preco =
+    Number(campo.value);
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/recharges",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+
+            operadora:
+              operadora,
+
+            recarga:
+              recarga,
+
+            preco:
+              preco,
+
+            ativo:
+              !ativoAtual
+
+          })
+
+        }
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Erro ao alterar status."
+      );
+    }
+
+    carregarConfiguracoesRecargas();
+
+  } catch (erro) {
+
+    alert(
+      "❌ Erro: " +
+      erro.message
+    );
+
+  }
+
+}
+
+
+
+async function carregarModoRecarga() {
+
+  try {
+
+    const resposta =
+      await fetch("/api/admin/recharge-mode");
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Não foi possível carregar o modo."
+      );
+    }
+
+    const radio =
+      document.querySelector(
+        `input[name="modoRecarga"][value="${dados.modoRecarga}"]`
+      );
+
+    if (radio) {
+      radio.checked = true;
+    }
+
+  } catch (error) {
+
+    console.error(
+      "Erro ao carregar modo:",
+      error
+    );
+
+  }
+
+}
+
+
+async function salvarModoRecarga() {
+
+  const selecionado =
+    document.querySelector(
+      'input[name="modoRecarga"]:checked'
+    );
+
+  const status =
+    document.getElementById(
+      "statusModoRecarga"
+    );
+
+  if (!selecionado) {
+
+    status.textContent =
+      "Selecione um modo.";
+
+    return;
+
+  }
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/recharge-mode",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              modoRecarga:
+                selecionado.value
+            })
+        }
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Não foi possível salvar."
+      );
+
+    }
+
+    status.textContent =
+      dados.message ||
+      "Modo salvo com sucesso.";
+
+  } catch (error) {
+
+    console.error(
+      "Erro ao salvar modo:",
+      error
+    );
+
+    status.textContent =
+      error.message;
+
+  }
+
+}
+
+
+document
+  .getElementById(
+    "btnSalvarModoRecarga"
+  )
+  ?.addEventListener(
+    "click",
+    salvarModoRecarga
+  );
+
+
+carregarModoRecarga();
+
+</script>
+
+</body>
+
+</html>

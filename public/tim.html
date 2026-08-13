@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>TIM - Zenvoki Recarga</title>
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
+
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Recarga TIM
+      </p>
+
+    </header>
+
+
+    <section class="hero">
+
+      <h2>
+        🔵 Recarga TIM
+      </h2>
+
+      <p>
+        Escolha o valor da recarga que deseja realizar.
+      </p>
+
+
+      <div id="listaRecargas">
+
+        Carregando valores...
+
+      </div>
+
+
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="window.location.href='/recarga.html'"
+        style="
+          margin-top:18px;
+          background:rgba(255,255,255,0.06);
+          box-shadow:none;
+        "
+      >
+
+        ← Voltar
+
+      </button>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    function selecionarValor(
+      operadora,
+      recarga,
+      preco
+    ) {
+
+      window.location.href =
+        "/numero.html?operadora=" +
+        encodeURIComponent(operadora) +
+        "&recarga=" +
+        encodeURIComponent(recarga) +
+        "&preco=" +
+        encodeURIComponent(preco);
+
+    }
+
+
+    async function carregarRecargas() {
+
+      const lista =
+        document.getElementById(
+          "listaRecargas"
+        );
+
+      try {
+
+        const resposta =
+          await fetch(
+            "/api/recharges"
+          );
+
+
+        const dados =
+          await resposta.json();
+
+
+        if (!resposta.ok) {
+
+          throw new Error(
+            dados.error ||
+            "Erro ao carregar recargas."
+          );
+
+        }
+
+
+        const recargas =
+          dados.recharges?.TIM || {};
+
+
+        lista.innerHTML = "";
+
+
+        for (
+          const recarga of Object.keys(recargas)
+        ) {
+
+          const preco =
+            recargas[recarga].preco;
+
+
+          const botao =
+            document.createElement(
+              "button"
+            );
+
+
+          botao.className =
+            "btn-recarregar";
+
+
+          botao.type =
+            "button";
+
+
+          botao.textContent =
+            `R$ ${recarga} → R$ ${Number(preco).toFixed(2).replace(".", ",")}`;
+
+
+          botao.onclick =
+            () =>
+              selecionarValor(
+                "TIM",
+                recarga,
+                preco
+              );
+
+
+          lista.appendChild(
+            botao
+          );
+
+        }
+
+
+        if (
+          Object.keys(recargas).length === 0
+        ) {
+
+          lista.innerHTML =
+            "<p>Nenhuma recarga disponível no momento.</p>";
+
+        }
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar recargas:",
+          erro
+        );
+
+
+        lista.innerHTML =
+          "<p>Não foi possível carregar as recargas.</p>";
+
+      }
+
+    }
+
+
+    carregarRecargas();
+
+  </script>
+
+</body>
+
+</html>

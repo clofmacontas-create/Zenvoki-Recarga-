@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Criar conta - Zenvoki Recarga</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+      <h1>Zenvoki <span>Recarga</span></h1>
+      <p>Crie sua conta</p>
+    </header>
+
+    <section class="hero">
+
+      <h2>👤 Criar conta</h2>
+
+      <p>
+        Cadastre-se para acompanhar suas recargas e pedidos.
+      </p>
+
+      <form id="cadastroForm">
+
+        <div class="campo">
+          <label for="nome">Nome</label>
+
+          <input
+            id="nome"
+            type="text"
+            placeholder="Seu nome"
+            autocomplete="name"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="username">Nome de usuário</label>
+
+          <input
+            id="username"
+            type="text"
+            placeholder="Escolha um nome de usuário"
+            autocomplete="username"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="email">E-mail</label>
+
+          <input
+            id="email"
+            type="email"
+            placeholder="seu@email.com"
+            autocomplete="email"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="senha">Senha</label>
+
+          <input
+            id="senha"
+            type="password"
+            placeholder="Mínimo de 6 caracteres"
+            autocomplete="new-password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <div class="campo">
+          <label for="confirmarSenha">Confirmar senha</label>
+
+          <input
+            id="confirmarSenha"
+            type="password"
+            placeholder="Digite a senha novamente"
+            autocomplete="new-password"
+            minlength="6"
+            required
+          >
+        </div>
+
+        <button
+          type="submit"
+          class="btn-recarregar"
+        >
+          👤 Criar minha conta
+        </button>
+
+      </form>
+
+      <p
+        id="mensagem"
+        style="
+          margin-top: 15px;
+          text-align: center;
+        "
+      ></p>
+
+      <button
+        type="button"
+        class="btn-recarregar"
+        onclick="window.location.href='/login.html'"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
+      >
+        🔐 Já tenho uma conta
+      </button>
+
+      <button
+        type="button"
+        onclick="history.back()"
+        style="
+          width: 100%;
+          margin-top: 10px;
+          padding: 12px;
+          border: none;
+          background: transparent;
+          color: #8d9bad;
+          cursor: pointer;
+        "
+      >
+        ← Voltar
+      </button>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    document
+      .getElementById("cadastroForm")
+      .addEventListener("submit", async function(event) {
+
+        event.preventDefault();
+
+        const mensagem =
+          document.getElementById("mensagem");
+
+        const botao =
+          this.querySelector("button[type='submit']");
+
+        const nome =
+          document.getElementById("nome").value.trim();
+
+        const username =
+          document.getElementById("username").value.trim();
+
+        const email =
+          document.getElementById("email").value.trim();
+
+        const senha =
+          document.getElementById("senha").value;
+
+        const confirmarSenha =
+          document.getElementById("confirmarSenha").value;
+
+        if (senha !== confirmarSenha) {
+          mensagem.style.color = "#ff6b6b";
+          mensagem.textContent =
+            "❌ As senhas não são iguais.";
+          return;
+        }
+
+        botao.disabled = true;
+        botao.textContent = "⏳ Criando conta...";
+
+        mensagem.textContent = "";
+
+        try {
+
+          const resposta = await fetch("/api/register", {
+            method: "POST",
+
+            headers: {
+              "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+              nome,
+              username,
+              email,
+              senha
+            })
+          });
+
+          const dados = await resposta.json();
+
+          if (!resposta.ok) {
+            throw new Error(
+              dados.error || "Não foi possível criar a conta."
+            );
+          }
+
+          mensagem.style.color = "#4ade80";
+          mensagem.textContent =
+            "✅ Conta criada com sucesso!";
+
+          setTimeout(() => {
+            window.location.href = "/";
+          }, 700);
+
+        } catch (erro) {
+
+          mensagem.style.color = "#ff6b6b";
+          mensagem.textContent =
+            "❌ " + erro.message;
+
+          botao.disabled = false;
+          botao.textContent = "👤 Criar minha conta";
+        }
+
+      });
+
+  </script>
+
+</body>
+</html>

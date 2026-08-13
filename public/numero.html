@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Número - Zenvoki Recarga</title>
+
+  <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+      <h1>Zenvoki <span>Recarga</span></h1>
+      <p>Informe o número para recarga</p>
+    </header>
+
+    <section class="hero">
+
+      <h2 id="titulo">📱 Número do telefone</h2>
+
+      <p id="resumo">
+        Digite o número que receberá a recarga.
+      </p>
+
+      <div style="margin-top: 22px;">
+
+        <input
+          id="numero"
+          type="tel"
+          inputmode="numeric"
+          maxlength="15"
+          placeholder="(00) 00000-0000"
+          style="
+            width: 100%;
+            height: 54px;
+            padding: 0 16px;
+            border: 1px solid rgba(255,255,255,0.10);
+            border-radius: 14px;
+            outline: none;
+            background: rgba(255,255,255,0.05);
+            color: #ffffff;
+            font-size: 16px;
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: center;
+          "
+        >
+
+      </div>
+
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="continuar()"
+      >
+        Continuar →
+      </button>
+
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="history.back()"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
+      >
+        ← Voltar
+      </button>
+
+    </section>
+
+  </main>
+
+  <script>
+
+    const parametros = new URLSearchParams(window.location.search);
+
+    const operadora = parametros.get("operadora");
+    const recarga = parametros.get("recarga");
+    const preco = parametros.get("preco");
+
+    const resumo = document.getElementById("resumo");
+
+    if (operadora && recarga && preco) {
+      resumo.innerHTML =
+        "Operadora: <strong>" + operadora + "</strong><br>" +
+        "Recarga: <strong>R$ " + recarga + "</strong><br>" +
+        "Valor a pagar: <strong>R$ " + preco + "</strong><br><br>" +
+        "Digite o número que receberá a recarga.";
+    }
+
+    function continuar() {
+
+      const numero = document.getElementById("numero").value.trim();
+
+      const apenasNumeros = numero.replace(/\D/g, "");
+
+      if (apenasNumeros.length < 10) {
+        alert("Digite um número de telefone válido.");
+        return;
+      }
+
+      window.location.href =
+        "/confirmar.html?operadora=" +
+        encodeURIComponent(operadora) +
+        "&recarga=" +
+        encodeURIComponent(recarga) +
+        "&preco=" +
+        encodeURIComponent(preco) +
+        "&numero=" +
+        encodeURIComponent(apenasNumeros);
+    }
+
+  </script>
+
+</body>
+</html>
