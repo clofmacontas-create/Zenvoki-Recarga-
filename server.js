@@ -69,6 +69,17 @@ function carregarDB() {
     db.recharges = {};
   }
 
+if (
+  !db.operadoras ||
+  typeof db.operadoras !== "object"
+) {
+  db.operadoras = {
+    TIM: true,
+    CLARO: true
+  };
+
+  salvarDB(db);
+}
   return db;
 }
 
@@ -883,6 +894,93 @@ app.post(
   }
 );
 
+// =========================
+// ADMIN - STATUS DAS OPERADORAS
+// =========================
+
+app.get(
+  "/api/admin/operadoras",
+  exigirAdmin,
+  (req, res) => {
+    try {
+      const db = carregarDB();
+
+      res.json({
+        success: true,
+        operadoras: db.operadoras || {
+          TIM: true,
+          CLARO: true
+        }
+      });
+
+    } catch (error) {
+      console.error(
+        "Erro ao carregar status das operadoras:",
+        error
+      );
+
+      res.status(500).json({
+        error:
+          "Não foi possível carregar o status das operadoras."
+      });
+    }
+  }
+);
+
+app.post(
+  "/api/admin/operadoras",
+  exigirAdmin,
+  (req, res) => {
+    try {
+      const {
+        operadora,
+        ativo
+      } = req.body;
+
+      if (
+        !["TIM", "CLARO"].includes(operadora) ||
+        typeof ativo !== "boolean"
+      ) {
+        return res.status(400).json({
+          error:
+            "Dados da operadora inválidos."
+        });
+      }
+
+      const db = carregarDB();
+
+      if (
+        !db.operadoras ||
+        typeof db.operadoras !== "object"
+      ) {
+        db.operadoras = {
+          TIM: true,
+          CLARO: true
+        };
+      }
+
+      db.operadoras[operadora] = ativo;
+
+      salvarDB(db);
+
+      res.json({
+        success: true,
+        operadoras: db.operadoras
+      });
+
+    } catch (error) {
+      console.error(
+        "Erro ao alterar status da operadora:",
+        error
+      );
+
+      res.status(500).json({
+        error:
+          "Não foi possível alterar o status da operadora."
+      });
+    }
+  }
+);
 // =========================
 // ADMIN - CONFIGURAÇÕES
 // =========================

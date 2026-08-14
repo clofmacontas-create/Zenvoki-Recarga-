@@ -679,52 +679,16 @@ async function alterarStatusPedido(
     );
 
 
-    await carregarDashboard();
-
-    await carregarPedidos();
-
-
   } catch (erro) {
 
     alert(
-      "Erro: " +
-      erro.message
+      "Erro: " + erro.message
     );
 
   }
-
 }
 
 
-// =========================
-// SAIR
-// =========================
-
-document
-  .getElementById(
-    "btnSair"
-  )
-  .addEventListener(
-    "click",
-    async () => {
-
-      await fetch(
-        "/api/admin/logout",
-        {
-          method:
-            "POST"
-        }
-      );
-
-      window.location.href =
-        "/admin/";
-
-    }
-  );
-
-
-// =========================
-// INICIAR
 // =========================
 
 carregarDashboard();
@@ -1149,6 +1113,9 @@ document
 
 
 carregarModoRecarga();
+
+carregarConfiguracoesRecargas();
+carregarStatusOperadoras();
 
 </script>
 
