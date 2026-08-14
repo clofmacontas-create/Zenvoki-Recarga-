@@ -90,12 +90,76 @@ function salvarDB(db) {
   );
 }
 
+async function garantirUsuarioInicial() {
+
+  const db =
+    carregarDB();
+
+  if (db.users.length > 0) {
+    return;
+  }
+
+  const username =
+    process.env.INITIAL_USER;
+
+  const email =
+    process.env.INITIAL_EMAIL;
+
+  const senha =
+    process.env.INITIAL_PASSWORD;
+
+  if (
+    !username ||
+    !email ||
+    !senha
+  ) {
+    console.log(
+      "ℹ️ Usuário inicial não configurado."
+    );
+
+    return;
+  }
+
+  const senhaHash =
+    await bcrypt.hash(
+      senha,
+      12
+    );
+
+  db.users.push({
+
+    id:
+      Date.now().toString(),
+
+    nome:
+      "Zenvoki",
+
+    username:
+      username,
+
+    email:
+      email.toLowerCase(),
+
+    senha:
+      senhaHash,
+
+    criadoEm:
+      new Date().toISOString()
+
+  });
+
+  salvarDB(db);
+
+  console.log(
+    "✅ Usuário inicial criado."
+  );
+}
 // =========================
 // CONFIGURAÇÕES DE RECARGA
 // =========================
 
 function garantirConfiguracoesRecarga() {
-  const db = carregarDB();
+const db = carregarDB();
 
   const configuracoes = {
     CLARO: {
@@ -1652,11 +1716,25 @@ app.get(
 // SERVIDOR
 // =========================
 
-app.listen(
-  PORT,
-  () => {
-    console.log(
-      `🚀 Zenvoki Recarga rodando em http://localhost:${PORT}`
+(async () => {
+  try {
+    await garantirUsuarioInicial();
+
+    app.listen(
+      PORT,
+      () => {
+        console.log(
+          `🚀 Zenvoki Recarga rodando em http://localhost:${PORT}`
+        );
+      }
     );
+
+  } catch (error) {
+    console.error(
+      "❌ Erro ao iniciar o servidor:",
+      error
+    );
+
+    process.exit(1);
   }
-);
+})();
