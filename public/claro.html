@@ -133,6 +133,12 @@
           const recarga of Object.keys(recargas)
         ) {
 
+if (
+  typeof recargas[recarga] === "object" &&
+  recargas[recarga].ativo === false
+) {
+  continue;
+}
           const configuracao =
             recargas[recarga];
 
