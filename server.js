@@ -1718,6 +1718,12 @@ app.get(
 
 (async () => {
   try {
+    console.log("ENV CHECK:", {
+      INITIAL_USER: !!process.env.INITIAL_USER,
+      INITIAL_EMAIL: !!process.env.INITIAL_EMAIL,
+      INITIAL_PASSWORD: !!process.env.INITIAL_PASSWORD
+    });
+
     await garantirUsuarioInicial();
 
     app.listen(
