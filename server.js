@@ -106,7 +106,7 @@ async function garantirUsuarioInicial() {
     process.env.INITIAL_EMAIL;
 
   const senha =
-    process.env.INITIAL_PASSWORD;
+    process.env.ZENVOKI_INITIAL_PASSWORD;
 
   if (
     !username ||
@@ -1721,7 +1721,7 @@ app.get(
     console.log("ENV CHECK:", {
       INITIAL_USER: !!process.env.INITIAL_USER,
       INITIAL_EMAIL: !!process.env.INITIAL_EMAIL,
-      INITIAL_PASSWORD: !!process.env.INITIAL_PASSWORD
+      INITIAL_PASSWORD: !!process.env.ZENVOKI_INITIAL_PASSWORD
     });
 
     await garantirUsuarioInicial();
