@@ -7,7 +7,7 @@ const fs = require("fs");
 const path = require("path");
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 const DB_FILE = path.join(__dirname, "db.json");
 
 // =========================
@@ -1206,6 +1206,284 @@ app.post(
 
 // =========================
 // CLIENTE - CONSULTAR PEDIDO
+app.post(
+  "/api/pix",
+  async (req, res) => {
+
+    try {
+
+      const {
+        operadora,
+        recarga,
+        preco,
+        numero
+      } = req.body;
+
+      if (
+        !operadora ||
+        !recarga ||
+        !preco ||
+        !numero
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Dados do pedido incompletos."
+
+        });
+
+      }
+
+      const token =
+        process.env.PIX_DIRECT_TOKEN;
+
+      if (!token) {
+
+        return res.status(500).json({
+
+          error:
+            "PIX_DIRECT_TOKEN não configurada no .env."
+
+        });
+
+      }
+
+      const valor =
+        Number(preco);
+
+      if (
+        !Number.isFinite(valor) ||
+        valor <= 0
+      ) {
+
+        return res.status(400).json({
+
+          error:
+            "Valor inválido."
+
+        });
+
+      }
+
+      const amount_cents =
+        Math.round(
+          valor * 100
+        );
+
+      // =========================
+      // COBRANÇA PIX
+      // =========================
+
+      const response =
+        await fetch(
+          "https://pix.direct/v1/deposits",
+          {
+
+            method:
+              "POST",
+
+            headers: {
+
+              "Authorization":
+                `Bearer ${token}`,
+
+              "Content-Type":
+                "application/json"
+
+            },
+
+            body:
+              JSON.stringify({
+                amount_cents
+              })
+
+          }
+        );
+
+      const data =
+        await response.json();
+
+      if (!response.ok) {
+
+        console.error(
+          "Erro Pix.direct:",
+          data
+        );
+
+        return res.status(
+          response.status
+        ).json({
+
+          error:
+            "Não foi possível criar a cobrança Pix.",
+
+          details:
+            data
+
+        });
+
+      }
+
+      // =========================
+      // SALVAR PEDIDO
+      // =========================
+
+      const db =
+        carregarDB();
+
+      let usuario =
+        null;
+
+      if (
+        req.session.userId
+      ) {
+
+        usuario =
+          db.users.find(
+            user =>
+              user.id ===
+              req.session.userId
+          );
+
+      }
+
+      const novoPedido = {
+
+        id:
+          Date.now().toString(),
+
+        usuarioId:
+          usuario
+            ? usuario.id
+            : null,
+
+        nomeCliente:
+          usuario
+            ? usuario.nome
+            : null,
+
+        usernameCliente:
+          usuario
+            ? usuario.username
+            : null,
+
+        emailCliente:
+          usuario
+            ? usuario.email
+            : null,
+
+        numero,
+
+        operadora,
+
+        recarga,
+
+        preco:
+          valor,
+
+        amount_cents,
+
+        pixId:
+          data.id,
+
+        pixStatus:
+          data.status ||
+          "pending",
+
+        status:
+          "pending",
+
+        criadoEm:
+          new Date().toISOString(),
+
+        atualizadoEm:
+          new Date().toISOString()
+
+      };
+
+      db.orders.push(
+        novoPedido
+      );
+
+      salvarDB(db);
+
+      // =========================
+      // RETORNO
+      // =========================
+
+      return res.json({
+
+        success:
+          true,
+
+        pedido: {
+
+          id:
+            novoPedido.id,
+
+          operadora,
+
+          recarga,
+
+          preco,
+
+          numero
+
+        },
+
+        pix: {
+
+          id:
+            data.id,
+
+          status:
+            data.status,
+
+          amount_cents:
+            data.amount_cents,
+
+          fee_cents:
+            data.fee_cents,
+
+          net_cents:
+            data.net_cents,
+
+          pix_code:
+            data.pix_code,
+
+          qr_code_base64:
+            data.qr_code_base64
+
+        },
+
+        pixCopiaCola:
+          data.pix_code,
+
+        qrCode:
+          data.qr_code_base64
+
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Erro ao criar Pix:",
+        error
+      );
+
+      return res.status(500).json({
+
+        error:
+          "Erro interno ao criar a cobrança Pix."
+
+      });
+
+    }
+
+  }
+);
+
 // =========================
 
 app.get(
@@ -1224,18 +1502,7 @@ app.get(
           order =>
             order.id === id
         );
-// =========================
-// SERVIDOR
-// =========================
 
-app.listen(
-  PORT,
-  () => {
-    console.log(
-      `🚀 Zenvoki Recarga rodando em http://localhost:${PORT}`
-    );
-  }
-);
       if (!pedido) {
         return res.status(404).json({
           error:

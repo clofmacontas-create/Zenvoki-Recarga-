@@ -1,175 +1,237 @@
 * {
+  box-sizing: border-box;
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
-}
-
-html,
-body {
-  width: 100%;
-  min-height: 100%;
 }
 
 body {
   min-height: 100vh;
   font-family: Arial, Helvetica, sans-serif;
   background:
-    radial-gradient(circle at 50% -10%, rgba(0, 140, 255, 0.22), transparent 40%),
-    #070a10;
+    radial-gradient(circle at top, rgba(0, 119, 255, 0.16), transparent 35%),
+    #05070d;
   color: #ffffff;
-  display: flex;
-  justify-content: center;
-  overflow-x: hidden;
 }
 
 .container {
   width: 100%;
-  max-width: 480px;
-  padding: 28px 20px 40px;
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 35px 20px 25px;
 }
 
 .logo {
-  width: 100%;
   text-align: center;
-  margin-top: 20px;
+  margin-bottom: 30px;
 }
 
 .logo h1 {
-  font-size: 34px;
+  font-size: 32px;
   font-weight: 800;
   letter-spacing: -1px;
-  color: #ffffff;
 }
 
 .logo h1 span {
-  color: #1597ff;
-  text-shadow: 0 0 18px rgba(21, 151, 255, 0.55);
+  color: #1683ff;
 }
 
 .logo p {
   margin-top: 8px;
-  color: #8e9aaa;
+  color: #8d9bad;
   font-size: 15px;
 }
 
 .hero {
-  width: 100%;
-  margin-top: 42px;
-  padding: 28px 22px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(14, 18, 29, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.07);
   border-radius: 24px;
-  background: rgba(16, 21, 30, 0.78);
+  padding: 28px 22px;
   box-shadow:
     0 20px 60px rgba(0, 0, 0, 0.45),
-    inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+    0 0 30px rgba(0, 119, 255, 0.08);
 }
 
 .hero h2 {
-  font-size: 25px;
+  font-size: 27px;
   line-height: 1.2;
   margin-bottom: 12px;
 }
 
-.hero p {
-  color: #9ca7b5;
-  font-size: 15px;
+.hero > p {
+  color: #9aa6b7;
   line-height: 1.6;
+  margin-bottom: 24px;
 }
 
-/* TODOS OS BOTÕES */
+/* =========================
+   CAMPOS DE LOGIN/CADASTRO
+   ========================= */
 
-.btn-recarregar {
-  display: block;
+.campo {
   width: 100%;
-  height: 54px;
-  margin-top: 12px;
+  margin-bottom: 17px;
+}
+
+.campo label {
+  display: block;
+  margin-bottom: 8px;
+  color: #dbe5f2;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.campo input {
+  width: 100%;
+  height: 52px;
   padding: 0 16px;
 
-  border: 0;
-  outline: 0;
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 14px;
 
-  background: linear-gradient(135deg, #0788ff, #005cff);
+  background: rgba(5, 8, 15, 0.90);
   color: #ffffff;
 
-  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+.campo input::placeholder {
+  color: #667386;
+}
+
+.campo input:focus {
+  border-color: #1683ff;
+  background: rgba(8, 13, 24, 0.98);
+
+  box-shadow:
+    0 0 0 3px rgba(22, 131, 255, 0.12),
+    0 0 22px rgba(22, 131, 255, 0.10);
+}
+
+.campo input:valid {
+  border-color: rgba(255, 255, 255, 0.14);
+}
+
+/* =========================
+   BOTÕES
+   ========================= */
+
+.btn-recarregar {
+  width: 100%;
+  min-height: 52px;
+
+  margin-top: 4px;
+  padding: 14px 18px;
+
+  border: none;
+  border-radius: 14px;
+
+  background: linear-gradient(
+    135deg,
+    #1683ff,
+    #0066ff
+  );
+
+  color: #ffffff;
+
   font-size: 16px;
   font-weight: 700;
-  line-height: 54px;
-  text-align: center;
 
   cursor: pointer;
 
-  appearance: none;
-  -webkit-appearance: none;
+  box-shadow:
+    0 10px 30px rgba(0, 102, 255, 0.25);
 
-  box-shadow: 0 8px 25px rgba(0, 119, 255, 0.3);
-
-  transform: none !important;
-  rotate: none !important;
-  scale: 1 !important;
-
-  transition: filter 0.2s ease;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease,
+    opacity 0.15s ease;
 }
 
 .btn-recarregar:hover {
-  filter: brightness(1.08);
+  transform: translateY(-1px);
+
+  box-shadow:
+    0 14px 35px rgba(0, 102, 255, 0.35);
 }
 
 .btn-recarregar:active {
-  transform: none !important;
-  rotate: none !important;
-  scale: 1 !important;
+  transform: scale(0.98);
 }
 
-.btn-recarregar:focus,
-.btn-recarregar:focus-visible {
-  outline: none !important;
-  transform: none !important;
-  rotate: none !important;
-  scale: 1 !important;
+.btn-recarregar:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+  transform: none;
 }
+
+/* =========================
+   BENEFÍCIOS
+   ========================= */
 
 .beneficios {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
-  margin-top: 18px;
+  margin-top: 28px;
 }
 
 .beneficio {
-  padding: 15px 8px;
+  padding: 14px 8px;
+
   text-align: center;
+
+  border-radius: 14px;
+
   background: rgba(255, 255, 255, 0.035);
   border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 16px;
 }
 
-.beneficio .icone {
+.icone {
   font-size: 21px;
   margin-bottom: 7px;
 }
 
 .beneficio span {
-  display: block;
-  color: #aab3c0;
+  color: #9aa6b7;
   font-size: 11px;
-  line-height: 1.3;
 }
+
+/* =========================
+   MENSAGENS
+   ========================= */
+
+#mensagem {
+  min-height: 20px;
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* =========================
+   RODAPÉ
+   ========================= */
 
 .footer {
   text-align: center;
-  margin-top: 30px;
-  color: #596372;
+  margin-top: 25px;
+
+  color: #596577;
   font-size: 12px;
 }
 
-@media (max-width: 360px) {
+/* =========================
+   CELULAR
+   ========================= */
+
+@media (max-width: 480px) {
+
   .container {
-    padding-left: 15px;
-    padding-right: 15px;
+    padding: 25px 15px 20px;
   }
 
   .logo h1 {
@@ -177,14 +239,21 @@ body {
   }
 
   .hero {
-    padding: 25px 18px;
+    padding: 24px 18px;
+    border-radius: 21px;
   }
 
   .hero h2 {
-    font-size: 22px;
+    font-size: 24px;
   }
 
-  .beneficio {
-    padding: 12px 5px;
+  .campo input {
+    height: 54px;
+    font-size: 16px;
   }
+
+  .btn-recarregar {
+    min-height: 54px;
+  }
+
 }

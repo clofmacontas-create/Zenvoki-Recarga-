@@ -20,31 +20,44 @@
 
     <section class="hero">
 
-      <h2>Faça sua recarga<br>de forma simples.</h2>
+      <h2>Acesse sua conta<br>para continuar.</h2>
 
       <p>
-        Escolha sua operadora, informe o número
-        e faça seu pedido com segurança.
+        Entre na sua conta ou crie uma nova
+        para fazer suas recargas.
       </p>
 
       <button
         type="button"
         class="btn-recarregar"
-        onclick="abrirRecarga()"
+        onclick="abrirLogin()"
       >
-        📱 Fazer Recarga
+        👤 Entrar
+      </button>
+
+      <button
+        type="button"
+        class="btn-recarregar"
+        onclick="abrirCadastro()"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
+      >
+        📝 Criar conta
       </button>
 
       <div class="beneficios">
 
         <div class="beneficio">
-          <div class="icone">⚡</div>
-          <span>Processo rápido</span>
+          <div class="icone">🔒</div>
+          <span>Conta segura</span>
         </div>
 
         <div class="beneficio">
-          <div class="icone">🔒</div>
-          <span>Pagamento seguro</span>
+          <div class="icone">⚡</div>
+          <span>Processo rápido</span>
         </div>
 
         <div class="beneficio">
@@ -63,9 +76,15 @@
   </main>
 
   <script>
-    function abrirRecarga() {
-      window.location.href = "/recarga.html";
+
+    function abrirLogin() {
+      window.location.href = "/login.html";
     }
+
+    function abrirCadastro() {
+      window.location.href = "/cadastro.html";
+    }
+
   </script>
 
 </body>
