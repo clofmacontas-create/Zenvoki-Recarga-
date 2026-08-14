@@ -860,35 +860,48 @@ async function salvarRecarga(
   const preco =
     Number(campo.value);
 
+  const linha =
+    campo.parentElement;
+
+  const botoes =
+    linha.querySelectorAll("button");
+
+  const botaoStatus =
+    botoes[1];
+
+  const ativo =
+    botaoStatus.textContent.includes("ON");
+
   try {
 
     const resposta =
       await fetch(
         "/api/admin/recharges",
         {
-          method: "POST",
+          method:
+            "POST",
 
           headers: {
             "Content-Type":
               "application/json"
           },
 
-          body: JSON.stringify({
+          body:
+            JSON.stringify({
 
-            operadora:
-              operadora,
+              operadora:
+                operadora,
 
-            recarga:
-              recarga,
+              recarga:
+                recarga,
 
-            preco:
-              preco,
+              preco:
+                preco,
 
-            ativo:
-              true
+              ativo:
+                ativo
 
-          })
-
+            })
         }
       );
 
@@ -896,10 +909,12 @@ async function salvarRecarga(
       await resposta.json();
 
     if (!resposta.ok) {
+
       throw new Error(
         dados.error ||
         "Erro ao salvar."
       );
+
     }
 
     alert(
@@ -918,8 +933,6 @@ async function salvarRecarga(
   }
 
 }
-
-
 async function alternarRecarga(
   operadora,
   recarga,
