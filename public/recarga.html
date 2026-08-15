@@ -1,12 +1,19 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Fazer Recarga - Zenvoki</title>
 
-  <link rel="stylesheet" href="/style.css">
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
 </head>
 
 <body>
@@ -14,19 +21,29 @@
   <main class="container">
 
     <header class="logo">
-      <h1>Zenvoki <span>Recarga</span></h1>
-      <p>Escolha sua operadora</p>
+
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Escolha sua operadora
+      </p>
+
     </header>
 
     <section class="hero">
 
-      <h2>Qual é sua operadora?</h2>
+      <h2>
+        Qual é sua operadora?
+      </h2>
 
       <p>
         Selecione a operadora do número que deseja recarregar.
       </p>
 
       <button
+        id="btnTIM"
         type="button"
         class="btn-recarregar"
         onclick="window.location.href='/tim.html'"
@@ -35,6 +52,7 @@
       </button>
 
       <button
+        id="btnCLARO"
         type="button"
         class="btn-recarregar"
         onclick="window.location.href='/claro.html'"
@@ -47,7 +65,11 @@
         type="button"
         class="btn-recarregar"
         onclick="window.location.href='/painel.html'"
-        style="margin-top: 12px; background: rgba(255,255,255,0.06); box-shadow: none;"
+        style="
+          margin-top: 12px;
+          background: rgba(255,255,255,0.06);
+          box-shadow: none;
+        "
       >
         ← Voltar
       </button>
@@ -56,5 +78,89 @@
 
   </main>
 
+  <script>
+
+    async function carregarStatusOperadoras() {
+
+      try {
+
+        const resposta =
+          await fetch("/api/operadoras");
+
+        const dados =
+          await resposta.json();
+
+        if (!resposta.ok) {
+          throw new Error(
+            dados.error ||
+            "Erro ao carregar status."
+          );
+        }
+
+        const operadoras =
+          dados.operadoras || {};
+
+        const btnTIM =
+          document.getElementById("btnTIM");
+
+        const btnCLARO =
+          document.getElementById("btnCLARO");
+
+
+        if (operadoras.TIM !== true) {
+
+          btnTIM.style.display = "none";
+
+        }
+
+
+        if (operadoras.CLARO !== true) {
+
+          btnCLARO.style.display = "none";
+
+        }
+
+
+        if (
+          operadoras.TIM !== true &&
+          operadoras.CLARO !== true
+        ) {
+
+          const mensagem =
+            document.createElement("p");
+
+          mensagem.textContent =
+            "Nenhuma operadora disponível no momento.";
+
+          mensagem.style.marginTop = "20px";
+
+          document
+            .querySelector(".hero")
+            .insertBefore(
+              mensagem,
+              document.querySelector(
+                'button[onclick*="painel.html"]'
+              )
+            );
+
+        }
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar status das operadoras:",
+          erro
+        );
+
+      }
+
+    }
+
+
+    carregarStatusOperadoras();
+
+  </script>
+
 </body>
+
 </html>

@@ -1,4 +1,4 @@
-,<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 
 <head>
@@ -117,8 +117,39 @@
           Clientes
         </p>
 
-      </div>
+            </div>
 
+    </section>
+
+<section class="panel">
+
+  <div class="panel-header">
+
+    <div>
+
+      <h2>📡 Status das Operadoras</h2>
+
+      <p>
+        Ative ou desative uma operadora para os clientes.
+      </p>
+
+    </div>
+
+  </div>
+
+  <div
+    id="statusOperadoras"
+    style="
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:15px;
+    "
+  >
+    <p>Carregando status...</p>
+  </div>
+
+</section>
     </section>
 
 <section class="panel">
@@ -1124,7 +1155,158 @@ document
     salvarModoRecarga
   );
 
+async function carregarStatusOperadoras() {
 
+  const container =
+    document.getElementById("statusOperadoras");
+
+  if (!container) {
+    console.error(
+      "Elemento #statusOperadoras não encontrado."
+    );
+    return;
+  }
+
+  try {
+
+    const resposta =
+      await fetch("/api/admin/operadoras");
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar status."
+      );
+    }
+
+    const operadoras =
+      dados.operadoras || {};
+
+    container.innerHTML = "";
+
+    for (
+      const operadora of ["TIM", "CLARO"]
+    ) {
+
+      const ativo =
+        operadoras[operadora] === true;
+
+      const nome =
+        operadora === "TIM"
+          ? "🔵 TIM"
+          : "🔴 CLARO";
+
+      const div =
+        document.createElement("div");
+
+      div.style.cssText = `
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        margin-top:12px;
+        padding:14px;
+        border-radius:10px;
+        background:#222;
+      `;
+
+      div.innerHTML = `
+        <strong>${nome}</strong>
+
+        <button
+          type="button"
+          style="
+            padding:10px 14px;
+            border:0;
+            border-radius:8px;
+            cursor:pointer;
+          "
+        >
+          ${ativo ? "🟢 ON" : "🔴 OFF"}
+        </button>
+      `;
+
+      const botao =
+        div.querySelector("button");
+
+      botao.onclick =
+        async function () {
+
+          botao.disabled = true;
+          botao.textContent = "⏳";
+
+          try {
+
+            const resposta =
+              await fetch(
+                "/api/admin/operadoras",
+                {
+                  method: "POST",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json"
+                  },
+
+                  body:
+                    JSON.stringify({
+                      operadora:
+                        operadora,
+
+                      ativo:
+                        !ativo
+                    })
+                }
+              );
+
+            const dados =
+              await resposta.json();
+
+            if (!resposta.ok) {
+              throw new Error(
+                dados.error ||
+                "Erro ao alterar status."
+              );
+            }
+
+            carregarStatusOperadoras();
+
+          } catch (erro) {
+
+            alert(
+              "❌ Erro: " +
+              erro.message
+            );
+
+            botao.disabled = false;
+            botao.textContent =
+              ativo
+                ? "🟢 ON"
+                : "🔴 OFF";
+          }
+
+        };
+
+      container.appendChild(div);
+    }
+
+  } catch (erro) {
+
+    console.error(
+      "Erro ao carregar status das operadoras:",
+      erro
+    );
+
+    container.innerHTML = `
+      <p style="color:#ff6b6b;">
+        Erro: ${erro.message}
+      </p>
+    `;
+  }
+}
 carregarModoRecarga();
 
 carregarConfiguracoesRecargas();

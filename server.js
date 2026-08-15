@@ -791,6 +791,37 @@ app.get(
 );
 
 // =========================
+// CLIENTE - STATUS OPERADORAS
+// =========================
+
+app.get(
+  "/api/operadoras",
+  (req, res) => {
+    try {
+      const db = carregarDB();
+
+      res.json({
+        success: true,
+        operadoras: db.operadoras || {
+          TIM: true,
+          CLARO: true
+        }
+      });
+
+    } catch (error) {
+      console.error(
+        "Erro ao carregar status das operadoras:",
+        error
+      );
+
+      res.status(500).json({
+        error:
+          "Não foi possível carregar o status das operadoras."
+      });
+    }
+  }
+);
+// =========================
 // CLIENTE - CONFIGURAÇÕES
 // =========================
 

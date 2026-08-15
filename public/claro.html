@@ -100,6 +100,21 @@
           "listaRecargas"
         );
 
+const respostaStatus =
+  await fetch("/api/operadoras");
+
+const dadosStatus =
+  await respostaStatus.json();
+
+if (
+  !respostaStatus.ok ||
+  dadosStatus.operadoras?.CLARO === false
+) {
+  lista.innerHTML =
+    "<p>🔴 Recarga CLARO indisponível no momento.</p>";
+  return;
+}
+
       try {
 
         const resposta =

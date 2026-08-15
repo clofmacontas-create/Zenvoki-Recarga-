@@ -100,6 +100,21 @@
           "listaRecargas"
         );
 
+const respostaStatus =
+  await fetch("/api/operadoras");
+
+const dadosStatus =
+  await respostaStatus.json();
+
+if (
+  !respostaStatus.ok ||
+  dadosStatus.operadoras?.TIM === false
+) {
+  lista.innerHTML =
+    "<p>🔴 Recarga TIM indisponível no momento.</p>";
+  return;
+}
+
       try {
 
         const resposta =
