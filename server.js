@@ -17,15 +17,15 @@ const DB_FILE = path.join(__dirname, "db.json");
 function carregarDB() {
   if (!fs.existsSync(DB_FILE)) {
     const dbInicial = {
-      users: [],
-      orders: [],
-      rechargeMode: "sem_codigo",
-      recharges: {}
-    };
-
-    salvarDB(dbInicial);
-
-    return dbInicial;
+  users: [],
+  orders: [],
+  rechargeMode: "sem_codigo",
+  rechargeModes: {
+    TIM: "sem_codigo",
+    CLARO: "sem_codigo"
+  },
+  recharges: {}
+};
   }
 
   let db;
@@ -38,11 +38,15 @@ function carregarDB() {
     console.error("Erro ao ler db.json:", error);
 
     db = {
-      users: [],
-      orders: [],
-      rechargeMode: "sem_codigo",
-      recharges: {}
-    };
+  users: [],
+  orders: [],
+  rechargeMode: "sem_codigo",
+  rechargeModes: {
+    TIM: "sem_codigo",
+    CLARO: "sem_codigo"
+  },
+  recharges: {}
+};
   }
 
   db.users = Array.isArray(db.users)
@@ -61,6 +65,28 @@ function carregarDB() {
   ) {
     db.rechargeMode = "sem_codigo";
   }
+if (
+  !db.rechargeModes ||
+  typeof db.rechargeModes !== "object"
+) {
+  db.rechargeModes = {
+    TIM: "sem_codigo",
+    CLARO: "sem_codigo"
+  };
+
+  salvarDB(db);
+}
+
+for (const operadora of ["TIM", "CLARO"]) {
+  if (
+    !["sem_codigo", "com_codigo"].includes(
+      db.rechargeModes[operadora]
+    )
+  ) {
+    db.rechargeModes[operadora] =
+      "sem_codigo";
+  }
+}
 
   if (
     !db.recharges ||
@@ -692,7 +718,7 @@ app.post(
 // VERIFICAR ADMIN
 // =========================
 
-  "/api/admin/recharge-mode",app.get(
+app.get(
   "/api/admin/me",
   (req, res) => {
     if (
@@ -900,31 +926,55 @@ app.get(
 
   }
 );
+// =========================
+// ADMIN - MODO DE RECARGA POR OPERADORA
+// =========================
+
 app.get(
   "/api/admin/recharge-mode",
   exigirAdmin,
   (req, res) => {
     try {
-      const db =
-        carregarDB();
+      const db = carregarDB();
+
+      if (
+        !db.rechargeModes ||
+        typeof db.rechargeModes !== "object"
+      ) {
+        db.rechargeModes = {
+          TIM: "sem_codigo",
+          CLARO: "sem_codigo"
+        };
+
+        salvarDB(db);
+      }
+
+      for (const operadora of ["TIM", "CLARO"]) {
+        if (
+          !["sem_codigo", "com_codigo"].includes(
+            db.rechargeModes[operadora]
+          )
+        ) {
+          db.rechargeModes[operadora] = "sem_codigo";
+        }
+      }
+
+      salvarDB(db);
 
       res.json({
         success: true,
-
-        modoRecarga:
-          db.rechargeMode ||
-          "sem_codigo"
+        modosRecarga: db.rechargeModes
       });
 
     } catch (error) {
       console.error(
-        "Erro ao carregar modo de recarga:",
+        "Erro ao carregar modos de recarga:",
         error
       );
 
       res.status(500).json({
         error:
-          "Não foi possível carregar o modo de recarga."
+          "Não foi possível carregar os modos de recarga."
       });
     }
   }
@@ -936,13 +986,30 @@ app.post(
   (req, res) => {
     try {
       const {
+        operadora,
         modoRecarga
       } = req.body;
+
+      const operadorasPermitidas = [
+        "TIM",
+        "CLARO"
+      ];
 
       const modosPermitidos = [
         "sem_codigo",
         "com_codigo"
       ];
+
+      if (
+        !operadorasPermitidas.includes(
+          operadora
+        )
+      ) {
+        return res.status(400).json({
+          error:
+            "Operadora inválida."
+        });
+      }
 
       if (
         !modosPermitidos.includes(
@@ -955,10 +1022,19 @@ app.post(
         });
       }
 
-      const db =
-        carregarDB();
+      const db = carregarDB();
 
-      db.rechargeMode =
+      if (
+        !db.rechargeModes ||
+        typeof db.rechargeModes !== "object"
+      ) {
+        db.rechargeModes = {
+          TIM: "sem_codigo",
+          CLARO: "sem_codigo"
+        };
+      }
+
+      db.rechargeModes[operadora] =
         modoRecarga;
 
       salvarDB(db);
@@ -966,13 +1042,18 @@ app.post(
       res.json({
         success: true,
 
+        operadora,
+
         modoRecarga,
 
         message:
-          modoRecarga ===
-          "com_codigo"
-            ? "Recarga com código ativada."
-            : "Recarga sem código ativada."
+          operadora +
+          " configurada como " +
+          (
+            modoRecarga === "com_codigo"
+              ? "recarga com código."
+              : "recarga sem código."
+          )
       });
 
     } catch (error) {

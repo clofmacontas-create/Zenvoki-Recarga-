@@ -160,56 +160,28 @@
       <h2>🔐 Modo de Recarga</h2>
 
       <p>
-        Escolha como a recarga será processada.
+        Configure separadamente o modo de recarga de cada operadora.
       </p>
     </div>
 
   </div>
 
-  <div class="recharge-mode">
+  <div
+    id="modosRecarga"
+    style="
+      display:flex;
+      flex-direction:column;
+      gap:15px;
+      margin-top:15px;
+    "
+  >
 
-    <label>
-      <input
-        type="radio"
-        name="modoRecarga"
-        value="sem_codigo"
-      >
-
-      <span>
-        <strong>⚡ Sem código</strong>
-        <small>
-          A recarga será processada sem solicitar código.
-        </small>
-      </span>
-    </label>
-
-    <label>
-      <input
-        type="radio"
-        name="modoRecarga"
-        value="com_codigo"
-      >
-
-      <span>
-        <strong>🔐 Com código</strong>
-        <small>
-          O cliente deverá enviar o código solicitado.
-        </small>
-      </span>
-    </label>
+    <p>Carregando modos...</p>
 
   </div>
 
-  <button
-    id="btnSalvarModoRecarga"
-    type="button"
-  >
-    💾 Salvar modo
-  </button>
-
-  <p id="statusModoRecarga"></p>
-
 </section>
+
 <section class="panel">
 
   <div class="panel-header">
@@ -725,6 +697,7 @@ async function alterarStatusPedido(
 carregarDashboard();
 
 carregarPedidos();
+carregarModoRecarga();
 
 async function carregarConfiguracoesRecargas() {
 
@@ -1037,10 +1010,17 @@ async function alternarRecarga(
 
 async function carregarModoRecarga() {
 
+  const container =
+    document.getElementById("modosRecarga");
+
+  if (!container) return;
+
   try {
 
     const resposta =
-      await fetch("/api/admin/recharge-mode");
+      await fetch(
+        "/api/admin/recharge-mode"
+      );
 
     const dados =
       await resposta.json();
@@ -1048,41 +1028,160 @@ async function carregarModoRecarga() {
     if (!resposta.ok) {
       throw new Error(
         dados.error ||
-        "Não foi possível carregar o modo."
+        "Não foi possível carregar os modos."
       );
     }
 
-    const radio =
-      document.querySelector(
-        `input[name="modoRecarga"][value="${dados.modoRecarga}"]`
-      );
+    const modos =
+      dados.modosRecarga || {};
 
-    if (radio) {
-      radio.checked = true;
+    let html = "";
+
+    for (
+      const operadora of ["TIM", "CLARO"]
+    ) {
+
+      const modoAtual =
+        modos[operadora] ||
+        "sem_codigo";
+
+      const nome =
+        operadora === "TIM"
+          ? "🔵 TIM"
+          : "🔴 CLARO";
+
+      html += `
+
+        <div
+          style="
+            padding:18px;
+            border-radius:14px;
+            background:#181818;
+            border:1px solid #292929;
+          "
+        >
+
+          <h3 style="margin-top:0;">
+            ${nome}
+          </h3>
+
+          <div
+            style="
+              display:flex;
+              flex-direction:column;
+              gap:10px;
+              margin-top:12px;
+            "
+          >
+
+            <label
+              style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:12px;
+                border-radius:10px;
+                background:#222;
+                cursor:pointer;
+              "
+            >
+
+              <input
+                type="radio"
+                name="modo-${operadora}"
+                value="sem_codigo"
+                ${modoAtual === "sem_codigo" ? "checked" : ""}
+              >
+
+              <span>
+                <strong>⚡ Sem código</strong>
+                <small style="display:block;opacity:.7;">
+                  Processar sem solicitar código.
+                </small>
+              </span>
+
+            </label>
+
+            <label
+              style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:12px;
+                border-radius:10px;
+                background:#222;
+                cursor:pointer;
+              "
+            >
+
+              <input
+                type="radio"
+                name="modo-${operadora}"
+                value="com_codigo"
+                ${modoAtual === "com_codigo" ? "checked" : ""}
+              >
+
+              <span>
+                <strong>🔐 Com código</strong>
+                <small style="display:block;opacity:.7;">
+                  Solicitar código ao cliente.
+                </small>
+              </span>
+
+            </label>
+
+          </div>
+
+          <button
+            type="button"
+            onclick="salvarModoRecarga('${operadora}')"
+            style="
+              margin-top:15px;
+              padding:11px 16px;
+              border:0;
+              border-radius:9px;
+              cursor:pointer;
+            "
+          >
+            💾 Salvar ${operadora}
+          </button>
+
+          <p
+            id="statusModo-${operadora}"
+            style="margin-bottom:0;"
+          ></p>
+
+        </div>
+
+      `;
     }
+
+    container.innerHTML = html;
 
   } catch (error) {
 
-    console.error(
-      "Erro ao carregar modo:",
-      error
-    );
+    container.innerHTML = `
+      <p style="color:#ff6b6b;">
+        Erro: ${error.message}
+      </p>
+    `;
 
   }
-
 }
 
 
-async function salvarModoRecarga() {
+async function salvarModoRecarga(
+  operadora
+) {
 
   const selecionado =
     document.querySelector(
-      'input[name="modoRecarga"]:checked'
+      `input[name="modo-${operadora}"]:checked`
     );
 
   const status =
     document.getElementById(
-      "statusModoRecarga"
+      `statusModo-${operadora}`
     );
 
   if (!selecionado) {
@@ -1091,7 +1190,6 @@ async function salvarModoRecarga() {
       "Selecione um modo.";
 
     return;
-
   }
 
   try {
@@ -1109,6 +1207,7 @@ async function salvarModoRecarga() {
 
           body:
             JSON.stringify({
+              operadora,
               modoRecarga:
                 selecionado.value
             })
@@ -1119,41 +1218,28 @@ async function salvarModoRecarga() {
       await resposta.json();
 
     if (!resposta.ok) {
-
       throw new Error(
         dados.error ||
         "Não foi possível salvar."
       );
-
     }
 
+    status.style.color = "#4ade80";
+
     status.textContent =
-      dados.message ||
-      "Modo salvo com sucesso.";
+      "✅ " +
+      dados.message;
 
   } catch (error) {
 
-    console.error(
-      "Erro ao salvar modo:",
-      error
-    );
+    status.style.color = "#ff6b6b";
 
     status.textContent =
+      "❌ " +
       error.message;
-
   }
-
 }
 
-
-document
-  .getElementById(
-    "btnSalvarModoRecarga"
-  )
-  ?.addEventListener(
-    "click",
-    salvarModoRecarga
-  );
 
 async function carregarStatusOperadoras() {
 
