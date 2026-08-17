@@ -71,24 +71,24 @@
         </div>
 
         <div>
-          💳 Valor a pagar:
+          💳 Valor da recarga:
           <strong>
             R$ <span id="preco"></span>
           </strong>
         </div>
 
         <div>
-          ℹ️ Taxa do gateway:
-          <strong>10% + R$ 1,99</strong>
+          🧾 Taxa do gateway:
+          <strong>
+            R$ <span id="taxaGateway"></span>
+          </strong>
         </div>
 
-        <div style="
-          font-size: 13px;
-          color: #9ca7b5;
-          line-height: 1.5;
-          margin-top: 4px;
-        ">
-          A taxa é cobrada pelo gateway de pagamento.
+        <div>
+          💵 Total a pagar:
+          <strong>
+            R$ <span id="totalPagar"></span>
+          </strong>
         </div>
 
         <div>
@@ -252,6 +252,42 @@ document.getElementById(
   "preco"
 ).textContent =
   preco;
+
+
+// =========================
+// CALCULAR TAXA DO GATEWAY
+// 10% + R$ 1,99
+// =========================
+
+const valorRecarga =
+  Number(
+    String(preco)
+      .replace(",", ".")
+  );
+
+const taxaFixa =
+  1.99;
+
+const taxaPercentual =
+  0.10;
+
+const totalPagar =
+  (valorRecarga + taxaFixa) /
+  (1 - taxaPercentual);
+
+const taxaGateway =
+  totalPagar -
+  valorRecarga;
+
+document.getElementById(
+  "taxaGateway"
+).textContent =
+  taxaGateway.toFixed(2).replace(".", ",");
+
+document.getElementById(
+  "totalPagar"
+).textContent =
+  totalPagar.toFixed(2).replace(".", ",");
 
 
 
