@@ -1,0 +1,232 @@
+{
+  "users": [
+    {
+      "id": "1786510992544",
+      "nome": "Teste7@#",
+      "username": "exemplo.com",
+      "email": "explom7@gmail.com",
+      "senha": "$2b$12$DACSQcKuQq5hdTdCS79e1.DRa3fY/I33SeRETjKJoo8TctgwBdjBe",
+      "criadoEm": "2026-08-12T05:03:12.544Z"
+    },
+    {
+      "id": "1786648871503",
+      "nome": "Zenvoki",
+      "username": "zenvoki@$10",
+      "email": "aishapain09@gmail.com",
+      "senha": "$2b$12$ulgFU9p/Jkq8NDfdB7uM/ua6VT5u3J24Sg7zwUTQADsm7v2gQPAr6",
+      "criadoEm": "2026-08-13T19:21:11.504Z"
+    },
+    {
+      "id": "1786652485606",
+      "nome": "Zeven",
+      "username": "zeven@#10",
+      "email": "clofmacontas@gmail.com",
+      "senha": "$2b$12$QabC1icUE8Dd6bk9bCvsQO8pMYl0n/ewg2TuHvtUgoN/OMfdO8F8K",
+      "criadoEm": "2026-08-13T20:21:25.606Z"
+    },
+    {
+      "id": "1786671827957",
+      "nome": "Naira",
+      "username": "naira@#$100",
+      "email": "voidnetworkoficial@gmail.com",
+      "senha": "$2b$12$/cRVmiG8vsf5/BDHiLszmOkypvzlnCB540qgB2I5T2F.OmuMZRm2.",
+      "criadoEm": "2026-08-14T01:43:47.959Z"
+    }
+  ],
+  "orders": [
+    {
+      "id": "1786532049960",
+      "usuarioId": null,
+      "nomeCliente": null,
+      "usernameCliente": null,
+      "emailCliente": null,
+      "numero": "6199277795",
+      "operadora": "CLARO",
+      "recarga": "20",
+      "preco": 13,
+      "amount_cents": 1300,
+      "pixId": "6a7c50d27669e49b1a9ff10c",
+      "pixStatus": "pending",
+      "status": "cancelled",
+      "criadoEm": "2026-08-12T10:54:09.960Z",
+      "atualizadoEm": "2026-08-12T13:57:33.719Z"
+    },
+    {
+      "id": "TESTE-1786539876510",
+      "usuarioId": null,
+      "nomeCliente": "Cliente Teste",
+      "usernameCliente": "teste",
+      "emailCliente": "teste@exemplo.com",
+      "numero": "11999999999",
+      "operadora": "TIM",
+      "recarga": 20,
+      "preco": 13,
+      "amount_cents": 1300,
+      "pixId": "TESTE",
+      "pixStatus": "pending",
+      "status": "completed",
+      "criadoEm": "2026-08-12T13:04:36.510Z",
+      "atualizadoEm": "2026-08-12T13:58:41.493Z"
+    },
+    {
+      "id": "1786547383693",
+      "usuarioId": null,
+      "nomeCliente": null,
+      "usernameCliente": null,
+      "emailCliente": null,
+      "numero": "6199277795",
+      "operadora": "CLARO",
+      "recarga": "20",
+      "preco": 13,
+      "amount_cents": 1300,
+      "pixId": "6a7c8cb8e5ba8e1c5a624ecf",
+      "pixStatus": "pending",
+      "status": "cancelled",
+      "criadoEm": "2026-08-12T15:09:43.693Z",
+      "atualizadoEm": "2026-08-14T02:43:51.157Z"
+    },
+    {
+      "id": "1786669558213",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki@$10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "21996649937",
+      "operadora": "TIM",
+      "recarga": "20",
+      "preco": 70,
+      "amount_cents": 7000,
+      "pixId": "6a7e69f6f9a1883a0241f32b",
+      "pixStatus": "pending",
+      "status": "cancelled",
+      "criadoEm": "2026-08-14T01:05:58.213Z",
+      "atualizadoEm": "2026-08-14T02:43:54.199Z"
+    },
+    {
+      "id": "1786671895918",
+      "usuarioId": "1786671827957",
+      "nomeCliente": "Naira",
+      "usernameCliente": "naira@#$100",
+      "emailCliente": "voidnetworkoficial@gmail.com",
+      "numero": "14996659937",
+      "operadora": "TIM",
+      "recarga": "30",
+      "preco": 18,
+      "amount_cents": 1800,
+      "pixId": "6a7e7318f9a1883a0241f420",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-14T01:44:55.919Z",
+      "atualizadoEm": "2026-08-14T01:44:55.919Z"
+    },
+    {
+      "id": "1786810448490",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki@$10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "21996649937",
+      "operadora": "TIM",
+      "recarga": "20",
+      "preco": 70,
+      "amount_cents": 7000,
+      "pixId": "6a809050f0dab5b48d27b40e",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-15T16:14:08.490Z",
+      "atualizadoEm": "2026-08-15T16:14:08.490Z"
+    },
+    {
+      "id": "1786922824828",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki@$10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "85996679938",
+      "operadora": "TIM",
+      "recarga": "20",
+      "preco": 10,
+      "amount_cents": 1000,
+      "pixId": "6a824748f0dab5b48d28510f",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-16T23:27:04.829Z",
+      "atualizadoEm": "2026-08-16T23:27:04.829Z"
+    }
+  ],
+  "recharges": {
+    "CLARO": {
+      "20": {
+        "preco": 13,
+        "ativo": true
+      },
+      "25": {
+        "preco": 15,
+        "ativo": true
+      },
+      "30": {
+        "preco": 18,
+        "ativo": false
+      },
+      "35": {
+        "preco": 20,
+        "ativo": false
+      },
+      "40": {
+        "preco": 23,
+        "ativo": false
+      },
+      "50": {
+        "preco": 28,
+        "ativo": false
+      },
+      "60": {
+        "preco": 33,
+        "ativo": false
+      },
+      "70": {
+        "preco": 37,
+        "ativo": false
+      }
+    },
+    "TIM": {
+      "15": {
+        "preco": 70,
+        "ativo": false
+      },
+      "20": {
+        "preco": 10,
+        "ativo": true
+      },
+      "30": {
+        "preco": 18,
+        "ativo": true
+      },
+      "40": {
+        "preco": 23,
+        "ativo": true
+      },
+      "50": {
+        "preco": 28,
+        "ativo": false
+      },
+      "60": {
+        "preco": 33,
+        "ativo": false
+      },
+      "100": {
+        "preco": 40,
+        "ativo": false
+      }
+    }
+  },
+  "rechargeMode": "com_codigo",
+  "operadoras": {
+    "TIM": true,
+    "CLARO": true
+  },
+  "rechargeModes": {
+    "TIM": "com_codigo",
+    "CLARO": "sem_codigo"
+  }
+}
