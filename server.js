@@ -1540,9 +1540,21 @@ app.post(
 
       }
 
+      // =========================
+      // TAXA DO GATEWAY
+      // 10% + R$ 1,99
+      // =========================
+
+      const taxaFixa = 1.99;
+      const taxaPercentual = 0.10;
+
+      const valorComTaxa =
+        (valor + taxaFixa) /
+        (1 - taxaPercentual);
+
       const amount_cents =
         Math.round(
-          valor * 100
+          valorComTaxa * 100
         );
 
       // =========================
