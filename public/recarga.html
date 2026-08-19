@@ -21,7 +21,6 @@
   <main class="container">
 
     <header class="logo">
-
       <h1>
         Zenvoki <span>Recarga</span>
       </h1>
@@ -43,32 +42,34 @@
       </p>
 
       <button
-        id="btnTIM"
-        type="button"
-        class="btn-recarregar"
-        onclick="window.location.href='/tim.html'"
-      >
-        🔵 TIM
-      </button>
-
-      <button
-        id="btnCLARO"
-        type="button"
-        class="btn-recarregar"
-        onclick="window.location.href='/claro.html'"
-        style="margin-top: 12px;"
-      >
-        </button>🔴 CLARO
-      </button>
+  id="btnTIM"
+  type="button"
+  class="btn-recarregar"
+  onclick="window.location.href='/tim.html'"
+>
+  🔵 TIM
+</button>
 
 <button
+  id="btnCLARO"
+  type="button"
+  class="btn-recarregar"
+  onclick="window.location.href='/claro.html'"
+  style="margin-top: 12px;"
+>
+  🔴 CLARO
+</button>
+<button
+  id="btnVIVO"
   type="button"
   class="btn-recarregar"
   onclick="window.location.href='/vivo.html'"
+  style="margin-top: 12px;"
 >
-  🟣 VIVO
+  &#x1F7E3; VIVO
 </button>
-      <button
+
+<button
         type="button"
         class="btn-recarregar"
         onclick="window.location.href='/painel.html'"
@@ -132,11 +133,11 @@ if (operadoras.VIVO !== true) {
 }
 
 
-        if (
- operadoras.TIM !== true &&
-operadoras.CLARO !== true &&
-operadoras.VIVO !== true
-        ) {
+                 if (
+                operadoras.TIM !== true &&
+                operadoras.CLARO !== true &&
+                operadoras.VIVO !== true
+                 ) {
 
           const mensagem =
             document.createElement("p");
