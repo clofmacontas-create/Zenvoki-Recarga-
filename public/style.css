@@ -257,3 +257,47 @@ body {
   }
 
 }
+
+.acoes-contato {
+  display: flex;
+  gap: 12px;
+  margin-top: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.acoes-contato a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 150px;
+  padding: 12px 18px;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 600;
+  font-size: 14px;
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.acoes-contato a:hover {
+  transform: translateY(-2px);
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.acoes-contato a:active {
+  transform: scale(0.97);
+}
+
+@media (max-width: 480px) {
+  .acoes-contato {
+    flex-direction: column;
+  }
+
+  .acoes-contato a {
+    width: 100%;
+    box-sizing: border-box;
+  }
+}
