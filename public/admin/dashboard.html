@@ -1050,7 +1050,7 @@ async function carregarModoRecarga() {
       const nome =
         operadora === "TIM"
           ? "🔵 TIM"
-          : "🔴 CLARO";
+          : operadora === "CLARO" ? "🔴 CLARO" : "VIVO";
 
       html += `
 
@@ -1285,7 +1285,7 @@ async function carregarStatusOperadoras() {
       const nome =
         operadora === "TIM"
           ? "🔵 TIM"
-          : "🔴 CLARO";
+          : operadora === "CLARO" ? "🔴 CLARO" : "VIVO";
 
       const div =
         document.createElement("div");
