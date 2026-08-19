@@ -1,5 +1,0 @@
-[[redirects]]
-  from = "/*"
-  to = "https://zenvokirecarga-0e5f4.containers.snapdeploy.app/:splat"
-  status = 200
-  force = true
