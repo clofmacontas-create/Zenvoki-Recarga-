@@ -103,7 +103,8 @@ if (
 ) {
   db.operadoras = {
     TIM: true,
-    CLARO: true
+    CLARO: true,
+    VIVO: true
   };
 
   salvarDB(db);
@@ -851,7 +852,8 @@ app.get(
         success: true,
         operadoras: db.operadoras || {
           TIM: true,
-          CLARO: true
+          CLARO: true,
+          VIVO: true
         }
       });
 
@@ -1107,7 +1109,8 @@ app.get(
         success: true,
         operadoras: db.operadoras || {
           TIM: true,
-          CLARO: true
+          CLARO: true,
+          VIVO: true
         }
       });
 
@@ -1136,7 +1139,7 @@ app.post(
       } = req.body;
 
       if (
-        !["TIM", "CLARO"].includes(operadora) ||
+        !["TIM", "CLARO", "VIVO"].includes(operadora) ||
         typeof ativo !== "boolean"
       ) {
         return res.status(400).json({
@@ -1153,7 +1156,8 @@ app.post(
       ) {
         db.operadoras = {
           TIM: true,
-          CLARO: true
+          CLARO: true,
+          VIVO: true
         };
       }
 

@@ -33,7 +33,59 @@
       "criadoEm": "2026-08-14T01:43:47.959Z"
     }
   ],
-  "orders": [],
+  "orders": [
+    {
+      "id": "1787007888781",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "6199277795",
+      "operadora": "TIM",
+      "recarga": "30",
+      "preco": 18,
+      "amount_cents": 1800,
+      "pixId": "6a839391f0dab5b48d289120",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-17T23:04:48.782Z",
+      "atualizadoEm": "2026-08-17T23:04:48.782Z"
+    },
+    {
+      "id": "1787008769500",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "77996649937",
+      "operadora": "TIM",
+      "recarga": "30",
+      "preco": 18,
+      "amount_cents": 2221,
+      "pixId": "6a839702f0dab5b48d2892a4",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-17T23:19:29.501Z",
+      "atualizadoEm": "2026-08-17T23:19:29.501Z"
+    },
+    {
+      "id": "1787010491005",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "85996679938",
+      "operadora": "TIM",
+      "recarga": "30",
+      "preco": 18,
+      "amount_cents": 2221,
+      "pixId": "6a839dbcf0dab5b48d289571",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-17T23:48:11.005Z",
+      "atualizadoEm": "2026-08-17T23:48:11.005Z"
+    }
+  ],
   "recharges": {
     "CLARO": {
       "20": {
@@ -98,15 +150,35 @@
         "preco": 40,
         "ativo": false
       }
+    },
+    "VIVO": {
+      "50": {
+        "preco": 28,
+        "ativo": true
+      },
+      "100": {
+        "preco": 40,
+        "ativo": true
+      },
+      "200": {
+        "preco": 63,
+        "ativo": true
+      },
+      "300": {
+        "preco": 93,
+        "ativo": true
+      }
     }
   },
   "rechargeMode": "com_codigo",
   "operadoras": {
-    "TIM": true,
-    "CLARO": true
+    "TIM": false,
+    "CLARO": true,
+    "VIVO": true
   },
   "rechargeModes": {
     "TIM": "com_codigo",
-    "CLARO": "sem_codigo"
+    "CLARO": "com_codigo",
+    "VIVO": "sem_codigo"
   }
 }
