@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
+
+  <title>VIVO - Zenvoki Recarga</title>
+
+  <link
+    rel="stylesheet"
+    href="/style.css"
+  >
+
+</head>
+
+<body>
+
+  <main class="container">
+
+    <header class="logo">
+
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Recarga VIVO
+      </p>
+
+    </header>
+
+
+    <section class="hero">
+
+      <h2>
+        🟣 Recarga VIVO
+      </h2>
+
+      <p>
+        Escolha o valor da recarga que deseja realizar.
+      </p>
+
+
+      <div id="listaRecargas">
+
+        Carregando valores...
+
+      </div>
+
+
+      <button
+        class="btn-recarregar"
+        type="button"
+        onclick="window.location.href='/recarga.html'"
+        style="
+          margin-top:18px;
+          background:rgba(255,255,255,0.06);
+          box-shadow:none;
+        "
+      >
+
+        ← Voltar
+
+      </button>
+
+    </section>
+
+  </main>
+
+
+  <script>
+
+    function selecionarValor(
+      operadora,
+      recarga,
+      preco
+    ) {
+
+      window.location.href =
+        "/numero.html?operadora=" +
+        encodeURIComponent(operadora) +
+        "&recarga=" +
+        encodeURIComponent(recarga) +
+        "&preco=" +
+        encodeURIComponent(preco);
+
+    }
+
+
+    async function carregarRecargas() {
+
+      const lista =
+        document.getElementById(
+          "listaRecargas"
+        );
+
+const respostaStatus =
+  await fetch("/api/operadoras");
+
+const dadosStatus =
+  await respostaStatus.json();
+
+if (
+  !respostaStatus.ok ||
+  dadosStatus.operadoras?.VIVO === false
+) {
+  lista.innerHTML =
+    "<p>🟣 Recarga VIVO indisponível no momento.</p>";
+  return;
+}
+
+      try {
+
+        const resposta =
+          await fetch(
+            "/api/recharges"
+          );
+
+
+        const dados =
+          await resposta.json();
+
+
+        if (!resposta.ok) {
+
+          throw new Error(
+            dados.error ||
+            "Erro ao carregar recargas."
+          );
+
+        }
+
+
+        const recargas =
+          dados.recharges?.VIVO || {};
+
+
+        lista.innerHTML = "";
+
+
+        for (
+          const recarga of Object.keys(recargas)
+        ) {
+
+if (
+  typeof recargas[recarga] === "object" &&
+  recargas[recarga].ativo === false
+) {
+  continue;
+}
+          const configuracao =
+            recargas[recarga];
+
+
+          const preco =
+            typeof configuracao === "object"
+              ? configuracao.preco
+              : configuracao;
+
+
+          const botao =
+            document.createElement(
+              "button"
+            );
+
+
+          botao.className =
+            "btn-recarregar";
+
+
+          botao.type =
+            "button";
+
+
+          botao.textContent =
+            `R$ ${recarga} → R$ ${Number(preco).toFixed(2).replace(".", ",")}`;
+
+
+          botao.onclick =
+            () =>
+              selecionarValor(
+                "VIVO",
+                recarga,
+                preco
+              );
+
+
+          lista.appendChild(
+            botao
+          );
+
+        }
+
+
+        if (
+          Object.keys(recargas).length === 0
+        ) {
+
+          lista.innerHTML =
+            "<p>Nenhuma recarga disponível no momento.</p>";
+
+        }
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar recargas:",
+          erro
+        );
+
+
+        lista.innerHTML =
+          "<p>Não foi possível carregar as recargas.</p>";
+
+      }
+
+    }
+
+
+    carregarRecargas();
+
+  </script>
+
+</body>
+
+</html>

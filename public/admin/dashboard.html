@@ -724,7 +724,7 @@ async function carregarConfiguracoesRecargas() {
 
     let html = "";
 
-    for (const operadora of ["TIM", "CLARO"]) {
+    for (const operadora of ["TIM", "CLARO", "VIVO"]) {
 
       html += `
         <div style="
@@ -737,7 +737,9 @@ async function carregarConfiguracoesRecargas() {
           <h3>
             ${operadora === "TIM"
               ? "🔵 TIM"
-              : "🔴 CLARO"}
+              : operadora === "CLARO"
+                ? "🔴 CLARO"
+                : "🟣 VIVO"}
           </h3>
       `;
 
@@ -1038,7 +1040,7 @@ async function carregarModoRecarga() {
     let html = "";
 
     for (
-      const operadora of ["TIM", "CLARO"]
+      const operadora of ["TIM", "CLARO", "VIVO"]
     ) {
 
       const modoAtual =
@@ -1274,7 +1276,7 @@ async function carregarStatusOperadoras() {
     container.innerHTML = "";
 
     for (
-      const operadora of ["TIM", "CLARO"]
+      const operadora of ["TIM", "CLARO", "VIVO"]
     ) {
 
       const ativo =

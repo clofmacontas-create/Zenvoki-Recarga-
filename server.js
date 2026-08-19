@@ -22,7 +22,8 @@ function carregarDB() {
   rechargeMode: "sem_codigo",
   rechargeModes: {
     TIM: "sem_codigo",
-    CLARO: "sem_codigo"
+    CLARO: "sem_codigo",
+    VIVO: "sem_codigo"
   },
   recharges: {}
 };
@@ -43,7 +44,8 @@ function carregarDB() {
   rechargeMode: "sem_codigo",
   rechargeModes: {
     TIM: "sem_codigo",
-    CLARO: "sem_codigo"
+    CLARO: "sem_codigo",
+    VIVO: "sem_codigo"
   },
   recharges: {}
 };
@@ -77,7 +79,7 @@ if (
   salvarDB(db);
 }
 
-for (const operadora of ["TIM", "CLARO"]) {
+for (const operadora of ["TIM", "CLARO", "VIVO"]) {
   if (
     !["sem_codigo", "com_codigo"].includes(
       db.rechargeModes[operadora]
@@ -219,6 +221,25 @@ const db = carregarDB();
       },
       "70": {
         preco: 37,
+        ativo: true
+      }
+    },
+
+    VIVO: {
+      "50": {
+        preco: 28,
+        ativo: true
+      },
+      "100": {
+        preco: 40,
+        ativo: true
+      },
+      "200": {
+        preco: 63,
+        ativo: true
+      },
+      "300": {
+        preco: 93,
         ativo: true
       }
     },
@@ -949,7 +970,7 @@ app.get(
         salvarDB(db);
       }
 
-      for (const operadora of ["TIM", "CLARO"]) {
+      for (const operadora of ["TIM", "CLARO", "VIVO"]) {
         if (
           !["sem_codigo", "com_codigo"].includes(
             db.rechargeModes[operadora]
@@ -992,7 +1013,8 @@ app.post(
 
       const operadorasPermitidas = [
         "TIM",
-        "CLARO"
+        "CLARO",
+        "VIVO"
       ];
 
       const modosPermitidos = [

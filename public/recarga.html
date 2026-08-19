@@ -58,9 +58,16 @@
         onclick="window.location.href='/claro.html'"
         style="margin-top: 12px;"
       >
-        🔴 CLARO
+        </button>🔴 CLARO
       </button>
 
+<button
+  type="button"
+  class="btn-recarregar"
+  onclick="window.location.href='/vivo.html'"
+>
+  🟣 VIVO
+</button>
       <button
         type="button"
         class="btn-recarregar"
@@ -105,7 +112,8 @@
 
         const btnCLARO =
           document.getElementById("btnCLARO");
-
+const btnVIVO =
+  document.getElementById("btnVIVO");
 
         if (operadoras.TIM !== true) {
 
@@ -119,11 +127,15 @@
           btnCLARO.style.display = "none";
 
         }
+if (operadoras.VIVO !== true) {
+  btnVIVO.style.display = "none";
+}
 
 
         if (
-          operadoras.TIM !== true &&
-          operadoras.CLARO !== true
+ operadoras.TIM !== true &&
+operadoras.CLARO !== true &&
+operadoras.VIVO !== true
         ) {
 
           const mensagem =
