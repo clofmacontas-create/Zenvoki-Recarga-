@@ -84,12 +84,29 @@
       "status": "pending",
       "criadoEm": "2026-08-17T23:48:11.005Z",
       "atualizadoEm": "2026-08-17T23:48:11.005Z"
+    },
+    {
+      "id": "1787344527981",
+      "usuarioId": "1786648871503",
+      "nomeCliente": "Zenvoki",
+      "usernameCliente": "zenvoki10",
+      "emailCliente": "aishapain09@gmail.com",
+      "numero": "61992777955",
+      "operadora": "TIM",
+      "recarga": "20",
+      "preco": 40,
+      "amount_cents": 4666,
+      "pixId": "6a88b691f8803163a9825065",
+      "pixStatus": "pending",
+      "status": "pending",
+      "criadoEm": "2026-08-21T20:35:27.981Z",
+      "atualizadoEm": "2026-08-21T20:35:27.981Z"
     }
   ],
   "recharges": {
     "CLARO": {
       "20": {
-        "preco": 13,
+        "preco": 85,
         "ativo": true
       },
       "25": {
@@ -127,7 +144,7 @@
         "ativo": false
       },
       "20": {
-        "preco": 10,
+        "preco": 40,
         "ativo": true
       },
       "30": {
