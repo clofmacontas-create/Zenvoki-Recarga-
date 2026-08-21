@@ -1,12 +1,141 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Zenvoki Recarga</title>
+  <title>Meu Perfil - Zenvoki Recarga</title>
 
   <link rel="stylesheet" href="/style.css">
+
+  <style>
+    .perfil-card {
+      width: 100%;
+      box-sizing: border-box;
+      padding: 22px;
+      border-radius: 18px;
+      background: rgba(8,35,70,.88);
+      border: 1px solid rgba(30,136,229,.35);
+      box-shadow: 0 20px 60px rgba(0,0,0,.45);
+    }
+
+    .perfil-topo {
+      text-align: center;
+      padding-bottom: 18px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .perfil-icone {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(145deg,#173f73,#061a35);
+      border: 1px solid rgba(50,160,255,.45);
+      box-shadow: 0 0 25px rgba(0,120,255,.22);
+      font-size: 27px;
+    }
+
+    .perfil-topo h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .perfil-topo p {
+      margin: 5px 0 0;
+      color: #91a5bd;
+      font-size: 13px;
+    }
+
+    .perfil-dados {
+      margin-top: 18px;
+      display: grid;
+      gap: 10px;
+    }
+
+    .perfil-dado {
+      padding: 13px 14px;
+      border-radius: 12px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .perfil-dado small {
+      display: block;
+      color: #91a5bd;
+      font-size: 11px;
+      margin-bottom: 4px;
+    }
+
+    .perfil-dado strong {
+      color: #fff;
+      font-size: 14px;
+      word-break: break-word;
+    }
+
+    .historico-titulo {
+      margin: 22px 0 10px;
+      font-size: 16px;
+      font-weight: 800;
+    }
+
+    .historico-lista {
+      display: grid;
+      gap: 10px;
+    }
+
+    .historico-item {
+      padding: 14px;
+      border-radius: 13px;
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.06);
+    }
+
+    .historico-linha {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .historico-operadora {
+      font-weight: 800;
+    }
+
+    .historico-valor {
+      font-weight: 800;
+      color: #4da3ff;
+    }
+
+    .historico-status {
+      margin-top: 7px;
+      font-size: 12px;
+      color: #91a5bd;
+    }
+
+    .perfil-vazio {
+      text-align: center;
+      color: #91a5bd;
+      padding: 20px 5px;
+      font-size: 13px;
+    }
+
+    .btn-voltar-perfil {
+      width: 100%;
+      margin-top: 18px;
+      padding: 13px;
+      border: 0;
+      border-radius: 12px;
+      background: rgba(255,255,255,.06);
+      color: #fff;
+      font-weight: 700;
+      cursor: pointer;
+    }
+  </style>
 </head>
 
 <body>
@@ -14,71 +143,244 @@
   <main class="container">
 
     <header class="logo">
-      <h1>Zenvoki <span>Recarga</span></h1>
-      <p>Sua recarga, em poucos minutos.</p>
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Meu Perfil
+      </p>
     </header>
 
     <section class="hero">
 
-      <h2>Faça sua recarga<br>de forma simples.</h2>
+      <div class="perfil-card">
 
-      <p>
-        Escolha sua operadora, informe o número e faça seu
-        pedido com segurança.
-      </p>
+        <div class="perfil-topo">
+          <div class="perfil-icone">
+            👤
+          </div>
 
-      <button
-        type="button"
-        class="btn-recarregar"
-        onclick="window.location.href='/recarga.html'"
-      >
-        📱 Fazer Recarga
-      </button>
+          <h2 id="nomePerfil">
+            Carregando...
+          </h2>
 
-      <div class="acoes-contato">
-        <a
-          href="https://wa.me/556199277795"
-          target="_blank"
-          rel="noopener noreferrer"
+          <p>
+            Minha conta
+          </p>
+        </div>
+
+        <div class="perfil-dados">
+
+          <div class="perfil-dado">
+            <small>Usuário</small>
+            <strong id="usernamePerfil">...</strong>
+          </div>
+
+          <div class="perfil-dado">
+            <small>Nome</small>
+            <strong id="nomeDado">...</strong>
+          </div>
+
+          <div class="perfil-dado">
+            <small>E-mail</small>
+            <strong id="emailPerfil">...</strong>
+          </div>
+
+        </div>
+
+        <div class="historico-titulo">
+          📋 Histórico de Recargas
+        </div>
+
+        <div
+          id="historicoLista"
+          class="historico-lista"
         >
-          💬 Suporte
-        </a>
+          <div class="perfil-vazio">
+            Carregando histórico...
+          </div>
+        </div>
 
-        <a
-          href="https://chat.whatsapp.com/GmeXJmfd9V52U1OKx8V2ar?s=cl&p=a&mlu=4"
-          target="_blank"
-          rel="noopener noreferrer"
+        <button
+          type="button"
+          class="btn-voltar-perfil"
+          onclick="window.location.href='/recarga.html'"
         >
-          👥 Entrar no Grupo
-        </a>
-      </div>
-
-      <div class="beneficios">
-
-        <div class="beneficio">
-          <div class="beneficio-icon">⚡</div>
-          <p>Processo rápido</p>
-        </div>
-
-        <div class="beneficio">
-          <div class="beneficio-icon">🔒</div>
-          <p>Pagamento seguro</p>
-        </div>
-
-        <div class="beneficio">
-          <div class="beneficio-icon">✓</div>
-          <p>atendimento</p>
-        </div>
+          ← Voltar para recargas
+        </button>
 
       </div>
 
     </section>
 
-    <footer class="footer">
-      Zenvoki Recarga © 2026
-    </footer>
-
   </main>
 
+  <script>
+
+    function escapar(texto) {
+      const div = document.createElement("div");
+      div.textContent = texto ?? "";
+      return div.innerHTML;
+    }
+
+    function formatarValor(valor) {
+      return Number(valor || 0).toLocaleString(
+        "pt-BR",
+        {
+          style: "currency",
+          currency: "BRL"
+        }
+      );
+    }
+
+    function statusTexto(status) {
+
+      const mapa = {
+        pending: "⏳ Aguardando análise",
+        completed: "✅ Recarga finalizada",
+        cancelled: "❌ Recarga cancelada"
+      };
+
+      return mapa[status] || status || "⏳ Em análise";
+    }
+
+    async function carregarPerfil() {
+
+      try {
+
+        const resposta = await fetch("/api/me");
+
+        const dados = await resposta.json();
+
+        if (!resposta.ok || !dados.authenticated) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        const usuario = dados.user;
+
+        document.getElementById("nomePerfil").textContent =
+          usuario.nome || "Cliente";
+
+        document.getElementById("nomeDado").textContent =
+          usuario.nome || "Não informado";
+
+        document.getElementById("usernamePerfil").textContent =
+          usuario.username
+            ? "@" + usuario.username
+            : "Não informado";
+
+        document.getElementById("emailPerfil").textContent =
+          usuario.email || "Não informado";
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar perfil:",
+          erro
+        );
+
+      }
+
+    }
+
+    async function carregarHistorico() {
+
+      const lista =
+        document.getElementById("historicoLista");
+
+      try {
+
+        const resposta =
+          await fetch("/api/my-orders");
+
+        const dados =
+          await resposta.json();
+
+        if (
+          !resposta.ok ||
+          !dados.authenticated
+        ) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        const pedidos =
+          dados.orders || [];
+
+        if (!pedidos.length) {
+
+          lista.innerHTML = `
+            <div class="perfil-vazio">
+              📭 Você ainda não realizou nenhuma recarga.
+            </div>
+          `;
+
+          return;
+        }
+
+        lista.innerHTML =
+          pedidos.map(pedido => {
+
+            const operadora =
+              escapar(pedido.operadora || "Operadora");
+
+            const valor =
+              formatarValor(pedido.preco);
+
+            const recarga =
+              pedido.recarga
+                ? "Recarga " + escapar(pedido.recarga)
+                : "Recarga";
+
+            return `
+              <div class="historico-item">
+
+                <div class="historico-linha">
+
+                  <span class="historico-operadora">
+                    ${operadora}
+                  </span>
+
+                  <span class="historico-valor">
+                    ${valor}
+                  </span>
+
+                </div>
+
+                <div class="historico-status">
+                  ${recarga}<br>
+                  ${statusTexto(pedido.status)}
+                </div>
+
+              </div>
+            `;
+
+          }).join("");
+
+      } catch (erro) {
+
+        console.error(
+          "Erro ao carregar histórico:",
+          erro
+        );
+
+        lista.innerHTML = `
+          <div class="perfil-vazio">
+            ⚠️ Não foi possível carregar o histórico.
+          </div>
+        `;
+
+      }
+
+    }
+
+    carregarPerfil();
+    carregarHistorico();
+
+  </script>
+
 </body>
+
 </html>

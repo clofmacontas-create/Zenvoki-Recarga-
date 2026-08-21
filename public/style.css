@@ -305,3 +305,478 @@ body {
     box-sizing: border-box;
   }
 }
+
+/* =========================
+   AÇÕES DA RECARGA
+   ========================= */
+
+.acoes-recarga {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  margin-top: 18px;
+  padding: 14px;
+
+  background: rgba(8, 35, 70, 0.88);
+  border: 1px solid rgba(30, 136, 229, 0.35);
+  border-radius: 18px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.25),
+    inset 0 0 20px rgba(30, 136, 229, 0.04);
+}
+
+.acoes-recarga button {
+  min-height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  border: 0;
+  border-radius: 13px;
+
+  background: rgba(255, 255, 255, 0.035);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+
+  color: #fff;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease;
+}
+
+.acoes-recarga button:hover {
+  transform: translateY(-2px);
+  background: rgba(30, 136, 229, 0.16);
+}
+
+.acoes-recarga button:active {
+  transform: scale(0.97);
+}
+
+.acoes-recarga button:first-child {
+  position: relative;
+}
+
+/* =========================
+   INFORMAÇÕES
+   ========================= */
+
+#infoRecarga {
+  margin-top: 10px;
+  padding: 12px 15px;
+
+  background: rgba(8, 35, 70, 0.65);
+  border: 1px solid rgba(30, 136, 229, 0.22);
+  border-radius: 13px;
+
+  color: #9aa6b7;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* =========================
+   OPERADORAS
+   ========================= */
+
+.operadoras-recarga {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+
+  margin-top: 18px;
+}
+
+.card-operadora {
+  min-height: 145px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px 12px;
+
+  border-radius: 17px;
+
+  background: rgba(8, 35, 70, 0.72);
+  border: 1px solid rgba(30, 136, 229, 0.28);
+
+  color: #fff;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.20);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.card-operadora:hover {
+  transform: translateY(-3px);
+  background: rgba(12, 48, 90, 0.88);
+  border-color: rgba(30, 136, 229, 0.50);
+}
+
+.card-operadora:active {
+  transform: scale(0.97);
+}
+
+.card-operadora strong {
+  font-size: 30px;
+  line-height: 1;
+  margin-bottom: 8px;
+}
+
+.card-operadora span {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.card-operadora small {
+  margin-top: 8px;
+
+  color: #8d9aae;
+  font-size: 11px;
+}
+
+/* TIM ocupa a linha inteira */
+
+#btnTIM {
+  grid-column: 1 / -1;
+}
+
+/* =========================
+   CELULAR
+   ========================= */
+
+@media (max-width: 480px) {
+
+  .acoes-recarga {
+    gap: 9px;
+    padding: 11px;
+  }
+
+  .acoes-recarga button {
+    min-height: 54px;
+    font-size: 13px;
+  }
+
+  .operadoras-recarga {
+    gap: 10px;
+  }
+
+  .card-operadora {
+    min-height: 135px;
+  }
+
+}
+
+/* =========================
+   LOGOS DA RECARGA
+   ========================= */
+
+.acoes-recarga button img {
+  width: 22px;
+  height: 22px;
+  object-fit: contain;
+  display: block;
+}
+
+.card-operadora img {
+  width: 70px;
+  height: 48px;
+  object-fit: contain;
+  display: block;
+  margin-bottom: 8px;
+}
+
+
+/* =========================================
+   NOVO PAINEL ZENVOKI RECARGA
+   ========================================= */
+
+.acoes-recarga {
+  margin-top: 18px;
+}
+
+
+.acoes-recarga button {
+  min-height: 92px;
+}
+
+
+.acoes-recarga button small {
+  display: block;
+  margin-top: 3px;
+  color: #8fa8c2;
+  font-size: 11px;
+}
+
+
+.acao-emoji {
+  font-size: 23px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+
+.info-recarga {
+  display: none;
+  margin-top: 12px;
+  padding: 5px 0;
+}
+
+
+.info-recarga.mostrar {
+  display: block;
+}
+
+
+.info-item {
+  padding: 14px;
+  margin-bottom: 9px;
+
+  border-radius: 13px;
+
+  background: rgba(255,255,255,.045);
+  border: 1px solid rgba(30,136,229,.18);
+}
+
+
+.info-item-title {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+
+  color: #fff;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+
+.info-item-title span {
+  flex-shrink: 0;
+}
+
+
+.info-item p {
+  margin: 8px 0 0 25px;
+
+  color: #91a5bd;
+  font-size: 12px;
+  line-height: 1.45;
+}
+
+
+.titulo-recarga {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+
+  margin: 22px 0 11px;
+
+  color: #fff;
+  font-size: 13px;
+  letter-spacing: .5px;
+}
+
+
+.titulo-recarga span {
+  font-size: 18px;
+}
+
+
+.card-operadora {
+  display: flex !important;
+  align-items: center;
+  gap: 14px;
+
+  width: 100%;
+  min-height: 76px;
+
+  padding: 12px 15px;
+
+  text-align: left;
+
+  cursor: pointer;
+}
+
+
+.card-operadora > img {
+  width: 46px !important;
+  height: 46px !important;
+
+  max-width: 46px !important;
+  max-height: 46px !important;
+
+  object-fit: contain !important;
+
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+
+.operadora-info {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+
+  min-width: 0;
+}
+
+
+.operadora-info strong {
+  color: #fff;
+  font-size: 16px;
+}
+
+
+.operadora-info small {
+  color: #91a5bd;
+  font-size: 12px;
+}
+
+
+.suporte-flutuante {
+  position: fixed;
+
+  right: 18px;
+  bottom: 18px;
+
+  width: 58px;
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0;
+
+  border: 0;
+  border-radius: 50%;
+
+  background:
+    linear-gradient(
+      145deg,
+      #1683ff,
+      #005eff
+    );
+
+  box-shadow:
+    0 8px 28px rgba(0,100,255,.42),
+    0 0 20px rgba(0,130,255,.25);
+
+  cursor: pointer;
+
+  z-index: 999;
+}
+
+
+.suporte-flutuante img {
+  width: 29px;
+  height: 29px;
+
+  object-fit: contain;
+}
+
+
+.suporte-flutuante:active {
+  transform: scale(.94);
+}
+
+
+@media (max-width: 420px) {
+
+  .suporte-flutuante {
+    right: 15px;
+    bottom: 15px;
+
+    width: 55px;
+    height: 55px;
+  }
+
+}
+
+/* WhatsApp do botão Grupo */
+.acoes-recarga button img[alt="Grupo"] {
+  filter: none;
+}
+
+
+/* WhatsApp verde no botão Grupo */
+.acoes-recarga button img[alt="Grupo"] {
+  filter: invert(45%) sepia(85%) saturate(700%) hue-rotate(90deg) brightness(90%) contrast(95%);
+}
+
+
+/* =========================
+   CARDS DAS OPERADORAS
+   ========================= */
+
+.card-operadora {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  gap: 4px !important;
+
+  width: 100%;
+  min-height: 135px;
+
+  padding: 12px 10px;
+  box-sizing: border-box;
+
+  text-align: center;
+}
+
+.card-operadora > img {
+  width: 46px !important;
+  height: 46px !important;
+  max-width: 46px !important;
+  max-height: 46px !important;
+
+  object-fit: contain !important;
+  border-radius: 50%;
+
+  flex: 0 0 auto;
+  margin: 0 0 5px !important;
+}
+
+.card-operadora .operadora-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 3px;
+
+  min-width: 0;
+}
+
+.card-operadora .operadora-info strong {
+  margin: 0;
+  line-height: 1.2;
+  font-size: 16px;
+}
+
+.card-operadora .operadora-info small {
+  margin: 0;
+  line-height: 1.2;
+  font-size: 12px;
+}
+
+#btnTIM {
+  grid-column: 1 / -1;
+}

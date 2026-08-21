@@ -1,232 +1,651 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>VIVO - Zenvoki Recarga</title>
+  <link rel="stylesheet" href="/style.css">
 
-  <link
-    rel="stylesheet"
-    href="/style.css"
-  >
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background:
+        radial-gradient(circle at top, rgba(0,110,255,.16), transparent 38%),
+        #050b16;
+      color: #fff;
+    }
+
+    .vivo-page {
+      width: 100%;
+      min-height: 100vh;
+      padding: 18px 14px 30px;
+    }
+
+    .vivo-top {
+      text-align: center;
+      margin-bottom: 16px;
+    }
+
+    .vivo-top h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 800;
+    }
+
+    .vivo-top h1 span {
+      color: #7357ff;
+    }
+
+    .vivo-top p {
+      margin: 5px 0 0;
+      color: #91a5bd;
+      font-size: 13px;
+    }
+
+    .vivo-card {
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 18px;
+      border-radius: 22px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(8,35,70,.98),
+          rgba(4,13,28,.99)
+        );
+
+      border: 1px solid rgba(30,136,229,.38);
+
+      box-shadow:
+        0 20px 60px rgba(0,0,0,.55),
+        0 0 35px rgba(0,119,255,.13);
+    }
+
+    .vivo-brand {
+      text-align: center;
+      padding-bottom: 16px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+    }
+
+    .vivo-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .vivo-header-row h2 {
+      margin: 0;
+    }
+
+    .vivo-header-row .tim-logo {
+      margin: 0;
+    }
+
+    .vivo-img {
+      width: 34px !important;
+      height: 34px !important;
+      max-width: 34px !important;
+      max-height: 34px !important;
+      object-fit: contain !important;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .vivo-logo img {
+      width: 28px;
+      height: 28px;
+      object-fit: contain;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .vivo-logo {
+      width: 42px;
+      height: 42px;
+      margin: 0 auto 10px;
+      border-radius: 50%;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      background:
+        linear-gradient(145deg,#173f73,#061a35);
+
+      border: 1px solid rgba(50,160,255,.45);
+
+      box-shadow:
+        0 0 25px rgba(0,120,255,.22);
+
+      font-size: 27px;
+      font-weight: 900;
+      color: #fff;
+    }
+
+    .vivo-brand h2 {
+      margin: 0;
+      font-size: 21px;
+    }
+
+    .vivo-brand p {
+      margin: 5px 0 0;
+      color: #91a5bd;
+      font-size: 13px;
+    }
+
+    .section-title {
+      margin: 18px 0 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #9fb4cc;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .phone-input {
+      width: 100%;
+      height: 50px;
+      padding: 0 14px;
+
+      border-radius: 13px;
+      border: 1px solid rgba(170,150,255,.28);
+
+      outline: none;
+
+      background: rgba(0,0,0,.22);
+      color: #fff;
+
+      font-size: 16px;
+      font-weight: 600;
+    }
+
+    .phone-input:focus {
+      border-color: #7357ff;
+      box-shadow: 0 0 0 3px rgba(22,131,255,.10);
+    }
+
+    .valor-label {
+      margin-top: 18px;
+    }
+
+    #listaRecargas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 9px;
+    }
+
+    .valor-btn {
+      min-height: 54px;
+      border-radius: 14px;
+      border: 1px solid rgba(170,150,255,.35);
+
+      background:
+        linear-gradient(
+          135deg,
+          #7357ff,
+          #4c35d9
+        );
+
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 7px 20px rgba(0,102,255,.20);
+    }
+
+    .valor-btn.selected {
+      border-color: #fff;
+      box-shadow:
+        0 0 0 2px rgba(22,131,255,.45),
+        0 8px 25px rgba(0,102,255,.35);
+      transform: translateY(-1px);
+    }
+
+    .tipo-recarga-title {
+      margin: 12px 0 2px !important;
+      padding: 0 !important;
+      line-height: 18px !important;
+    }
+
+    .tipo-recarga-title + .modo-box {
+      margin: 0 auto !important;
+    }
+
+    .modo-box {
+      width: 100%;
+      min-height: 38px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 0 14px;
+      margin: 0;
+
+      border-radius: 11px;
+      border: 1px solid rgba(30,136,229,.28);
+      background: rgba(255,255,255,.045);
+
+      color: #dcecff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .modo-option {
+      color: #dcecff;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .prazo-box {
+      padding: 13px 14px;
+      border-radius: 13px;
+
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+
+      color: #c8d5e4;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .prazo-box strong {
+      color: #fff;
+    }
+
+    .confirmar {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 18px;
+
+      border: 0;
+      border-radius: 14px;
+
+      background:
+        linear-gradient(
+          135deg,
+          #7357ff,
+          #0061df
+        );
+
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+
+      box-shadow:
+        0 10px 28px rgba(0,102,255,.28);
+    }
+
+    .confirmar:active {
+      transform: scale(.98);
+    }
+
+    .voltar {
+      width: 100%;
+      min-height: 45px;
+      margin-top: 10px;
+
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.10);
+
+      background: rgba(255,255,255,.045);
+      color: #cbd9e8;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .mensagem {
+      margin-top: 10px;
+      text-align: center;
+      color: #ff8c8c;
+      font-size: 12px;
+      min-height: 16px;
+    }
+
+    .carregando {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 12px;
+      color: #91a5bd;
+      font-size: 13px;
+    }
+
+    @media (max-width: 360px) {
+      .vivo-page {
+        padding: 12px 10px 24px;
+      }
+
+      .vivo-card {
+        padding: 14px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <main class="container">
+<main class="vivo-page">
 
-    <header class="logo">
+  <header class="tim-top">
+    <h1>Zenvoki <span>Recarga</span></h1>
+    <p>Recarga VIVO</p>
+  </header>
 
-      <h1>
-        Zenvoki <span>Recarga</span>
-      </h1>
+  <section class="vivo-card">
 
-      <p>
-        Recarga VIVO
-      </p>
-
-    </header>
-
-
-    <section class="hero">
-
-      <h2>
-        🟣 Recarga VIVO
-      </h2>
-
-      <p>
-        Escolha o valor da recarga que deseja realizar.
-      </p>
-
-
-      <div id="listaRecargas">
-
-        Carregando valores...
-
+    <div class="vivo-brand">
+      <div class="vivo-header-row">
+      <div class="tim-logo">
+        <img src="/assets/vivo.jpg" alt="VIVO" class="vivo-img">
       </div>
+      <h2>Recarga VIVO</h2>
+    </div>
+    <p>Preencha os dados da sua recarga</p>
+    </div>
 
+    <div class="section-title">
+      Dados da Recarga
+    </div>
 
-      <button
-        class="btn-recarregar"
-        type="button"
-        onclick="window.location.href='/recarga.html'"
-        style="
-          margin-top:18px;
-          background:rgba(255,255,255,0.06);
-          box-shadow:none;
-        "
-      >
+    <label class="field-label" for="numero">
+      Número do celular
+    </label>
 
-        ← Voltar
+    <input
+      id="numero"
+      class="phone-input"
+      type="tel"
+      inputmode="numeric"
+      maxlength="15"
+      placeholder="(00) 00000-0000"
+      autocomplete="tel"
+    >
 
-      </button>
+    <div class="section-title valor-label">
+      VALOR DA RECARGA
+    </div>
 
-    </section>
+    <div id="listaRecargas">
+      <div class="carregando">
+        Carregando valores...
+      </div>
+    </div>
 
-  </main>
+    <div class="section-title tipo-recarga-title">
+      TIPO DE RECARGA
+    </div>
 
+    <div id="modoBox" class="modo-box">
+      Carregando...
+    </div>
 
-  <script>
+    <div class="section-title">
+      Prazo de Processamento
+    </div>
 
-    function selecionarValor(
-      operadora,
-      recarga,
-      preco
-    ) {
+    <div class="prazo-box">
+      Após a confirmação do pagamento,
+      <strong>a recarga será processada dentro do prazo informado pelo sistema.</strong>
+    </div>
 
-      window.location.href =
-        "/numero.html?operadora=" +
-        encodeURIComponent(operadora) +
-        "&recarga=" +
-        encodeURIComponent(recarga) +
-        "&preco=" +
-        encodeURIComponent(preco);
+    <div id="mensagem" class="mensagem"></div>
 
+    <button
+      id="confirmar"
+      class="confirmar"
+      type="button"
+    >
+      ⚡ Confirmar Recarga
+    </button>
+
+    <button
+      class="voltar"
+      type="button"
+      onclick="window.location.href='/recarga.html'"
+    >
+      ← Voltar
+    </button>
+
+  </section>
+
+</main>
+
+<script>
+  let valorSelecionado = null;
+  let modoRecarga = "sem_codigo";
+
+  const numeroInput =
+    document.getElementById("numero");
+
+  const lista =
+    document.getElementById("listaRecargas");
+
+  const mensagem =
+    document.getElementById("mensagem");
+
+  function formatarTelefone(valor) {
+    let numero = valor.replace(/\D/g, "").slice(0, 11);
+
+    if (numero.length <= 2) {
+      return numero;
     }
 
+    if (numero.length <= 7) {
+      return "(" + numero.slice(0, 2) + ") " +
+        numero.slice(2);
+    }
 
-    async function carregarRecargas() {
+    return "(" + numero.slice(0, 2) + ") " +
+      numero.slice(2, 7) + "-" +
+      numero.slice(7);
+  }
 
-      const lista =
-        document.getElementById(
-          "listaRecargas"
+  numeroInput.addEventListener("input", () => {
+    numeroInput.value =
+      formatarTelefone(numeroInput.value);
+  });
+
+  function selecionarValor(recarga, preco, botao) {
+    valorSelecionado = {
+      recarga,
+      preco
+    };
+
+    document
+      .querySelectorAll(".valor-btn")
+      .forEach(btn =>
+        btn.classList.remove("selected")
+      );
+
+    botao.classList.add("selected");
+
+    mensagem.textContent = "";
+  }
+
+  function atualizarModoVisual() {
+    const box = document.getElementById("modoBox");
+
+    if (modoRecarga === "com_codigo") {
+      box.innerHTML = `
+        <div class="modo-option">
+          ❌ Com código
+        </div>
+      `;
+    } else {
+      box.innerHTML = `
+        <div class="modo-option">
+          ✅ Sem código
+        </div>
+      `;
+    }
+  }
+
+  async function carregarModo() {
+    try {
+      const resposta =
+        await fetch("/api/recharge-mode/VIVO");
+
+      const dados =
+        await resposta.json();
+
+      if (resposta.ok && dados.modoRecarga) {
+        modoRecarga = dados.modoRecarga;
+      }
+
+    } catch (erro) {
+      console.error(
+        "Erro ao carregar modo:",
+        erro
+      );
+    }
+
+    atualizarModoVisual();
+  }
+
+  async function carregarRecargas() {
+    try {
+      const status =
+        await fetch("/api/operadoras");
+
+      const statusDados =
+        await status.json();
+
+      if (
+        !status.ok ||
+        statusDados.operadoras?.VIVO === false
+      ) {
+        lista.innerHTML =
+          '<p class="carregando">🔴 Recarga VIVO indisponível no momento.</p>';
+        return;
+      }
+
+      const resposta =
+        await fetch("/api/recharges");
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.error ||
+          "Erro ao carregar recargas."
         );
+      }
 
-const respostaStatus =
-  await fetch("/api/operadoras");
+      const recargas =
+        dados.recharges?.VIVO || {};
 
-const dadosStatus =
-  await respostaStatus.json();
+      lista.innerHTML = "";
 
-if (
-  !respostaStatus.ok ||
-  dadosStatus.operadoras?.VIVO === false
-) {
-  lista.innerHTML =
-    "<p>🟣 Recarga VIVO indisponível no momento.</p>";
-  return;
-}
+      for (const recarga of Object.keys(recargas)) {
 
-      try {
+        const configuracao =
+          recargas[recarga];
 
-        const resposta =
-          await fetch(
-            "/api/recharges"
-          );
-
-
-        const dados =
-          await resposta.json();
-
-
-        if (!resposta.ok) {
-
-          throw new Error(
-            dados.error ||
-            "Erro ao carregar recargas."
-          );
-
+        if (
+          typeof configuracao === "object" &&
+          configuracao.ativo === false
+        ) {
+          continue;
         }
 
+        const preco =
+          typeof configuracao === "object"
+            ? configuracao.preco
+            : configuracao;
 
-        const recargas =
-          dados.recharges?.VIVO || {};
+        const botao =
+          document.createElement("button");
 
+        botao.type = "button";
+        botao.className = "valor-btn";
 
-        lista.innerHTML = "";
+        botao.textContent =
+          `R$ ${recarga} → R$ ${Number(preco)
+            .toFixed(2)
+            .replace(".", ",")}`;
 
-
-        for (
-          const recarga of Object.keys(recargas)
-        ) {
-
-if (
-  typeof recargas[recarga] === "object" &&
-  recargas[recarga].ativo === false
-) {
-  continue;
-}
-          const configuracao =
-            recargas[recarga];
-
-
-          const preco =
-            typeof configuracao === "object"
-              ? configuracao.preco
-              : configuracao;
-
-
-          const botao =
-            document.createElement(
-              "button"
-            );
-
-
-          botao.className =
-            "btn-recarregar";
-
-
-          botao.type =
-            "button";
-
-
-          botao.textContent =
-            `R$ ${recarga} → R$ ${Number(preco).toFixed(2).replace(".", ",")}`;
-
-
-          botao.onclick =
-            () =>
-              selecionarValor(
-                "VIVO",
-                recarga,
-                preco
-              );
-
-
-          lista.appendChild(
+        botao.onclick = () =>
+          selecionarValor(
+            recarga,
+            preco,
             botao
           );
 
-        }
-
-
-        if (
-          Object.keys(recargas).length === 0
-        ) {
-
-          lista.innerHTML =
-            "<p>Nenhuma recarga disponível no momento.</p>";
-
-        }
-
-      } catch (erro) {
-
-        console.error(
-          "Erro ao carregar recargas:",
-          erro
-        );
-
-
-        lista.innerHTML =
-          "<p>Não foi possível carregar as recargas.</p>";
-
+        lista.appendChild(botao);
       }
 
+      if (!lista.children.length) {
+        lista.innerHTML =
+          '<p class="carregando">Nenhuma recarga disponível no momento.</p>';
+      }
+
+    } catch (erro) {
+      console.error(
+        "Erro ao carregar recargas:",
+        erro
+      );
+
+      lista.innerHTML =
+        '<p class="carregando">Não foi possível carregar as recargas.</p>';
     }
+  }
 
+  document
+    .getElementById("confirmar")
+    .addEventListener("click", () => {
 
-    carregarRecargas();
+      const numero =
+        numeroInput.value.replace(/\D/g, "");
 
-  </script>
+      if (numero.length !== 11) {
+        mensagem.textContent =
+          "Digite um número de celular válido.";
+        numeroInput.focus();
+        return;
+      }
+
+      if (!valorSelecionado) {
+        mensagem.textContent =
+          "Escolha o valor da recarga.";
+        return;
+      }
+
+      const params =
+        new URLSearchParams({
+          operadora: "VIVO",
+          numero,
+          recarga: valorSelecionado.recarga,
+          preco: valorSelecionado.preco,
+          modo: modoRecarga
+        });
+
+      window.location.href =
+        "/confirmar.html?" + params.toString();
+    });
+
+  carregarModo();
+  carregarRecargas();
+</script>
 
 </body>
-
 </html>

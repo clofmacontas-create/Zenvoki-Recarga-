@@ -172,7 +172,7 @@
   },
   "rechargeMode": "com_codigo",
   "operadoras": {
-    "TIM": false,
+    "TIM": true,
     "CLARO": true,
     "VIVO": true
   },

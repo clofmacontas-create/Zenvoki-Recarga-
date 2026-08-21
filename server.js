@@ -824,6 +824,54 @@ app.get(
 );
 
 // =========================
+// HISTÓRICO DO CLIENTE
+// =========================
+
+app.get(
+  "/api/my-orders",
+  (req, res) => {
+    try {
+
+      if (!req.session.userId) {
+        return res.status(401).json({
+          authenticated: false
+        });
+      }
+
+      const db = carregarDB();
+
+      const pedidos = db.orders
+        .filter(
+          order =>
+            order.usuarioId === req.session.userId
+        )
+        .sort(
+          (a, b) =>
+            new Date(b.criadoEm) -
+            new Date(a.criadoEm)
+        );
+
+      res.json({
+        authenticated: true,
+        orders: pedidos
+      });
+
+    } catch (erro) {
+
+      console.error(
+        "Erro ao carregar histórico:",
+        erro
+      );
+
+      res.status(500).json({
+        error: "Não foi possível carregar o histórico."
+      });
+
+    }
+  }
+);
+
+// =========================
 // STATUS
 // =========================
 
@@ -903,6 +951,42 @@ app.get(
     }
   }
 );
+
+// =========================
+// CLIENTE - MODO DA RECARGA POR OPERADORA
+// =========================
+app.get("/api/recharge-mode/:operadora", (req, res) => {
+  try {
+    const db = carregarDB();
+    const operadora = String(req.params.operadora || "").toUpperCase();
+
+    if (!["TIM", "CLARO", "VIVO"].includes(operadora)) {
+      return res.status(400).json({
+        success: false,
+        error: "Operadora inválida."
+      });
+    }
+
+    const modo =
+      db.rechargeModes?.[operadora] ||
+      db.rechargeMode ||
+      "sem_codigo";
+
+    res.json({
+      success: true,
+      operadora,
+      modoRecarga: modo
+    });
+
+  } catch (error) {
+    console.error("Erro ao consultar modo da recarga:", error);
+
+    res.status(500).json({
+      success: false,
+      error: "Não foi possível consultar o modo da recarga."
+    });
+  }
+});
 
 // =========================
 // ADMIN - MODO DE RECARGA

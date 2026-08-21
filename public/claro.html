@@ -1,232 +1,690 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CLARO - Zenvoki Recarga</title>
+  <link rel="stylesheet" href="/style.css">
 
-  <link
-    rel="stylesheet"
-    href="/style.css"
-  >
+  <style>
+    * {
+      box-sizing: border-box;
+    }
 
+    body {
+      margin: 0;
+      min-height: 100vh;
+      overflow: hidden;
+    }
+
+    .operadora-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 16px;
+    }
+
+    .operadora-logo {
+      text-align: center;
+      margin-bottom: 14px;
+    }
+
+    .operadora-logo h1 {
+      margin: 0;
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .operadora-logo h1 span {
+      color: #1683ff;
+    }
+
+    .operadora-logo p {
+      margin: 4px 0 0;
+      color: #9fb4cc;
+      font-size: 13px;
+    }
+
+    .operadora-card {
+      width: 100%;
+      max-width: 430px;
+      margin: 0 auto;
+      padding: 20px 16px 16px;
+      border-radius: 22px;
+
+      background: linear-gradient(
+        145deg,
+        rgba(55, 8, 18, 0.98),
+        rgba(22, 5, 12, 0.99)
+      );
+
+      border: 1px solid rgba(255, 60, 75, 0.35);
+
+      box-shadow:
+        0 20px 60px rgba(0, 0, 0, 0.5),
+        0 0 35px rgba(255, 30, 55, 0.12);
+    }
+
+    .operadora-header {
+      text-align: center;
+      margin-bottom: 17px;
+    }
+
+    .claro-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .claro-header-row h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 21px;
+    }
+
+    .claro-header-row .claro-logo {
+      width: 42px;
+      height: 42px;
+      margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .claro-img {
+      width: 34px !important;
+      height: 34px !important;
+      max-width: 34px !important;
+      max-height: 34px !important;
+      object-fit: contain !important;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .operadora-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .operadora-icon {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 10px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+
+      font-size: 28px;
+    }
+
+    .operadora-header h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 21px;
+    }
+
+    .operadora-header p {
+      margin: 6px 0 0;
+      color: #d0aab1;
+      font-size: 13px;
+    }
+
+    .section-title {
+      margin: 18px 0 10px;
+      color: #fff;
+      font-size: 13px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .6px;
+    }
+
+    .field-label {
+      display: block;
+      margin-bottom: 7px;
+      color: #d0aab1;
+      font-size: 13px;
+    }
+
+    .phone-input {
+      width: 100%;
+      height: 50px;
+      padding: 0 14px;
+
+      border: 1px solid rgba(255, 100, 110, .28);
+      border-radius: 13px;
+
+      background: rgba(255,255,255,.045);
+      color: #fff;
+
+      font-size: 15px;
+      outline: none;
+    }
+
+    .phone-input::placeholder {
+      color: #85656c;
+    }
+
+    .phone-input:focus {
+      border-color: rgba(255,70,85,.7);
+      box-shadow: 0 0 0 2px rgba(255,40,60,.12);
+    }
+
+    .valor-label {
+      margin-top: 16px;
+    }
+
+    #listaRecargas {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    .valor-btn {
+      min-height: 54px;
+      border-radius: 14px;
+
+      border: 1px solid rgba(255, 100, 110, .4);
+
+      background: linear-gradient(
+        135deg,
+        #ff3045,
+        #d90022
+      );
+
+      color: #fff;
+      font-size: 14px;
+      font-weight: 800;
+
+      cursor: pointer;
+
+      box-shadow:
+        0 7px 20px rgba(255, 0, 40, .20);
+    }
+
+    .valor-btn.selected {
+      border-color: #fff;
+      box-shadow:
+        0 0 0 2px rgba(255,48,69,.45),
+        0 8px 25px rgba(255,0,40,.35);
+
+      transform: translateY(-1px);
+    }
+
+    .tipo-recarga-title {
+      margin: 10px 0 3px !important;
+    }
+
+    .tipo-recarga-title + .modo-box {
+      margin-top: 0 !important;
+    }
+
+    .modo-box {
+      width: 100%;
+      min-height: 38px;
+
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+
+      padding: 0 14px;
+      margin: 0;
+
+      border-radius: 11px;
+      border: 1px solid rgba(255, 70, 85, .28);
+      background: rgba(255,255,255,.045);
+
+      color: #ffecef;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .modo-option {
+      color: #ffecef;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .prazo-box {
+      padding: 13px 14px;
+      border-radius: 13px;
+
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+
+      color: #d0aab1;
+      font-size: 13px;
+      line-height: 1.45;
+    }
+
+    .prazo-box strong {
+      color: #fff;
+    }
+
+    .confirmar {
+      width: 100%;
+      min-height: 54px;
+      margin-top: 18px;
+
+      border: 0;
+      border-radius: 14px;
+
+      background: linear-gradient(
+        135deg,
+        #ff3045,
+        #d90022
+      );
+
+      color: #fff;
+      font-size: 15px;
+      font-weight: 800;
+
+      box-shadow:
+        0 10px 28px rgba(255,0,40,.28);
+
+      cursor: pointer;
+    }
+
+    .confirmar:active {
+      transform: scale(.98);
+    }
+
+    .voltar {
+      width: 100%;
+      min-height: 45px;
+      margin-top: 10px;
+
+      border-radius: 13px;
+      border: 1px solid rgba(255,255,255,.10);
+
+      background: rgba(255,255,255,.045);
+      color: #ffecef;
+
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    .mensagem {
+      margin-top: 10px;
+      text-align: center;
+      color: #ff8c8c;
+      font-size: 12px;
+      min-height: 16px;
+    }
+
+    .carregando {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 12px;
+      color: #d0aab1;
+      font-size: 13px;
+    }
+
+    @media (max-height: 650px) {
+      .operadora-page {
+        padding: 8px 14px 20px;
+      }
+
+      .operadora-logo {
+        margin-bottom: 7px;
+      }
+
+      .operadora-logo h1 {
+        font-size: 21px;
+      }
+
+      .operadora-card {
+        padding: 14px 12px 12px;
+      }
+
+      .operadora-icon img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+      display: block;
+    }
+
+    .operadora-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 22px;
+        margin-bottom: 6px;
+      }
+
+      .operadora-header {
+        margin-bottom: 10px;
+      }
+
+      .operadora-header h2 {
+        font-size: 18px;
+      }
+
+      .section-title {
+        margin-top: 12px;
+        margin-bottom: 7px;
+      }
+
+      .phone-input {
+        height: 44px;
+      }
+
+      #listaRecargas {
+        gap: 7px;
+      }
+
+      .valor-btn {
+        min-height: 45px;
+        font-size: 13px;
+      }
+
+      .confirmar {
+        min-height: 46px;
+        margin-top: 12px;
+      }
+
+      .voltar {
+        min-height: 40px;
+        margin-top: 8px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <main class="container">
+<main class="operadora-page">
 
-    <header class="logo">
+  <header class="operadora-logo">
+    <h1>Zenvoki <span>Recarga</span></h1>
+    <p>Recarga CLARO</p>
+  </header>
 
-      <h1>
-        Zenvoki <span>Recarga</span>
-      </h1>
+  <section class="operadora-card">
 
-      <p>
-        Recarga CLARO
-      </p>
-
-    </header>
-
-
-    <section class="hero">
-
-      <h2>
-        🔴 Recarga CLARO
-      </h2>
-
-      <p>
-        Escolha o valor da recarga que deseja realizar.
-      </p>
-
-
-      <div id="listaRecargas">
-
-        Carregando valores...
-
+    <div class="operadora-header">
+      <div class="claro-header-row">
+        <div class="claro-logo">
+          <img src="/assets/claro.jpg" alt="CLARO" class="claro-img">
+        </div>
+        <h2>Recarga CLARO</h2>
       </div>
 
+      <p>Preencha os dados da sua recarga</p>
+    </div>
 
-      <button
-        class="btn-recarregar"
-        type="button"
-        onclick="window.location.href='/recarga.html'"
-        style="
-          margin-top:18px;
-          background:rgba(255,255,255,0.06);
-          box-shadow:none;
-        "
-      >
+    <div class="section-title">
+      Dados da Recarga
+    </div>
 
-        ← Voltar
+    <label class="field-label" for="numero">
+      Número do celular
+    </label>
 
-      </button>
+    <input
+      id="numero"
+      class="phone-input"
+      type="tel"
+      inputmode="numeric"
+      maxlength="15"
+      placeholder="(00) 00000-0000"
+      autocomplete="tel"
+    >
 
-    </section>
+    <div class="section-title valor-label">
+      VALOR DA RECARGA
+    </div>
 
-  </main>
+    <div id="listaRecargas">
+      <div class="carregando">
+        Carregando valores...
+      </div>
+    </div>
 
+    <div class="section-title tipo-recarga-title">
+      TIPO DE RECARGA
+    </div>
 
-  <script>
+    <div id="modoBox" class="modo-box">
+      Carregando...
+    </div>
 
-    function selecionarValor(
-      operadora,
-      recarga,
-      preco
-    ) {
+    <div class="section-title">
+      Prazo de Processamento
+    </div>
 
-      window.location.href =
-        "/numero.html?operadora=" +
-        encodeURIComponent(operadora) +
-        "&recarga=" +
-        encodeURIComponent(recarga) +
-        "&preco=" +
-        encodeURIComponent(preco);
+    <div class="prazo-box">
+      Após a confirmação do pagamento,
+      <strong>a recarga será processada dentro do prazo informado pelo sistema.</strong>
+    </div>
 
+    <div id="mensagem" class="mensagem"></div>
+
+    <button
+      id="confirmar"
+      class="confirmar"
+      type="button"
+    >
+      ⚡ Confirmar Recarga
+    </button>
+
+    <button
+      class="voltar"
+      type="button"
+      onclick="window.location.href='/recarga.html'"
+    >
+      ← Voltar
+    </button>
+
+  </section>
+</main>
+
+<script>
+  let valorSelecionado = null;
+  let modoRecarga = "sem_codigo";
+
+  const numeroInput = document.getElementById("numero");
+  const lista = document.getElementById("listaRecargas");
+  const mensagem = document.getElementById("mensagem");
+
+  function formatarTelefone(valor) {
+    let numero = valor.replace(/\D/g, "").slice(0, 11);
+
+    if (numero.length <= 2) return numero;
+
+    if (numero.length <= 7) {
+      return "(" + numero.slice(0, 2) + ") " + numero.slice(2);
     }
 
+    return "(" + numero.slice(0, 2) + ") " +
+      numero.slice(2, 7) + "-" +
+      numero.slice(7);
+  }
 
-    async function carregarRecargas() {
+  numeroInput.addEventListener("input", () => {
+    numeroInput.value = formatarTelefone(numeroInput.value);
+  });
 
-      const lista =
-        document.getElementById(
-          "listaRecargas"
+  function selecionarValor(recarga, preco, botao) {
+    valorSelecionado = {
+      recarga,
+      preco
+    };
+
+    document
+      .querySelectorAll(".valor-btn")
+      .forEach(btn => btn.classList.remove("selected"));
+
+    botao.classList.add("selected");
+    mensagem.textContent = "";
+  }
+
+  function atualizarModoVisual() {
+    const box = document.getElementById("modoBox");
+
+    if (modoRecarga === "com_codigo") {
+      box.innerHTML = `
+        <div class="modo-option">
+          ❌ Com código
+        </div>
+      `;
+    } else {
+      box.innerHTML = `
+        <div class="modo-option">
+          ✅ Sem código
+        </div>
+      `;
+    }
+  }
+
+  async function carregarModo() {
+    try {
+      const resposta =
+        await fetch("/api/recharge-mode/CLARO");
+
+      const dados =
+        await resposta.json();
+
+      if (resposta.ok && dados.modoRecarga) {
+        modoRecarga = dados.modoRecarga;
+      }
+
+    } catch (erro) {
+      console.error("Erro ao carregar modo:", erro);
+    }
+
+    atualizarModoVisual();
+  }
+
+  async function carregarRecargas() {
+    try {
+      const status =
+        await fetch("/api/operadoras");
+
+      const statusDados =
+        await status.json();
+
+      if (
+        !status.ok ||
+        statusDados.operadoras?.CLARO === false
+      ) {
+        lista.innerHTML =
+          '<p class="carregando">🔴 Recarga CLARO indisponível no momento.</p>';
+        return;
+      }
+
+      const resposta =
+        await fetch("/api/recharges");
+
+      const dados =
+        await resposta.json();
+
+      if (!resposta.ok) {
+        throw new Error(
+          dados.error || "Erro ao carregar recargas."
         );
+      }
 
-const respostaStatus =
-  await fetch("/api/operadoras");
+      const recargas =
+        dados.recharges?.CLARO || {};
 
-const dadosStatus =
-  await respostaStatus.json();
+      lista.innerHTML = "";
 
-if (
-  !respostaStatus.ok ||
-  dadosStatus.operadoras?.CLARO === false
-) {
-  lista.innerHTML =
-    "<p>🔴 Recarga CLARO indisponível no momento.</p>";
-  return;
-}
+      for (const recarga of Object.keys(recargas)) {
+        const configuracao = recargas[recarga];
 
-      try {
-
-        const resposta =
-          await fetch(
-            "/api/recharges"
-          );
-
-
-        const dados =
-          await resposta.json();
-
-
-        if (!resposta.ok) {
-
-          throw new Error(
-            dados.error ||
-            "Erro ao carregar recargas."
-          );
-
+        if (
+          typeof configuracao === "object" &&
+          configuracao.ativo === false
+        ) {
+          continue;
         }
 
+        const preco =
+          typeof configuracao === "object"
+            ? configuracao.preco
+            : configuracao;
 
-        const recargas =
-          dados.recharges?.CLARO || {};
+        const botao =
+          document.createElement("button");
 
+        botao.type = "button";
+        botao.className = "valor-btn";
 
-        lista.innerHTML = "";
+        botao.textContent =
+          `R$ ${recarga} → R$ ${Number(preco)
+            .toFixed(2)
+            .replace(".", ",")}`;
 
-
-        for (
-          const recarga of Object.keys(recargas)
-        ) {
-
-if (
-  typeof recargas[recarga] === "object" &&
-  recargas[recarga].ativo === false
-) {
-  continue;
-}
-          const configuracao =
-            recargas[recarga];
-
-
-          const preco =
-            typeof configuracao === "object"
-              ? configuracao.preco
-              : configuracao;
-
-
-          const botao =
-            document.createElement(
-              "button"
-            );
-
-
-          botao.className =
-            "btn-recarregar";
-
-
-          botao.type =
-            "button";
-
-
-          botao.textContent =
-            `R$ ${recarga} → R$ ${Number(preco).toFixed(2).replace(".", ",")}`;
-
-
-          botao.onclick =
-            () =>
-              selecionarValor(
-                "CLARO",
-                recarga,
-                preco
-              );
-
-
-          lista.appendChild(
+        botao.onclick = () =>
+          selecionarValor(
+            recarga,
+            preco,
             botao
           );
 
-        }
-
-
-        if (
-          Object.keys(recargas).length === 0
-        ) {
-
-          lista.innerHTML =
-            "<p>Nenhuma recarga disponível no momento.</p>";
-
-        }
-
-      } catch (erro) {
-
-        console.error(
-          "Erro ao carregar recargas:",
-          erro
-        );
-
-
-        lista.innerHTML =
-          "<p>Não foi possível carregar as recargas.</p>";
-
+        lista.appendChild(botao);
       }
 
+      if (!lista.children.length) {
+        lista.innerHTML =
+          '<p class="carregando">Nenhuma recarga disponível no momento.</p>';
+      }
+
+    } catch (erro) {
+      console.error("Erro ao carregar recargas:", erro);
+
+      lista.innerHTML =
+        '<p class="carregando">Não foi possível carregar as recargas.</p>';
     }
+  }
 
+  document
+    .getElementById("confirmar")
+    .addEventListener("click", () => {
 
-    carregarRecargas();
+      const numero =
+        numeroInput.value.replace(/\D/g, "");
 
-  </script>
+      if (numero.length !== 11) {
+        mensagem.textContent =
+          "Digite um número de celular válido.";
+        numeroInput.focus();
+        return;
+      }
+
+      if (!valorSelecionado) {
+        mensagem.textContent =
+          "Escolha o valor da recarga.";
+        return;
+      }
+
+      const params =
+        new URLSearchParams({
+          operadora: "CLARO",
+          numero,
+          recarga: valorSelecionado.recarga,
+          preco: valorSelecionado.preco,
+          modo: modoRecarga
+        });
+
+      window.location.href =
+        "/confirmar.html?" + params.toString();
+    });
+
+  carregarModo();
+  carregarRecargas();
+</script>
 
 </body>
-
 </html>

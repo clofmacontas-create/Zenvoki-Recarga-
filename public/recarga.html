@@ -3,12 +3,13 @@
 
 <head>
   <meta charset="UTF-8">
+
   <meta
     name="viewport"
     content="width=device-width, initial-scale=1.0"
   >
 
-  <title>Fazer Recarga - Zenvoki Recarga</title>
+  <title>Zenvoki Recarga</title>
 
   <link
     rel="stylesheet"
@@ -21,147 +22,378 @@
   <main class="container">
 
     <header class="logo">
+
       <h1>
         Zenvoki <span>Recarga</span>
       </h1>
 
       <p>
-        Escolha sua operadora
+        Recargas rápidas e seguras
       </p>
 
     </header>
 
+
     <section class="hero">
 
-      <h2>
-        Qual é sua operadora?
-      </h2>
+      <!-- AÇÕES -->
+      <div class="acoes-recarga">
 
-      <p>
-        Selecione a operadora do número que deseja recarregar.
-      </p>
+        <button
+          type="button"
+          onclick="window.open('https://chat.whatsapp.com/', '_blank')"
+        >
+          <img
+            src="/assets/whatsapp.svg"
+            alt="Grupo"
+          >
 
-      <button
-  id="btnTIM"
-  type="button"
-  class="btn-recarregar"
-  onclick="window.location.href='/tim.html'"
->
-  🔵 TIM
-</button>
+          <span>Grupo</span>
+        </button>
 
-<button
-  id="btnCLARO"
-  type="button"
-  class="btn-recarregar"
-  onclick="window.location.href='/claro.html'"
-  style="margin-top: 12px;"
->
-  🔴 CLARO
-</button>
-<button
-  id="btnVIVO"
-  type="button"
-  class="btn-recarregar"
-  onclick="window.location.href='/vivo.html'"
-  style="margin-top: 12px;"
->
-  &#x1F7E3; VIVO
-</button>
 
-<button
-        type="button"
-        class="btn-recarregar"
-        onclick="window.location.href='/painel.html'"
-        style="
-          margin-top: 12px;
-          background: rgba(255,255,255,0.06);
-          box-shadow: none;
-        "
+        <button
+          type="button"
+          onclick="window.open('https://t.me/TulsaEsim_Robot', '_blank')"
+        >
+          <img
+            src="/assets/telegram.svg"
+            alt="Comprar eSIM"
+          >
+
+          <span>Comprar eSIM</span>
+        </button>
+
+
+        <button
+          type="button"
+          onclick="document.getElementById('infoRecarga').classList.toggle('mostrar')"
+        >
+          <img
+            src="/assets/info.svg"
+            alt="Informações"
+            style="color:#1683ff; filter:none;"
+          >
+
+          <span>Informações</span>
+        </button>
+
+
+        <button
+          type="button"
+          onclick="window.location.href='/painel.html'"
+        >
+          <span class="acao-emoji">👤</span>
+
+          <span>Meu Perfil</span>
+        </button>
+
+      </div>
+
+
+      <!-- INFORMAÇÕES -->
+      <div
+        id="infoRecarga"
+        class="info-recarga"
       >
-        ← Voltar
-      </button>
+
+        <div class="info-item">
+
+          <div class="info-item-title">
+            <span>✅</span>
+            <strong>Como funciona a recarga COM CÓDIGO</strong>
+          </div>
+
+          <p>
+            Após a confirmação do pagamento, o código da recarga é
+            utilizado para realizar o procedimento na operadora.
+          </p>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="info-item-title">
+            <span>📱</span>
+            <strong>Como funciona a recarga SEM CÓDIGO</strong>
+          </div>
+
+          <p>
+            A recarga é processada diretamente no número informado
+            durante o pedido, conforme o modo configurado para a operadora.
+          </p>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="info-item-title">
+            <span>📡</span>
+            <strong>Quais operadoras estão disponíveis</strong>
+          </div>
+
+          <p>
+            As operadoras disponíveis aparecem automaticamente nesta
+            página quando estão habilitadas pelo sistema.
+          </p>
+
+        </div>
+
+
+        <div class="info-item">
+
+          <div class="info-item-title">
+            <span>⏱️</span>
+            <strong>Prazos de processamento</strong>
+          </div>
+
+          <p>
+            Após a confirmação do pagamento, a recarga poderá ser
+            processada em até 24 horas.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <!-- RECARGA -->
+      <div class="titulo-recarga">
+
+        <span>📱</span>
+
+        <strong>
+          FAZER RECARGA
+        </strong>
+
+      </div>
+
+
+      <!-- OPERADORAS -->
+      <div class="operadoras-recarga">
+
+        <button
+          id="btnCLARO"
+          type="button"
+          class="card-operadora"
+          onclick="window.location.href='/claro.html'"
+        >
+
+          <img
+            src="/assets/claro.jpg"
+            alt="Claro"
+          >
+
+          <div class="operadora-info">
+
+            <strong>
+              Claro
+            </strong>
+
+            <small id="precoCLARO">
+              Carregando...
+            </small>
+
+          </div>
+
+        </button>
+
+
+        <button
+          id="btnVIVO"
+          type="button"
+          class="card-operadora"
+          onclick="window.location.href='/vivo.html'"
+        >
+
+          <img
+            src="/assets/vivo.jpg"
+            alt="Vivo"
+          >
+
+          <div class="operadora-info">
+
+            <strong>
+              Vivo
+            </strong>
+
+            <small id="precoVIVO">
+              Carregando...
+            </small>
+
+          </div>
+
+        </button>
+
+
+        <button
+          id="btnTIM"
+          type="button"
+          class="card-operadora"
+          onclick="window.location.href='/tim.html'"
+        >
+
+          <img
+            src="/assets/tim.jpg"
+            alt="TIM"
+          >
+
+          <div class="operadora-info">
+
+            <strong>
+              TIM
+            </strong>
+
+            <small id="precoTIM">
+              Carregando...
+            </small>
+
+          </div>
+
+        </button>
+
+      </div>
 
     </section>
 
   </main>
 
+
+  <!-- SUPORTE FLUTUANTE -->
+  <button
+    class="suporte-flutuante"
+    type="button"
+    onclick="window.open('https://wa.me/556199277795', '_blank')"
+    aria-label="Suporte"
+  >
+
+    <img
+      src="/assets/suporte.svg"
+      alt="Suporte"
+    >
+
+  </button>
+
+
   <script>
 
-    async function carregarStatusOperadoras() {
+    function menorRecarga(recargas) {
+
+      if (!recargas || typeof recargas !== "object") {
+        return null;
+      }
+
+      const valores = Object.keys(recargas)
+        .map(Number)
+        .filter(Number.isFinite);
+
+      if (!valores.length) {
+        return null;
+      }
+
+      return Math.min(...valores);
+
+    }
+
+
+    function formatarReais(valor) {
+
+      return Number(valor)
+        .toFixed(2)
+        .replace(".", ",");
+
+    }
+
+
+    async function carregarDados() {
 
       try {
 
-        const resposta =
+        const respostaOperadoras =
           await fetch("/api/operadoras");
 
-        const dados =
-          await resposta.json();
-
-        if (!resposta.ok) {
-          throw new Error(
-            dados.error ||
-            "Erro ao carregar status."
-          );
-        }
+        const dadosOperadoras =
+          await respostaOperadoras.json();
 
         const operadoras =
-          dados.operadoras || {};
-
-        const btnTIM =
-          document.getElementById("btnTIM");
-
-        const btnCLARO =
-          document.getElementById("btnCLARO");
-const btnVIVO =
-  document.getElementById("btnVIVO");
-
-        if (operadoras.TIM !== true) {
-
-          btnTIM.style.display = "none";
-
-        }
+          dadosOperadoras.operadoras || {};
 
 
-        if (operadoras.CLARO !== true) {
+        const respostaRecargas =
+          await fetch("/api/recharges");
 
-          btnCLARO.style.display = "none";
+        const dadosRecargas =
+          await respostaRecargas.json();
 
-        }
-if (operadoras.VIVO !== true) {
-  btnVIVO.style.display = "none";
-}
+        const recargas =
+          dadosRecargas.recharges || {};
 
 
-                 if (
-                operadoras.TIM !== true &&
-                operadoras.CLARO !== true &&
-                operadoras.VIVO !== true
-                 ) {
+        const mapa = {
 
-          const mensagem =
-            document.createElement("p");
+          TIM: {
+            botao: "btnTIM",
+            preco: "precoTIM"
+          },
 
-          mensagem.textContent =
-            "Nenhuma operadora disponível no momento.";
+          CLARO: {
+            botao: "btnCLARO",
+            preco: "precoCLARO"
+          },
 
-          mensagem.style.marginTop = "20px";
+          VIVO: {
+            botao: "btnVIVO",
+            preco: "precoVIVO"
+          }
 
-          document
-            .querySelector(".hero")
-            .insertBefore(
-              mensagem,
-              document.querySelector(
-                'button[onclick*="painel.html"]'
-              )
-            );
+        };
+
+
+        for (const operadora of Object.keys(mapa)) {
+
+          const elementos =
+            mapa[operadora];
+
+          const botao =
+            document.getElementById(elementos.botao);
+
+          const preco =
+            document.getElementById(elementos.preco);
+
+
+          if (operadoras[operadora] !== true) {
+
+            botao.style.display = "none";
+
+            continue;
+
+          }
+
+
+          const menor =
+            menorRecarga(recargas[operadora]);
+
+
+          if (menor !== null) {
+
+            preco.textContent =
+              `A partir de R$ ${formatarReais(menor)}`;
+
+          } else {
+
+            preco.textContent =
+              "Valores disponíveis";
+
+          }
 
         }
 
       } catch (erro) {
 
         console.error(
-          "Erro ao carregar status das operadoras:",
+          "Erro ao carregar dados das operadoras:",
           erro
         );
 
@@ -170,7 +402,7 @@ if (operadoras.VIVO !== true) {
     }
 
 
-    carregarStatusOperadoras();
+    carregarDados();
 
   </script>
 
