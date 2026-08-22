@@ -1962,6 +1962,7 @@ app.get(
 
     app.listen(
       PORT,
+      "0.0.0.0",
       () => {
         console.log(
           `🚀 Zenvoki Recarga rodando em http://localhost:${PORT}`
