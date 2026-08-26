@@ -11,3 +11,5 @@ xx,
 *.bak
 *.bak2
 *.backup
+
+.env
