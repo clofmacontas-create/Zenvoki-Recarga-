@@ -6,63 +6,480 @@
 
   <title>Zenvoki Recarga</title>
 
-  <link rel="stylesheet" href="/style.css">
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      min-height: 100vh;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(0, 132, 255, .20), transparent 38%),
+        radial-gradient(circle at 0% 100%, rgba(0, 91, 190, .08), transparent 35%),
+        #03070d;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      padding: 45px 20px 30px;
+      overflow-x: hidden;
+    }
+
+    .glow {
+      position: fixed;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: rgba(0, 119, 255, .07);
+      filter: blur(90px);
+      pointer-events: none;
+    }
+
+    .glow.one {
+      top: -130px;
+      left: -120px;
+    }
+
+    .glow.two {
+      bottom: -150px;
+      right: -120px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 570px;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* LOGO */
+
+    .brand {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .brand-mark {
+      width: 62px;
+      height: 62px;
+      margin: 0 auto 16px;
+      border-radius: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 26px;
+      font-weight: 900;
+      letter-spacing: -2px;
+
+      color: #fff;
+
+      background:
+        linear-gradient(145deg, #0d223b, #050d17);
+
+      border: 1px solid rgba(0, 145, 255, .45);
+
+      box-shadow:
+        0 0 35px rgba(0, 119, 255, .17),
+        inset 0 0 22px rgba(0, 119, 255, .08);
+    }
+
+    .brand h1 {
+      font-size: 29px;
+      font-weight: 850;
+      letter-spacing: -1px;
+    }
+
+    .brand h1 span {
+      color: #218cff;
+    }
+
+    .brand p {
+      margin-top: 7px;
+      color: #718096;
+      font-size: 13px;
+    }
+
+    /* CARD */
+
+    .hero {
+      padding: 34px;
+      border-radius: 25px;
+
+      background:
+        linear-gradient(
+          145deg,
+          rgba(10, 20, 33, .94),
+          rgba(5, 11, 19, .94)
+        );
+
+      border: 1px solid rgba(83, 132, 181, .16);
+
+      box-shadow:
+        0 30px 80px rgba(0, 0, 0, .50),
+        inset 0 1px 0 rgba(255,255,255,.025);
+
+      backdrop-filter: blur(18px);
+    }
+
+    .hero-top {
+      margin-bottom: 28px;
+    }
+
+    .status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+
+      padding: 7px 11px;
+      border-radius: 30px;
+
+      background: rgba(25, 145, 255, .07);
+      border: 1px solid rgba(25, 145, 255, .13);
+
+      color: #7dbdff;
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: .3px;
+      text-transform: uppercase;
+    }
+
+    .status-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #2696ff;
+      box-shadow: 0 0 9px rgba(38,150,255,.8);
+    }
+
+    .hero h2 {
+      margin-top: 17px;
+      font-size: 29px;
+      line-height: 1.13;
+      font-weight: 800;
+      letter-spacing: -.8px;
+    }
+
+    .hero h2 span {
+      color: #258fff;
+    }
+
+    .hero-description {
+      margin-top: 13px;
+      max-width: 430px;
+
+      color: #7b899b;
+      font-size: 14px;
+      line-height: 1.65;
+    }
+
+    /* BUTTONS */
+
+    .actions {
+      display: grid;
+      gap: 11px;
+    }
+
+    .btn {
+      width: 100%;
+      height: 53px;
+
+      border-radius: 13px;
+      border: 1px solid transparent;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+
+      text-decoration: none;
+
+      font-size: 14px;
+      font-weight: 750;
+
+      transition: .2s ease;
+    }
+
+    .btn-primary {
+      color: #fff;
+
+      background:
+        linear-gradient(135deg, #168cff, #0068dc);
+
+      box-shadow:
+        0 11px 30px rgba(0, 119, 255, .20);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow:
+        0 15px 36px rgba(0, 119, 255, .29);
+    }
+
+    .btn-secondary {
+      color: #c6d0dc;
+
+      background: rgba(255,255,255,.035);
+      border-color: rgba(104, 133, 163, .14);
+    }
+
+    .btn-secondary:hover {
+      color: #fff;
+      background: rgba(255,255,255,.055);
+      border-color: rgba(104, 155, 200, .25);
+      transform: translateY(-1px);
+    }
+
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .btn-icon svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* BENEFÍCIOS */
+
+    .divider {
+      height: 1px;
+      background: rgba(255,255,255,.055);
+      margin: 29px 0 20px;
+    }
+
+    .beneficios {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+
+    .beneficio {
+      min-height: 88px;
+
+      padding: 17px 8px;
+
+      border-radius: 14px;
+
+      background: rgba(255,255,255,.025);
+      border: 1px solid rgba(105, 137, 170, .10);
+
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+
+      text-align: center;
+    }
+
+    .beneficio-icon {
+      width: 27px;
+      height: 27px;
+      margin-bottom: 9px;
+
+      color: #369cff;
+    }
+
+    .beneficio-icon svg {
+      width: 100%;
+      height: 100%;
+
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .beneficio span {
+      color: #7e8b9d;
+      font-size: 11px;
+      font-weight: 550;
+    }
+
+    /* FOOTER */
+
+    .footer {
+      text-align: center;
+      margin-top: 25px;
+
+      color: #3f4c5d;
+      font-size: 11px;
+    }
+
+    @media (max-width: 480px) {
+
+      body {
+        padding: 28px 16px 25px;
+      }
+
+      .brand {
+        margin-bottom: 25px;
+      }
+
+      .brand-mark {
+        width: 57px;
+        height: 57px;
+        border-radius: 17px;
+      }
+
+      .brand h1 {
+        font-size: 25px;
+      }
+
+      .hero {
+        padding: 25px 20px;
+        border-radius: 22px;
+      }
+
+      .hero h2 {
+        font-size: 27px;
+      }
+
+      .hero-description {
+        font-size: 13px;
+      }
+
+      .beneficios {
+        gap: 7px;
+      }
+
+      .beneficio {
+        min-height: 82px;
+        padding: 14px 5px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
+  <div class="glow one"></div>
+  <div class="glow two"></div>
+
   <main class="container">
 
-    <header class="logo">
-      <h1>Zenvoki <span>Recarga</span></h1>
-      <p>Sua recarga, em poucos minutos.</p>
+    <header class="brand">
+
+      <div class="brand-mark">
+        ZK
+      </div>
+
+      <h1>
+        Zenvoki <span>Recarga</span>
+      </h1>
+
+      <p>
+        Recargas simples, rápidas e seguras.
+      </p>
+
     </header>
 
     <section class="hero">
 
-      <h2>Acesse sua conta<br>para continuar.</h2>
+      <div class="hero-top">
 
-      <p>
-        Entre na sua conta ou crie uma nova
-        para fazer suas recargas.
-      </p>
+        <div class="status">
+          <span class="status-dot"></span>
+          Plataforma online
+        </div>
 
-      <button
-        type="button"
-        class="btn-recarregar"
-        onclick="abrirLogin()"
-      >
-        👤 Entrar
-      </button>
+        <h2>
+          Sua recarga.<br>
+          <span>Do seu jeito.</span>
+        </h2>
 
-      <button
-        type="button"
-        class="btn-recarregar"
-        onclick="abrirCadastro()"
-        style="
-          margin-top: 12px;
-          background: rgba(255,255,255,0.06);
-          box-shadow: none;
-        "
-      >
-        📝 Criar conta
-      </button>
+        <p class="hero-description">
+          Acesse sua conta para realizar suas recargas
+          de forma rápida, prática e segura.
+        </p>
+
+      </div>
+
+      <div class="actions">
+
+        <a href="/login.html" class="btn btn-primary">
+
+          <span class="btn-icon">
+            <svg viewBox="0 0 24 24">
+              <circle cx="12" cy="8" r="4"></circle>
+              <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"></path>
+            </svg>
+          </span>
+
+          Entrar na conta
+
+        </a>
+
+        <a href="/cadastro.html" class="btn btn-secondary">
+
+          <span class="btn-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 5v14M5 12h14"></path>
+            </svg>
+          </span>
+
+          Criar uma conta
+
+        </a>
+
+      </div>
+
+      <div class="divider"></div>
 
       <div class="beneficios">
 
         <div class="beneficio">
-          <div class="icone">🔒</div>
-          <span>Conta segura</span>
+
+          <div class="beneficio-icon">
+            <svg viewBox="0 0 24 24">
+              <rect x="5" y="10" width="14" height="10" rx="2"></rect>
+              <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+            </svg>
+          </div>
+
+          <span>
+            Conta segura
+          </span>
+
         </div>
 
         <div class="beneficio">
-          <div class="icone">⚡</div>
-          <span>Processo rápido</span>
+
+          <div class="beneficio-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M13 2 5 13h6l-1 9 8-12h-6l1-8Z"></path>
+            </svg>
+          </div>
+
+          <span>
+            Processo rápido
+          </span>
+
         </div>
 
         <div class="beneficio">
-          <div class="icone">✓</div>
-          <span>Atendimento</span>
+
+          <div class="beneficio-icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M20 6 9 17l-5-5"></path>
+            </svg>
+          </div>
+
+          <span>
+            Atendimento
+          </span>
+
         </div>
 
       </div>
@@ -74,18 +491,6 @@
     </footer>
 
   </main>
-
-  <script>
-
-    function abrirLogin() {
-      window.location.href = "/login.html";
-    }
-
-    function abrirCadastro() {
-      window.location.href = "/cadastro.html";
-    }
-
-  </script>
 
 </body>
 </html>
