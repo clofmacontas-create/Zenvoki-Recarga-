@@ -1,20 +1,12 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Zenvoki Recarga</title>
 
-  <link
-    rel="stylesheet"
-    href="/style.css"
-  >
+  <link rel="stylesheet" href="/style.css">
 </head>
 
 <body>
@@ -22,19 +14,34 @@
   <main class="container">
 
     <header class="logo">
+      <div class="logo-mark">Z</div>
 
       <h1>
         Zenvoki <span>Recarga</span>
       </h1>
 
-      <p>
-        Recargas rápidas e seguras
-      </p>
-
+      <p>Recargas rápidas, simples e seguras.</p>
     </header>
 
 
     <section class="hero">
+
+      <div class="painel-topo">
+        <div>
+          <span class="status-online">
+            <i></i> SISTEMA ONLINE
+          </span>
+
+          <h2>Escolha sua operadora</h2>
+
+          <p>
+            Selecione uma operadora para começar sua recarga.
+          </p>
+        </div>
+
+        <div class="icone-celular">⌁</div>
+      </div>
+
 
       <!-- AÇÕES -->
       <div class="acoes-recarga">
@@ -43,12 +50,14 @@
           type="button"
           onclick="window.open('https://chat.whatsapp.com/', '_blank')"
         >
-          <img
-            src="/assets/whatsapp.svg"
-            alt="Grupo"
-          >
+          <div class="acao-icone">
+            <img src="/assets/whatsapp.svg" alt="Grupo">
+          </div>
 
-          <span>Grupo</span>
+          <div class="acao-texto">
+            <strong>Grupo</strong>
+            <small>Entre no grupo</small>
+          </div>
         </button>
 
 
@@ -56,12 +65,14 @@
           type="button"
           onclick="window.open('https://t.me/TulsaEsim_Robot', '_blank')"
         >
-          <img
-            src="/assets/telegram.svg"
-            alt="Comprar eSIM"
-          >
+          <div class="acao-icone">
+            <img src="/assets/telegram.svg" alt="Comprar eSIM">
+          </div>
 
-          <span>Comprar eSIM</span>
+          <div class="acao-texto">
+            <strong>Comprar eSIM</strong>
+            <small>Ative seu eSIM</small>
+          </div>
         </button>
 
 
@@ -69,13 +80,14 @@
           type="button"
           onclick="document.getElementById('infoRecarga').classList.toggle('mostrar')"
         >
-          <img
-            src="/assets/info.svg"
-            alt="Informações"
-            style="color:#1683ff; filter:none;"
-          >
+          <div class="acao-icone">
+            <img src="/assets/info.svg" alt="Informações">
+          </div>
 
-          <span>Informações</span>
+          <div class="acao-texto">
+            <strong>Informações</strong>
+            <small>Saiba como funciona</small>
+          </div>
         </button>
 
 
@@ -83,91 +95,86 @@
           type="button"
           onclick="window.location.href='/painel.html'"
         >
-          <span class="acao-emoji">👤</span>
+          <div class="acao-icone perfil">
+            <span>◉</span>
+          </div>
 
-          <span>Meu Perfil</span>
+          <div class="acao-texto">
+            <strong>Meu Perfil</strong>
+            <small>Acessar minha conta</small>
+          </div>
         </button>
 
       </div>
 
 
       <!-- INFORMAÇÕES -->
-      <div
-        id="infoRecarga"
-        class="info-recarga"
-      >
+      <div id="infoRecarga" class="info-recarga">
 
-        <div class="info-item">
+        <div class="info-cabecalho">
+          <strong>Como funciona?</strong>
 
-          <div class="info-item-title">
-            <span>✅</span>
-            <strong>Como funciona a recarga COM CÓDIGO</strong>
-          </div>
-
-          <p>
-            Após a confirmação do pagamento, o código da recarga é
-            utilizado para realizar o procedimento na operadora.
-          </p>
-
+          <button
+            type="button"
+            onclick="document.getElementById('infoRecarga').classList.remove('mostrar')"
+          >
+            ×
+          </button>
         </div>
 
 
         <div class="info-item">
+          <div class="info-item-icon">✓</div>
 
-          <div class="info-item-title">
-            <span>📱</span>
-            <strong>Como funciona a recarga SEM CÓDIGO</strong>
+          <div>
+            <strong>Recarga COM CÓDIGO</strong>
+
+            <p>
+              Após a confirmação do pagamento, o código da recarga
+              é utilizado para realizar o procedimento na operadora.
+            </p>
           </div>
-
-          <p>
-            A recarga é processada diretamente no número informado
-            durante o pedido, conforme o modo configurado para a operadora.
-          </p>
-
         </div>
 
 
         <div class="info-item">
+          <div class="info-item-icon">⌁</div>
 
-          <div class="info-item-title">
-            <span>📡</span>
-            <strong>Quais operadoras estão disponíveis</strong>
+          <div>
+            <strong>Recarga SEM CÓDIGO</strong>
+
+            <p>
+              A recarga é processada diretamente no número informado
+              durante o pedido, conforme o modo configurado.
+            </p>
           </div>
-
-          <p>
-            As operadoras disponíveis aparecem automaticamente nesta
-            página quando estão habilitadas pelo sistema.
-          </p>
-
         </div>
 
 
         <div class="info-item">
+          <div class="info-item-icon">24</div>
 
-          <div class="info-item-title">
-            <span>⏱️</span>
-            <strong>Prazos de processamento</strong>
+          <div>
+            <strong>Prazo de processamento</strong>
+
+            <p>
+              Após a confirmação do pagamento, a recarga poderá ser
+              processada em até 24 horas.
+            </p>
           </div>
-
-          <p>
-            Após a confirmação do pagamento, a recarga poderá ser
-            processada em até 24 horas.
-          </p>
-
         </div>
 
       </div>
 
 
-      <!-- RECARGA -->
+      <!-- TÍTULO -->
       <div class="titulo-recarga">
+        <div class="titulo-linha"></div>
 
-        <span>📱</span>
-
-        <strong>
-          FAZER RECARGA
-        </strong>
-
+        <div>
+          <span>RECARGAS</span>
+          <strong>Escolha sua operadora</strong>
+        </div>
       </div>
 
 
@@ -181,22 +188,22 @@
           onclick="window.location.href='/claro.html'"
         >
 
-          <img
-            src="/assets/claro.jpg"
-            alt="Claro"
-          >
+          <div class="logo-operadora">
+            <img
+              src="/assets/claro.jpg"
+              alt="Claro"
+            >
+          </div>
 
           <div class="operadora-info">
-
-            <strong>
-              Claro
-            </strong>
+            <strong>Claro</strong>
 
             <small id="precoCLARO">
               Carregando...
             </small>
-
           </div>
+
+          <div class="seta-operadora">›</div>
 
         </button>
 
@@ -208,22 +215,22 @@
           onclick="window.location.href='/vivo.html'"
         >
 
-          <img
-            src="/assets/vivo.jpg"
-            alt="Vivo"
-          >
+          <div class="logo-operadora">
+            <img
+              src="/assets/vivo.jpg"
+              alt="Vivo"
+            >
+          </div>
 
           <div class="operadora-info">
-
-            <strong>
-              Vivo
-            </strong>
+            <strong>Vivo</strong>
 
             <small id="precoVIVO">
               Carregando...
             </small>
-
           </div>
+
+          <div class="seta-operadora">›</div>
 
         </button>
 
@@ -235,45 +242,58 @@
           onclick="window.location.href='/tim.html'"
         >
 
-          <img
-            src="/assets/tim.jpg"
-            alt="TIM"
-          >
+          <div class="logo-operadora">
+            <img
+              src="/assets/tim.jpg"
+              alt="TIM"
+            >
+          </div>
 
           <div class="operadora-info">
-
-            <strong>
-              TIM
-            </strong>
+            <strong>TIM</strong>
 
             <small id="precoTIM">
               Carregando...
             </small>
-
           </div>
+
+          <div class="seta-operadora">›</div>
 
         </button>
 
       </div>
 
+
+      <div class="seguranca-recarga">
+        <span>✓</span>
+
+        <div>
+          <strong>Recarga segura</strong>
+          <small>Pagamento protegido e processamento confiável.</small>
+        </div>
+      </div>
+
     </section>
+
+
+    <footer class="footer">
+      <span>ZENVOKI</span> • Recargas digitais
+    </footer>
 
   </main>
 
 
-  <!-- SUPORTE FLUTUANTE -->
+  <!-- SUPORTE -->
   <button
     class="suporte-flutuante"
     type="button"
     onclick="window.open('https://wa.me/556199277795', '_blank')"
     aria-label="Suporte"
   >
-
     <img
       src="/assets/suporte.svg"
       alt="Suporte"
     >
-
   </button>
 
 
@@ -294,7 +314,6 @@
       }
 
       return Math.min(...valores);
-
     }
 
 
@@ -303,7 +322,6 @@
       return Number(valor)
         .toFixed(2)
         .replace(".", ",");
-
     }
 
 
@@ -363,12 +381,16 @@
             document.getElementById(elementos.preco);
 
 
+          if (!botao || !preco) {
+            continue;
+          }
+
+
           if (operadoras[operadora] !== true) {
 
             botao.style.display = "none";
 
             continue;
-
           }
 
 
@@ -407,5 +429,4 @@
   </script>
 
 </body>
-
 </html>
