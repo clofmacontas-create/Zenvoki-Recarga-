@@ -1953,6 +1953,8 @@ app.get(
 (async () => {
   try {
     console.log("ENV CHECK:", {
+      ADMIN_USER: process.env.ADMIN_USER || false,
+      ADMIN_PASSWORD: !!process.env.ADMIN_PASSWORD,
       INITIAL_USER: !!process.env.INITIAL_USER,
       INITIAL_EMAIL: !!process.env.INITIAL_EMAIL,
       INITIAL_PASSWORD: !!process.env.ZENVOKI_INITIAL_PASSWORD
