@@ -3,229 +3,601 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Criar conta • Zenvoki Recarga</title>
 
-  <title>Criar conta - Zenvoki Recarga</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-  <link rel="stylesheet" href="/style.css">
+    body {
+      min-height: 100vh;
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at 50% -10%, rgba(0, 132, 255, .18), transparent 38%),
+        #03070d;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+      overflow-x: hidden;
+    }
+
+    .glow {
+      position: fixed;
+      width: 280px;
+      height: 280px;
+      border-radius: 50%;
+      background: rgba(0, 119, 255, .08);
+      filter: blur(80px);
+      pointer-events: none;
+    }
+
+    .glow.one {
+      top: -100px;
+      left: -100px;
+    }
+
+    .glow.two {
+      bottom: -120px;
+      right: -100px;
+    }
+
+    .auth {
+      width: 100%;
+      max-width: 450px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand {
+      text-align: center;
+      margin-bottom: 25px;
+    }
+
+    .brand-mark {
+      width: 58px;
+      height: 58px;
+      margin: 0 auto 14px;
+      border-radius: 17px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 25px;
+      font-weight: 900;
+      letter-spacing: -2px;
+      color: #fff;
+      background: linear-gradient(145deg, #0b1b30, #06101d);
+      border: 1px solid rgba(0, 145, 255, .45);
+      box-shadow:
+        0 0 30px rgba(0, 119, 255, .16),
+        inset 0 0 18px rgba(0, 119, 255, .08);
+    }
+
+    .brand h1 {
+      font-size: 26px;
+      font-weight: 800;
+      letter-spacing: -.8px;
+    }
+
+    .brand h1 span {
+      color: #2b9cff;
+    }
+
+    .brand p {
+      margin-top: 6px;
+      color: #718096;
+      font-size: 13px;
+    }
+
+    .card {
+      padding: 30px;
+      border-radius: 24px;
+      background: rgba(7, 14, 23, .88);
+      border: 1px solid rgba(87, 137, 190, .16);
+      box-shadow:
+        0 25px 70px rgba(0, 0, 0, .5),
+        inset 0 1px 0 rgba(255,255,255,.025);
+      backdrop-filter: blur(18px);
+    }
+
+    .card-header {
+      margin-bottom: 23px;
+    }
+
+    .card-header h2 {
+      font-size: 22px;
+      font-weight: 750;
+      letter-spacing: -.4px;
+    }
+
+    .card-header p {
+      color: #738095;
+      font-size: 13px;
+      margin-top: 7px;
+      line-height: 1.5;
+    }
+
+    .field {
+      margin-bottom: 15px;
+    }
+
+    .field label {
+      display: block;
+      margin-bottom: 8px;
+      color: #b7c2d1;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .input-wrap {
+      position: relative;
+    }
+
+    .input-icon {
+      position: absolute;
+      left: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 17px;
+      height: 17px;
+      color: #64758a;
+      pointer-events: none;
+    }
+
+    .input-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    input {
+      width: 100%;
+      height: 50px;
+      padding: 0 15px 0 45px;
+      border-radius: 13px;
+      border: 1px solid #182638;
+      outline: none;
+      background: #060d16;
+      color: #fff;
+      font-size: 14px;
+      transition: .2s ease;
+    }
+
+    input::placeholder {
+      color: #465466;
+    }
+
+    input:focus {
+      border-color: rgba(28, 145, 255, .65);
+      box-shadow: 0 0 0 3px rgba(0, 132, 255, .09);
+      background: #07111d;
+    }
+
+    .password-wrap input {
+      padding-right: 48px;
+    }
+
+    .toggle-password {
+      position: absolute;
+      right: 13px;
+      top: 50%;
+      transform: translateY(-50%);
+      border: 0;
+      background: transparent;
+      color: #617084;
+      cursor: pointer;
+      padding: 6px;
+    }
+
+    .toggle-password svg {
+      width: 18px;
+      height: 18px;
+      stroke: currentColor;
+      fill: none;
+      stroke-width: 1.8;
+    }
+
+    .hint {
+      margin-top: 7px;
+      color: #4e5d70;
+      font-size: 10px;
+    }
+
+    .btn {
+      width: 100%;
+      height: 52px;
+      border: 0;
+      border-radius: 13px;
+      margin-top: 7px;
+      background: linear-gradient(135deg, #168cff, #0066d6);
+      color: white;
+      font-size: 14px;
+      font-weight: 750;
+      cursor: pointer;
+      box-shadow: 0 10px 28px rgba(0, 119, 255, .20);
+      transition: .2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 14px 34px rgba(0, 119, 255, .28);
+    }
+
+    .btn:disabled {
+      opacity: .6;
+      cursor: wait;
+      transform: none;
+    }
+
+    .message {
+      display: none;
+      margin-bottom: 17px;
+      padding: 12px 14px;
+      border-radius: 11px;
+      font-size: 12px;
+      line-height: 1.4;
+    }
+
+    .message.show {
+      display: block;
+    }
+
+    .message.error {
+      color: #ffb8b8;
+      background: rgba(255, 70, 70, .08);
+      border: 1px solid rgba(255, 70, 70, .18);
+    }
+
+    .message.success {
+      color: #9de4bb;
+      background: rgba(50, 210, 120, .07);
+      border: 1px solid rgba(50, 210, 120, .16);
+    }
+
+    .bottom {
+      text-align: center;
+      margin-top: 21px;
+      color: #68768a;
+      font-size: 13px;
+    }
+
+    .bottom a {
+      color: #319cff;
+      text-decoration: none;
+      font-weight: 650;
+    }
+
+    .back {
+      display: block;
+      text-align: center;
+      margin-top: 17px;
+      color: #59687b;
+      text-decoration: none;
+      font-size: 12px;
+    }
+
+    .back:hover {
+      color: #9aa9bb;
+    }
+
+    .footer {
+      text-align: center;
+      color: #374456;
+      font-size: 11px;
+      margin-top: 22px;
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 18px;
+        align-items: flex-start;
+        padding-top: 28px;
+      }
+
+      .card {
+        padding: 24px 20px;
+        border-radius: 21px;
+      }
+
+      .brand h1 {
+        font-size: 24px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
-  <main class="container">
+  <div class="glow one"></div>
+  <div class="glow two"></div>
 
-    <header class="logo">
+  <main class="auth">
+
+    <div class="brand">
+      <div class="brand-mark">ZK</div>
       <h1>Zenvoki <span>Recarga</span></h1>
-      <p>Crie sua conta</p>
-    </header>
+      <p>Crie sua conta e comece a recarregar.</p>
+    </div>
 
-    <section class="hero">
+    <section class="card">
 
-      <h2>👤 Criar conta</h2>
+      <div class="card-header">
+        <h2>Criar sua conta</h2>
+        <p>Preencha seus dados para começar.</p>
+      </div>
 
-      <p>
-        Cadastre-se para acompanhar suas recargas e pedidos.
-      </p>
+      <div id="message" class="message"></div>
 
-      <form id="cadastroForm">
+      <form id="registerForm">
 
-        <div class="campo">
+        <div class="field">
           <label for="nome">Nome</label>
 
-          <input
-            id="nome"
-            type="text"
-            placeholder="Seu nome"
-            autocomplete="name"
-            required
-          >
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="8" r="4"></circle>
+                <path d="M4 21c.8-4 3.5-6 8-6s7.2 2 8 6"></path>
+              </svg>
+            </span>
+
+            <input
+              id="nome"
+              name="nome"
+              type="text"
+              placeholder="Seu nome"
+              autocomplete="name"
+              required
+            >
+          </div>
         </div>
 
-        <div class="campo">
-          <label for="username">Nome de usuário</label>
+        <div class="field">
+          <label for="username">Usuário</label>
 
-          <input
-            id="username"
-            type="text"
-            placeholder="Escolha um nome de usuário"
-            autocomplete="username"
-            required
-          >
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="9"></circle>
+                <path d="M8 12h8M12 8v8"></path>
+              </svg>
+            </span>
+
+            <input
+              id="username"
+              name="username"
+              type="text"
+              placeholder="Escolha seu usuário"
+              autocomplete="username"
+              required
+            >
+          </div>
         </div>
 
-        <div class="campo">
+        <div class="field">
           <label for="email">E-mail</label>
 
-          <input
-            id="email"
-            type="email"
-            placeholder="seu@email.com"
-            autocomplete="email"
-            required
-          >
+          <div class="input-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="3" y="5" width="18" height="14" rx="2"></rect>
+                <path d="m4 7 8 6 8-6"></path>
+              </svg>
+            </span>
+
+            <input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="seuemail@exemplo.com"
+              autocomplete="email"
+              required
+            >
+          </div>
         </div>
 
-        <div class="campo">
+        <div class="field">
           <label for="senha">Senha</label>
 
-          <input
-            id="senha"
-            type="password"
-            placeholder="Mínimo de 6 caracteres"
-            autocomplete="new-password"
-            minlength="6"
-            required
-          >
+          <div class="input-wrap password-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <rect x="4" y="10" width="16" height="11" rx="2"></rect>
+                <path d="M8 10V7a4 4 0 0 1 8 0v3"></path>
+              </svg>
+            </span>
+
+            <input
+              id="senha"
+              name="senha"
+              type="password"
+              placeholder="Crie uma senha"
+              minlength="6"
+              autocomplete="new-password"
+              required
+            >
+
+            <button
+              type="button"
+              class="toggle-password"
+              id="togglePassword"
+              aria-label="Mostrar senha"
+            >
+              <svg viewBox="0 0 24 24">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+                <circle cx="12" cy="12" r="2.5"></circle>
+              </svg>
+            </button>
+          </div>
+
+          <div class="hint">Sua senha deve ter pelo menos 6 caracteres.</div>
         </div>
 
-        <div class="campo">
+        <div class="field">
           <label for="confirmarSenha">Confirmar senha</label>
 
-          <input
-            id="confirmarSenha"
-            type="password"
-            placeholder="Digite a senha novamente"
-            autocomplete="new-password"
-            minlength="6"
-            required
-          >
+          <div class="input-wrap password-wrap">
+            <span class="input-icon">
+              <svg viewBox="0 0 24 24">
+                <path d="M6 11V8a6 6 0 0 1 12 0v3"></path>
+                <rect x="4" y="11" width="16" height="10" rx="2"></rect>
+              </svg>
+            </span>
+
+            <input
+              id="confirmarSenha"
+              name="confirmarSenha"
+              type="password"
+              placeholder="Digite a senha novamente"
+              minlength="6"
+              autocomplete="new-password"
+              required
+            >
+
+            <button
+              type="button"
+              class="toggle-password"
+              id="toggleConfirm"
+              aria-label="Mostrar confirmação de senha"
+            >
+              <svg viewBox="0 0 24 24">
+                <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path>
+                <circle cx="12" cy="12" r="2.5"></circle>
+              </svg>
+            </button>
+          </div>
         </div>
 
-        <button
-          type="submit"
-          class="btn-recarregar"
-        >
-          👤 Criar minha conta
+        <button class="btn" id="submitBtn" type="submit">
+          Criar minha conta
         </button>
 
       </form>
 
-      <p
-        id="mensagem"
-        style="
-          margin-top: 15px;
-          text-align: center;
-        "
-      ></p>
+      <div class="bottom">
+        Já possui uma conta?
+        <a href="/login.html">Entrar</a>
+      </div>
 
-      <button
-        type="button"
-        class="btn-recarregar"
-        onclick="window.location.href='/login.html'"
-        style="
-          margin-top: 12px;
-          background: rgba(255,255,255,0.06);
-          box-shadow: none;
-        "
-      >
-        🔐 Já tenho uma conta
-      </button>
-
-      <button
-        type="button"
-        onclick="history.back()"
-        style="
-          width: 100%;
-          margin-top: 10px;
-          padding: 12px;
-          border: none;
-          background: transparent;
-          color: #8d9bad;
-          cursor: pointer;
-        "
-      >
-        ← Voltar
-      </button>
+      <a class="back" href="/">
+        Voltar para o início
+      </a>
 
     </section>
+
+    <div class="footer">
+      Zenvoki Recarga © 2026
+    </div>
 
   </main>
 
   <script>
+    const form = document.getElementById("registerForm");
+    const message = document.getElementById("message");
+    const submitBtn = document.getElementById("submitBtn");
 
-    document
-      .getElementById("cadastroForm")
-      .addEventListener("submit", async function(event) {
+    const senha = document.getElementById("senha");
+    const confirmarSenha = document.getElementById("confirmarSenha");
 
-        event.preventDefault();
+    const togglePassword = document.getElementById("togglePassword");
+    const toggleConfirm = document.getElementById("toggleConfirm");
 
-        const mensagem =
-          document.getElementById("mensagem");
+    function showMessage(text, type = "error") {
+      message.textContent = text;
+      message.className = "message show " + type;
+    }
 
-        const botao =
-          this.querySelector("button[type='submit']");
+    function toggle(input, button) {
+      const visible = input.type === "text";
+      input.type = visible ? "password" : "text";
 
-        const nome =
-          document.getElementById("nome").value.trim();
+      button.setAttribute(
+        "aria-label",
+        visible ? "Mostrar senha" : "Ocultar senha"
+      );
+    }
 
-        const username =
-          document.getElementById("username").value.trim();
+    togglePassword.addEventListener("click", () => {
+      toggle(senha, togglePassword);
+    });
 
-        const email =
-          document.getElementById("email").value.trim();
+    toggleConfirm.addEventListener("click", () => {
+      toggle(confirmarSenha, toggleConfirm);
+    });
 
-        const senha =
-          document.getElementById("senha").value;
+    form.addEventListener("submit", async (event) => {
+      event.preventDefault();
 
-        const confirmarSenha =
-          document.getElementById("confirmarSenha").value;
+      message.className = "message";
 
-        if (senha !== confirmarSenha) {
-          mensagem.style.color = "#ff6b6b";
-          mensagem.textContent =
-            "❌ As senhas não são iguais.";
-          return;
+      const nome = document.getElementById("nome").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const email = document.getElementById("email").value.trim();
+
+      if (senha.value.length < 6) {
+        showMessage("A senha precisa ter pelo menos 6 caracteres.");
+        return;
+      }
+
+      if (senha.value !== confirmarSenha.value) {
+        showMessage("As senhas não coincidem.");
+        return;
+      }
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Criando conta...";
+
+      try {
+        const response = await fetch("/api/register", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "same-origin",
+          body: JSON.stringify({
+            nome,
+            username,
+            email,
+            senha: senha.value
+          })
+        });
+
+        const data = await response.json().catch(() => ({}));
+
+        if (!response.ok) {
+          throw new Error(
+            data.error ||
+            data.message ||
+            "Não foi possível criar a conta."
+          );
         }
 
-        botao.disabled = true;
-        botao.textContent = "⏳ Criando conta...";
+        showMessage(
+          data.message || "Conta criada com sucesso.",
+          "success"
+        );
 
-        mensagem.textContent = "";
+        setTimeout(() => {
+          window.location.href = "/";
+        }, 700);
 
-        try {
+      } catch (error) {
+        showMessage(
+          error.message || "Não foi possível criar a conta."
+        );
 
-          const resposta = await fetch("/api/register", {
-            method: "POST",
-
-            headers: {
-              "Content-Type": "application/json"
-            },
-
-            body: JSON.stringify({
-              nome,
-              username,
-              email,
-              senha
-            })
-          });
-
-          const dados = await resposta.json();
-
-          if (!resposta.ok) {
-            throw new Error(
-              dados.error || "Não foi possível criar a conta."
-            );
-          }
-
-          mensagem.style.color = "#4ade80";
-          mensagem.textContent =
-            "✅ Conta criada com sucesso!";
-
-          setTimeout(() => {
-            window.location.href = "/";
-          }, 700);
-
-        } catch (erro) {
-
-          mensagem.style.color = "#ff6b6b";
-          mensagem.textContent =
-            "❌ " + erro.message;
-
-          botao.disabled = false;
-          botao.textContent = "👤 Criar minha conta";
-        }
-
-      });
-
+        submitBtn.disabled = false;
+        submitBtn.textContent = "Criar minha conta";
+      }
+    });
   </script>
 
 </body>
