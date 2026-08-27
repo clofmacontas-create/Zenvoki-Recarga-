@@ -38,7 +38,7 @@
     }
 
     .vivo-top h1 span {
-      color: #7357ff;
+      color: #1683ff;
     }
 
     .vivo-top p {
@@ -86,8 +86,13 @@
       margin: 0;
     }
 
-    .vivo-header-row .tim-logo {
+    .vivo-header-row .vivo-logo {
+      width: 42px;
+      height: 42px;
       margin: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .vivo-img {
@@ -111,24 +116,11 @@
     .vivo-logo {
       width: 42px;
       height: 42px;
-      margin: 0 auto 10px;
-      border-radius: 50%;
+      margin: 0;
 
       display: flex;
       align-items: center;
       justify-content: center;
-
-      background:
-        linear-gradient(145deg,#173f73,#061a35);
-
-      border: 1px solid rgba(50,160,255,.45);
-
-      box-shadow:
-        0 0 25px rgba(0,120,255,.22);
-
-      font-size: 27px;
-      font-weight: 900;
-      color: #fff;
     }
 
     .vivo-brand h2 {
@@ -177,7 +169,7 @@
     }
 
     .phone-input:focus {
-      border-color: #7357ff;
+      border-color: #1683ff;
       box-shadow: 0 0 0 3px rgba(22,131,255,.10);
     }
 
@@ -199,7 +191,7 @@
       background:
         linear-gradient(
           135deg,
-          #7357ff,
+          #1683ff,
           #4c35d9
         );
 
@@ -282,7 +274,7 @@
       background:
         linear-gradient(
           135deg,
-          #7357ff,
+          #1683ff,
           #0061df
         );
 
@@ -345,7 +337,7 @@
 
 <main class="vivo-page">
 
-  <header class="tim-top">
+  <header class="vivo-top">
     <h1>Zenvoki <span>Recarga</span></h1>
     <p>Recarga VIVO</p>
   </header>
@@ -354,12 +346,12 @@
 
     <div class="vivo-brand">
       <div class="vivo-header-row">
-      <div class="tim-logo">
-        <img src="/assets/vivo.jpg" alt="VIVO" class="vivo-img">
+        <div class="vivo-logo">
+          <img src="/assets/vivo.jpg" alt="VIVO" class="vivo-img">
+        </div>
+        <h2>Recarga VIVO</h2>
       </div>
-      <h2>Recarga VIVO</h2>
-    </div>
-    <p>Preencha os dados da sua recarga</p>
+      <p>Preencha os dados da sua recarga</p>
     </div>
 
     <div class="section-title">
