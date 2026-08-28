@@ -18,16 +18,20 @@ const pool = process.env.DATABASE_URL
     })
   : null;
 
-if (pool) {
-  pool.query("SELECT NOW()")
-    .then(() => {
-      console.log("✅ PostgreSQL conectado!");
-    })
-    .catch((error) => {
-      console.error("❌ Erro PostgreSQL:", error.message);
-    });
-} else {
-  console.log("⚠️ DATABASE_URL não disponível — usando db.json");
+async function testarPostgreSQL() {
+  if (!pool) {
+    console.log("⚠️ DATABASE_URL não disponível — usando db.json");
+    return false;
+  }
+
+  try {
+    await pool.query("SELECT NOW()");
+    console.log("✅ PostgreSQL conectado!");
+    return true;
+  } catch (error) {
+    console.error("❌ Erro PostgreSQL:", error.message);
+    return false;
+  }
 }
 
 
@@ -2052,6 +2056,8 @@ app.get(
       INITIAL_EMAIL: !!process.env.INITIAL_EMAIL,
       INITIAL_PASSWORD: !!process.env.ZENVOKI_INITIAL_PASSWORD
     });
+
+    await testarPostgreSQL();
 
     await garantirUsuarioInicial();
 
