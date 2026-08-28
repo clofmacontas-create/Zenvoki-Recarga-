@@ -2028,6 +2028,7 @@ app.get(
     console.log("ENV CHECK:", {
       ADMIN_USER: process.env.ZENVOKI_ADMIN_USER || false,
       ADMIN_PASSWORD: !!process.env.ZENVOKI_ADMIN_PASSWORD,
+      DATABASE_URL: !!process.env.DATABASE_URL,
       INITIAL_USER: !!process.env.INITIAL_USER,
       INITIAL_EMAIL: !!process.env.INITIAL_EMAIL,
       INITIAL_PASSWORD: !!process.env.ZENVOKI_INITIAL_PASSWORD
