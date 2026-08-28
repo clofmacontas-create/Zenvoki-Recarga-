@@ -18,6 +18,18 @@ const pool = process.env.DATABASE_URL
     })
   : null;
 
+if (pool) {
+  pool.query("SELECT NOW()")
+    .then(() => {
+      console.log("✅ PostgreSQL conectado!");
+    })
+    .catch((error) => {
+      console.error("❌ Erro PostgreSQL:", error.message);
+    });
+} else {
+  console.log("⚠️ DATABASE_URL não disponível — usando db.json");
+}
+
 
 // =========================
 // BANCO DE DADOS
@@ -1014,13 +1026,20 @@ app.get(
       const db =
         carregarDB();
 
+      const operadora =
+        String(req.query.operadora || "").toUpperCase();
+
+      const modoRecarga =
+        db.rechargeModes &&
+        db.rechargeModes[operadora]
+          ? db.rechargeModes[operadora]
+          : (db.rechargeMode || "sem_codigo");
+
       res.json({
 
         success: true,
 
-        modoRecarga:
-          db.rechargeMode ||
-          "sem_codigo"
+        modoRecarga
 
       });
 
