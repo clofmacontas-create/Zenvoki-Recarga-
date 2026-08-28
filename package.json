@@ -17,6 +17,7 @@
     "express": "^5.2.1",
     "express-session": "^1.19.0",
     "lowdb": "^7.0.1",
-    "mercadopago": "^3.4.0"
+    "mercadopago": "^3.4.0",
+    "pg": "^8.23.0"
   }
 }

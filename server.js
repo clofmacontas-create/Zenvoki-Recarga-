@@ -5,10 +5,19 @@ const session = require("express-session");
 const bcrypt = require("bcryptjs");
 const fs = require("fs");
 const path = require("path");
+const { Pool } = require("pg");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, "db.json");
+
+const pool = process.env.DATABASE_URL
+  ? new Pool({
+      connectionString: process.env.DATABASE_URL,
+      ssl: { rejectUnauthorized: false }
+    })
+  : null;
+
 
 // =========================
 // BANCO DE DADOS
@@ -686,9 +695,9 @@ app.post(
 
       if (
         login !==
-          process.env.ADMIN_USER ||
+          process.env.ZENVOKI_ADMIN_USER ||
         senha !==
-          process.env.ADMIN_PASSWORD
+          process.env.ZENVOKI_ADMIN_PASSWORD
       ) {
         return res.status(401).json({
           error:
@@ -1802,7 +1811,71 @@ app.post(
         novoPedido
       );
 
-      salvarDB(db);
+      // Hostless: salva o pedido no PostgreSQL
+      // porque /app/db.json é somente leitura.
+      if (pool) {
+        await pool.query(`
+          CREATE TABLE IF NOT EXISTS orders (
+            id TEXT PRIMARY KEY,
+            usuario_id TEXT,
+            nome_cliente TEXT,
+            username_cliente TEXT,
+            email_cliente TEXT,
+            numero TEXT NOT NULL,
+            operadora TEXT NOT NULL,
+            recarga TEXT NOT NULL,
+            preco NUMERIC NOT NULL,
+            amount_cents INTEGER NOT NULL,
+            pix_id TEXT,
+            pix_status TEXT,
+            status TEXT,
+            criado_em TIMESTAMP,
+            atualizado_em TIMESTAMP
+          )
+        `);
+
+        await pool.query(
+          `INSERT INTO orders (
+            id,
+            usuario_id,
+            nome_cliente,
+            username_cliente,
+            email_cliente,
+            numero,
+            operadora,
+            recarga,
+            preco,
+            amount_cents,
+            pix_id,
+            pix_status,
+            status,
+            criado_em,
+            atualizado_em
+          ) VALUES (
+            $1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15
+          )
+          ON CONFLICT (id) DO NOTHING`,
+          [
+            novoPedido.id,
+            novoPedido.usuarioId,
+            novoPedido.nomeCliente,
+            novoPedido.usernameCliente,
+            novoPedido.emailCliente,
+            novoPedido.numero,
+            novoPedido.operadora,
+            novoPedido.recarga,
+            novoPedido.preco,
+            novoPedido.amount_cents,
+            novoPedido.pixId,
+            novoPedido.pixStatus,
+            novoPedido.status,
+            novoPedido.criadoEm,
+            novoPedido.atualizadoEm
+          ]
+        );
+      } else {
+        salvarDB(db);
+      }
 
       // =========================
       // RETORNO
@@ -1953,8 +2026,8 @@ app.get(
 (async () => {
   try {
     console.log("ENV CHECK:", {
-      ADMIN_USER: process.env.ADMIN_USER || false,
-      ADMIN_PASSWORD: !!process.env.ADMIN_PASSWORD,
+      ADMIN_USER: process.env.ZENVOKI_ADMIN_USER || false,
+      ADMIN_PASSWORD: !!process.env.ZENVOKI_ADMIN_PASSWORD,
       INITIAL_USER: !!process.env.INITIAL_USER,
       INITIAL_EMAIL: !!process.env.INITIAL_EMAIL,
       INITIAL_PASSWORD: !!process.env.ZENVOKI_INITIAL_PASSWORD
