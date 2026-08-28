@@ -14,7 +14,7 @@ const DB_FILE = path.join(__dirname, "db.json");
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
-      ssl: { rejectUnauthorized: false }
+      ssl: true
     })
   : null;
 
