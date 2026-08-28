@@ -11,6 +11,22 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 const DB_FILE = path.join(__dirname, "db.json");
 
+if (process.env.DATABASE_URL) {
+  try {
+    const u = new URL(process.env.DATABASE_URL);
+    console.log("DB CHECK:", {
+      protocol: u.protocol,
+      host: u.hostname || false,
+      port: u.port || false,
+      database: u.pathname ? u.pathname.slice(1) : false,
+      username: u.username ? true : false,
+      password: u.password ? true : false
+    });
+  } catch (error) {
+    console.error("❌ DATABASE_URL inválida:", error.message);
+  }
+}
+
 const pool = process.env.DATABASE_URL
   ? new Pool({
       connectionString: process.env.DATABASE_URL,
