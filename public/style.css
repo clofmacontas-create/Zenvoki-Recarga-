@@ -503,7 +503,7 @@ body {
 
 
 /* =========================================
-   NOVO PAINEL ZENVOKI RECARGA
+   NOVO PAINEL BREVON RECARGA
    ========================================= */
 
 .acoes-recarga {
@@ -779,4 +779,47 @@ body {
 
 #btnTIM {
   grid-column: 1 / -1;
+}
+
+/* Logo Brevon no cabeçalho */
+.brand-mark {
+  width: 84px;
+  height: 84px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 20px;
+}
+
+.brand-mark img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+
+/* CORREÇÃO DEFINITIVA - LOGO BREVON */
+header.brand .brand-mark {
+  width: 84px !important;
+  height: 84px !important;
+  min-width: 84px !important;
+  min-height: 84px !important;
+  max-width: 84px !important;
+  max-height: 84px !important;
+  overflow: hidden !important;
+  border-radius: 20px !important;
+}
+
+header.brand .brand-mark img {
+  width: 64px !important;
+  height: 64px !important;
+  min-width: 64px !important;
+  min-height: 64px !important;
+  max-width: 64px !important;
+  max-height: 64px !important;
+  object-fit: contain !important;
+  display: block !important;
+  position: static !important;
 }
