@@ -1,42 +1,89 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
-
 <head>
-
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
-
-  <title>Dashboard - Zenvoki Recarga</title>
-
-  <link
-    rel="stylesheet"
-    href="/admin/style.css"
-  >
-
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard - Brevon Recarga</title>
+  <link rel="stylesheet" href="/admin/style.css">
 </head>
 
 <body>
 
-  <header class="admin-header">
+<aside class="sidebar">
 
-    <div>
-
-      <h1>
-        Zenvoki <span>Recarga</span>
-      </h1>
-
-      <p>
-        Painel Administrativo
-      </p>
-
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <img src="/assets/brevon-logo.png" alt="Brevon">
     </div>
 
-    <button id="btnSair">
-      🚪 Sair
+    <div class="sidebar-name">
+      <strong>Brevon</strong>
+      <span>Recarga</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a href="/admin/dashboard.html" class="nav-item active">
+      <span class="nav-icon">⌂</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="/admin/pedidos.html" class="nav-item">
+      <span class="nav-icon">▣</span>
+      <span>Pedidos</span>
+    </a>
+
+    <a href="/admin/clientes.html" class="nav-item">
+      <span class="nav-icon">♙</span>
+      <span>Clientes</span>
+    </a>
+
+    <a href="/admin/operadoras.html" class="nav-item">
+      <span class="nav-icon">◉</span>
+      <span>Operadoras</span>
+    </a>
+
+    <a href="/admin/recargas.html" class="nav-item">
+      <span class="nav-icon">◇</span>
+      <span>Recargas</span>
+    </a>
+
+    <a href="/admin/configuracoes.html" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      <span>Configurações</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-secure">
+    <div class="secure-icon">✓</div>
+
+    <div>
+      <strong>Painel Seguro</strong>
+      <span>Acesso restrito</span>
+    </div>
+
+    <i></i>
+  </div>
+
+</aside>
+
+
+<div class="admin-content">
+
+  <header class="topbar">
+
+    <div class="mobile-brand">
+      <div class="mobile-logo">
+        <img src="/assets/brevon-logo.png" alt="Brevon">
+      </div>
+      <strong>Brevon <span>Recarga</span></strong>
+    </div>
+
+    <button id="btnSair" class="logout-btn">
+      <span>↪</span>
+      Sair
     </button>
 
   </header>
@@ -46,209 +93,183 @@
 
     <section class="welcome">
 
-      <h2>
-        📊 Dashboard
-      </h2>
+      <div class="page-title">
 
-      <p>
-        Bem-vindo ao painel administrativo
-        da Zenvoki Recarga.
-      </p>
+        <div class="page-icon">▣</div>
+
+        <div>
+          <span class="eyebrow">VISÃO GERAL</span>
+          <h1>Dashboard</h1>
+          <p>Acompanhe sua operação em tempo real.</p>
+        </div>
+
+      </div>
+
+      <div class="status-online">
+        <span></span>
+        Sistema online
+      </div>
 
     </section>
 
 
     <section class="cards">
 
-      <div class="card">
+      <div class="card card-blue">
 
-        <span>📦</span>
+        <div class="card-top">
+          <div class="card-icon">▣</div>
+          <span class="card-label">PEDIDOS</span>
+        </div>
 
-        <h3 id="totalPedidos">
-          0
-        </h3>
+        <h3 id="totalPedidos">0</h3>
 
-        <p>
-          Total de pedidos
-        </p>
-
-      </div>
-
-
-      <div class="card">
-
-        <span>⏳</span>
-
-        <h3 id="pedidosPendentes">
-          0
-        </h3>
-
-        <p>
-          Pedidos pendentes
-       </p>
-
-      </d,iv>
-
-
-      <div class="card">
-
-        <span>💳</span>
-
-        <h3 id="pedidosPagos">
-          0
-        </h3>
-
-        <p>
-          Pagamentos confirmados
-        </p>
+        <p>Total de pedidos</p>
+        <small>Todos os pedidos realizados</small>
 
       </div>
 
 
-      <div class="card">
+      <div class="card card-orange">
 
-        <span>👥</span>
+        <div class="card-top">
+          <div class="card-icon">◷</div>
+          <span class="card-label">PENDENTES</span>
+        </div>
 
-        <h3 id="totalClientes">
-          0
-        </h3>
+        <h3 id="pedidosPendentes">0</h3>
 
-        <p>
-          Clientes
-        </p>
+        <p>Pedidos pendentes</p>
+        <small>Aguardando análise</small>
 
-            </div>
+      </div>
+
+
+      <div class="card card-green">
+
+        <div class="card-top">
+          <div class="card-icon">✓</div>
+          <span class="card-label">PAGOS</span>
+        </div>
+
+        <h3 id="pedidosPagos">0</h3>
+
+        <p>Pagamentos confirmados</p>
+        <small>Pedidos aprovados</small>
+
+      </div>
+
+
+      <div class="card card-purple">
+
+        <div class="card-top">
+          <div class="card-icon">×</div>
+          <span class="card-label">CLIENTES</span>
+        </div>
+
+        <h3 id="totalClientes">0</h3>
+
+        <p>Clientes cadastrados</p>
+        <small>Usuários da plataforma</small>
+
+      </div>
 
     </section>
 
-<section class="panel">
 
-  <div class="panel-header">
-
-    <div>
-
-      <h2>📡 Status das Operadoras</h2>
-
-      <p>
-        Ative ou desative uma operadora para os clientes.
-      </p>
-
-    </div>
-
-  </div>
-
-  <div
-    id="statusOperadoras"
-    style="
-      display:flex;
-      flex-direction:column;
-      gap:12px;
-      margin-top:15px;
-    "
-  >
-    <p>Carregando status...</p>
-  </div>
-
-</section>
-    </section>
-
-<section class="panel">
-
-  <div class="panel-header">
-
-    <div>
-      <h2>🔐 Modo de Recarga</h2>
-
-      <p>
-        Configure separadamente o modo de recarga de cada operadora.
-      </p>
-    </div>
-
-  </div>
-
-  <div
-    id="modosRecarga"
-    style="
-      display:flex;
-      flex-direction:column;
-      gap:15px;
-      margin-top:15px;
-    "
-  >
-
-    <p>Carregando modos...</p>
-
-  </div>
-
-</section>
-
-<section class="panel">
-
-  <div class="panel-header">
-
-    <div>
-
-      <h2>⚙️ Gerenciar Recargas</h2>
-
-      <p>
-        Altere valores, preços e disponibilidade.
-      </p>
-
-    </div>
-
-  </div>
-
-  <div id="configRecargas">
-
-    <p>
-      Carregando configurações...
-    </p>
-
-  </div>
-
-</section>
-    <section class="panel">
+    <section class="panel" id="operadoras">
 
       <div class="panel-header">
 
         <div>
-
-          <h2>
-            📦 Pedidos recentes
-          </h2>
-
-          <p>
-            Acompanhe as últimas recargas.
-          </p>
-
+          <span class="section-tag">OPERADORAS</span>
+          <h2>Status das Operadoras</h2>
+          <p>Ative ou desative uma operadora para os clientes.</p>
         </div>
 
       </div>
 
+      <div id="statusOperadoras" class="operator-list">
+        <p>Carregando status...</p>
+      </div>
 
-      <div
-        id="listaPedidos"
-        class="empty"
-      >
+    </section>
 
-        <div class="empty-icon">
-          📭
+
+    <section class="panel" id="configuracoes">
+
+      <div class="panel-header">
+
+        <div>
+          <span class="section-tag">CONFIGURAÇÃO</span>
+          <h2>Modo de Recarga</h2>
+          <p>Configure separadamente o modo de recarga de cada operadora.</p>
         </div>
 
-        <h3>
-          Carregando pedidos...
-        </h3>
+      </div>
 
-        <p>
-          Aguarde.
-        </p>
+      <div id="modosRecarga" class="mode-list">
+        <p>Carregando modos...</p>
+      </div>
+
+    </section>
+
+
+    <section class="panel" id="recargas">
+
+      <div class="panel-header">
+
+        <div>
+          <span class="section-tag">PREÇOS</span>
+          <h2>Gerenciar Recargas</h2>
+          <p>Altere valores, preços e disponibilidade.</p>
+        </div>
+
+      </div>
+
+      <div id="configRecargas">
+        <p>Carregando configurações...</p>
+      </div>
+
+    </section>
+
+
+    <section class="panel pedidos-panel" id="pedidos">
+
+      <div class="panel-header pedidos-header">
+
+        <div>
+          <span class="section-tag">OPERAÇÃO</span>
+          <h2>Pedidos</h2>
+          <p>Acompanhe e gerencie as últimas recargas.</p>
+        </div>
+
+        <button
+          type="button"
+          class="refresh-btn"
+          onclick="carregarPedidos()"
+        >
+          Atualizar
+        </button>
+
+      </div>
+
+
+      <div id="listaPedidos" class="orders-list">
+
+        <div class="empty">
+          <div class="empty-icon">▣</div>
+          <h3>Carregando pedidos</h3>
+          <p>Aguarde...</p>
+        </div>
 
       </div>
 
     </section>
-<section class="panel">
+
   </main>
 
+</div>
 
 <script>
 
