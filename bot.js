@@ -1,11 +1,11 @@
 require('dotenv').config();
 
-const { Bot } = require('node-telegram-bot-api');
+const TelegramBot = require('node-telegram-bot-api');
 const OpenAI = require('openai');
 
-const TELEGRAM_TOKEN = '8992269508:AAGmBe7_WecyugZkTSrNkYwa90FtYYUqKIA';
+const TELEGRAM_TOKEN = process.env.SIMVA_AI_BOT_TOKEN || '8992269508:AAGmBe7_WecyugZkTSrNkYwa90FtYYUqKIA';
 
-const bot = new Bot(TELEGRAM_TOKEN);
+const bot = new TelegramBot(TELEGRAM_TOKEN, { polling: true });
 
 const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY
@@ -54,8 +54,9 @@ const MENU = {
   }
 };
 
-bot.command('start', async (ctx) => {
-  await ctx.reply(
+bot.onText(/\/start/, async (msg) => {
+  await bot.sendMessage(
+    msg.chat.id,
 `👋 Olá! Eu sou o SIMVA AI.
 
 Como posso ajudar?`,
@@ -63,13 +64,14 @@ Como posso ajudar?`,
   );
 });
 
-bot.on('callback_query', async (ctx) => {
-  const data = ctx.callbackQuery?.data;
+bot.on('callback_query', async (query) => {
+  const data = query.data;
+  const chatId = query.message.chat.id;
 
-  await ctx.answerCallbackQuery();
+  await bot.answerCallbackQuery(query.id);
 
   if (data === 'recargas') {
-    await ctx.reply(
+    await bot.sendMessage(chatId, 
       `📲 RECARGAS
 
 Como posso ajudar?`,
@@ -93,7 +95,7 @@ Como posso ajudar?`,
   }
 
   if (data === 'esim') {
-    await ctx.reply(
+    await bot.sendMessage(chatId, 
       `📡 eSIM
 
 Como posso ajudar?`,
@@ -113,7 +115,7 @@ Como posso ajudar?`,
   }
 
   if (data === 'streaming') {
-    await ctx.reply(
+    await bot.sendMessage(chatId, 
       `🎬 STREAMING
 
 Como posso ajudar?`,
@@ -136,11 +138,11 @@ Como posso ajudar?`,
   }
 
   if (data === 'valores') {
-    await responderIA(ctx, 'Quais serviços a SIMVA oferece e como consultar os valores?');
+    await responderIA(chatId, 'Quais serviços a SIMVA oferece e como consultar os valores?');
   }
 
   if (data === 'atendimento') {
-    await ctx.reply(
+    await bot.sendMessage(chatId, 
       `👨‍💻 ATENDIMENTO
 
 Fale diretamente com nossa equipe pelo WhatsApp:
@@ -150,31 +152,31 @@ https://wa.me/556199277795`
   }
 
   if (data === 'recarga_como') {
-    await responderIA(ctx, 'Como funciona a recarga?');
+    await responderIA(chatId, 'Como funciona a recarga?');
   }
 
   if (data === 'recarga_operadoras') {
-    await responderIA(ctx, 'Quais operadoras vocês trabalham?');
+    await responderIA(chatId, 'Quais operadoras vocês trabalham?');
   }
 
   if (data === 'recarga_prazo') {
-    await responderIA(ctx, 'Qual é o prazo máximo da recarga cair?');
+    await responderIA(chatId, 'Qual é o prazo máximo da recarga cair?');
   }
 
   if (data === 'esim_como') {
-    await responderIA(ctx, 'Como funciona o eSIM?');
+    await responderIA(chatId, 'Como funciona o eSIM?');
   }
 
   if (data === 'streaming_servicos') {
-    await responderIA(ctx, 'Quais streaming vocês trabalham?');
+    await responderIA(chatId, 'Quais streaming vocês trabalham?');
   }
 
   if (data === 'streaming_oque') {
-    await responderIA(ctx, 'O que é streaming?');
+    await responderIA(chatId, 'O que é streaming?');
   }
 
   if (data === 'menu') {
-    await ctx.reply(
+    await bot.sendMessage(chatId, 
       `👋 Olá! Eu sou o SIMVA AI.
 
 Como posso ajudar?`,
@@ -182,9 +184,9 @@ Como posso ajudar?`,
     );
   }
 });
-bot.hears('📲 Recargas', async (ctx) => {
-  await ctx.reply(
-`📲 RECARGAS
+bot.onText(new RegExp('📲\\ Recargas'), async (msg) => {
+  const chatId = msg.chat.id;
+  await bot.sendMessage(chatId, `📲 RECARGAS
 
 Como posso ajudar?`,
     {
@@ -200,9 +202,9 @@ Como posso ajudar?`,
   );
 });
 
-bot.hears('📡 eSIM', async (ctx) => {
-  await ctx.reply(
-`📡 eSIM
+bot.onText(new RegExp('📡\\ eSIM'), async (msg) => {
+  const chatId = msg.chat.id;
+  await bot.sendMessage(chatId, `📡 eSIM
 
 Como posso ajudar?`,
     {
@@ -217,9 +219,9 @@ Como posso ajudar?`,
   );
 });
 
-bot.hears('🎬 Streaming', async (ctx) => {
-  await ctx.reply(
-`🎬 STREAMING
+bot.onText(new RegExp('🎬\\ Streaming'), async (msg) => {
+  const chatId = msg.chat.id;
+  await bot.sendMessage(chatId, `🎬 STREAMING
 
 Como posso ajudar?`,
     {
@@ -235,18 +237,18 @@ Como posso ajudar?`,
   );
 });
 
-bot.hears('💰 Valores e serviços', async (ctx) => {
-  await ctx.reply(
-`💰 VALORES E SERVIÇOS
+bot.onText(new RegExp('💰\\ Valores\\ e\\ serviços'), async (msg) => {
+  const chatId = msg.chat.id;
+  await bot.sendMessage(chatId, `💰 VALORES E SERVIÇOS
 
 Para consultar valores, informe qual serviço deseja consultar.`,
     MENU
   );
 });
 
-bot.hears('👨‍💻 Atendimento', async (ctx) => {
-  await ctx.reply(
-`👨‍💻 ATENDIMENTO
+bot.onText(new RegExp('👨\u200d💻\\ Atendimento'), async (msg) => {
+  const chatId = msg.chat.id;
+  await bot.sendMessage(chatId, `👨‍💻 ATENDIMENTO
 
 Fale diretamente com nossa equipe pelo WhatsApp:
 
@@ -254,35 +256,42 @@ https://wa.me/556199277795`
   );
 });
 
-bot.hears('❓ Como funciona?', async (ctx) => {
-  await responderIA(ctx, 'Como funciona a recarga?');
+bot.onText(new RegExp('❓ Como funciona\\?'), async (msg) => {
+  const chatId = msg.chat.id;
+  await responderIA(chatId, 'Como funciona a recarga?');
 });
 
-bot.hears('📡 Operadoras', async (ctx) => {
-  await responderIA(ctx, 'Quais operadoras vocês trabalham?');
+bot.onText(new RegExp('📡 Operadoras'), async (msg) => {
+  const chatId = msg.chat.id;
+  await responderIA(chatId, 'Quais operadoras vocês trabalham?');
 });
 
-bot.hears('⏱️ Prazo da recarga', async (ctx) => {
-  await responderIA(ctx, 'Qual é o prazo máximo da recarga cair?');
+bot.onText(new RegExp('⏱️ Prazo da recarga'), async (msg) => {
+  const chatId = msg.chat.id;
+  await responderIA(chatId, 'Qual é o prazo máximo da recarga cair?');
 });
 
-bot.hears('❓ Como funciona o eSIM?', async (ctx) => {
-  await responderIA(ctx, 'Como funciona o eSIM?');
+bot.onText(new RegExp('❓ Como funciona o eSIM\\?'), async (msg) => {
+  const chatId = msg.chat.id;
+  await responderIA(chatId, 'Como funciona o eSIM?');
 });
 
-bot.hears('📋 Serviços disponíveis', async (ctx) => {
-  await responderIA(ctx, 'Quais streaming vocês trabalham?');
+bot.onText(new RegExp('📋 Serviços disponíveis'), async (msg) => {
+  const chatId = msg.chat.id;
+  await responderIA(chatId, 'Quais streaming vocês trabalham?');
 });
 
-bot.hears('❓ O que é streaming?', async (ctx) => {
-  await responderIA(ctx, 'O que é streaming?');
+bot.onText(new RegExp('❓ O que é streaming\\?'), async (msg) => {
+  const chatId = msg.chat.id;
+  await responderIA(chatId, 'O que é streaming?');
 });
 
-bot.hears('🔙 Voltar ao menu', async (ctx) => {
-  await ctx.reply('🏠 Menu principal', MENU);
+bot.onText(new RegExp('🔙\\ Voltar\\ ao\\ menu'), async (msg) => {
+  const chatId = msg.chat.id;
+  await bot.sendMessage(chatId, '🏠 Menu principal', MENU);
 });
 
-async function responderIA(ctx, mensagem) {
+async function responderIA(chatId, mensagem) {
   try {
     const resposta = await openai.responses.create({
       model: 'gpt-5.6-luna',
@@ -290,17 +299,18 @@ async function responderIA(ctx, mensagem) {
       input: mensagem
     });
 
-    await ctx.reply(resposta.output_text);
+    await bot.sendMessage(chatId, resposta.output_text);
   } catch (error) {
     console.error('Erro na IA:', error);
-    await ctx.reply(
+    await bot.sendMessage(chatId, 
       '⚠️ Não consegui processar sua mensagem agora. Tente novamente.'
     );
   }
 }
 
-bot.on('message', async (ctx) => {
-  const mensagem = ctx.message.text;
+bot.on('message', async (msg) => {
+  const chatId = msg.chat.id;
+  const mensagem = msg.text;
 
   if (!mensagem || mensagem.startsWith('/')) return;
 
@@ -321,13 +331,9 @@ bot.on('message', async (ctx) => {
 
   if (botoes.includes(mensagem)) return;
 
-  await responderIA(ctx, mensagem);
+  await responderIA(chatId, mensagem);
 });
+;
 
-bot.catch((error) => {
-  console.error('Erro no bot:', error);
-});
-
-bot.startPolling();
 
 console.log('🤖 SIMVA AI iniciado!');
