@@ -201,7 +201,7 @@ async function garantirUsuarioInicial() {
       Date.now().toString(),
 
     nome:
-      "Zenvoki",
+      "Brevon",
 
     username:
       username,
@@ -921,7 +921,7 @@ app.get(
     res.json({
       online: true,
       sistema:
-        "Zenvoki Recarga"
+        "Brevon Recarga"
     });
   }
 );
@@ -1512,6 +1512,46 @@ app.get(
 );
 
 // =========================
+// ADMIN - LISTAR CLIENTES
+// =========================
+
+app.get(
+  "/api/admin/clientes",
+  exigirAdmin,
+  (req, res) => {
+    try {
+
+      const db = carregarDB();
+
+      const clientes = (db.users || []).map(cliente => ({
+        id: cliente.id,
+        nome: cliente.nome || "Cliente",
+        username: cliente.username || "",
+        email: cliente.email || "",
+        criadoEm: cliente.criadoEm || null
+      }));
+
+      res.json({
+        success: true,
+        clientes
+      });
+
+    } catch (error) {
+
+      console.error(
+        "Erro ao listar clientes:",
+        error
+      );
+
+      res.status(500).json({
+        error:
+          "Não foi possível carregar os clientes."
+      });
+    }
+  }
+);
+
+// =========================
 // ADMIN - LISTAR PEDIDOS
 // =========================
 
@@ -1634,6 +1674,82 @@ app.post(
     }
   }
 );
+
+// =========================
+// BOT - ATUALIZAR PEDIDO
+// =========================
+
+app.post("/api/bot/orders/:id/status", async (req, res) => {
+  try {
+    const secret = req.headers["x-simva-bot-secret"];
+
+    if (!secret || secret !== process.env.SIMVA_BOT_SECRET) {
+      return res.status(401).json({
+        error: "Não autorizado."
+      });
+    }
+
+    const { id } = req.params;
+    const { status } = req.body;
+
+    if (!["completed", "cancelled"].includes(status)) {
+      return res.status(400).json({
+        error: "Status inválido."
+      });
+    }
+
+    if (pool) {
+      const result = await pool.query(
+        `UPDATE orders
+         SET status = $1,
+             atualizado_em = NOW()
+         WHERE id = $2
+         RETURNING *`,
+        [status, id]
+      );
+
+      if (result.rowCount === 0) {
+        return res.status(404).json({
+          error: "Pedido não encontrado."
+        });
+      }
+
+      return res.json({
+        success: true,
+        order: result.rows[0]
+      });
+    }
+
+    const db = carregarDB();
+
+    const pedido = db.orders.find(
+      order => order.id === id
+    );
+
+    if (!pedido) {
+      return res.status(404).json({
+        error: "Pedido não encontrado."
+      });
+    }
+
+    pedido.status = status;
+    pedido.atualizadoEm = new Date().toISOString();
+
+    salvarDB(db);
+
+    return res.json({
+      success: true,
+      order: pedido
+    });
+
+  } catch (error) {
+    console.error("Erro ao atualizar pedido pelo bot:", error);
+
+    return res.status(500).json({
+      error: "Não foi possível atualizar o pedido."
+    });
+  }
+});
 
 // =========================
 // CLIENTE - CONSULTAR PEDIDO
@@ -2081,7 +2197,7 @@ app.get(
       "0.0.0.0",
       () => {
         console.log(
-          `🚀 Zenvoki Recarga rodando em http://localhost:${PORT}`
+          `🚀 Brevon Recarga rodando em http://localhost:${PORT}`
         );
       }
     );
@@ -2094,4 +2210,5 @@ app.get(
 
     process.exit(1);
   }
+require("./bot.js");
 })();
