@@ -108,6 +108,12 @@ bot.onText(/^\/start$/, async (msg) => {
 
   const botoes = [];
 
+  if (db.operadoras?.TIM) {
+    botoes.push([
+      { text: "💙 TIM", callback_data: "operadora_TIM" }
+    ]);
+  }
+
   if (db.operadoras?.CLARO) {
     botoes.push([
       { text: "❤️ CLARO", callback_data: "operadora_CLARO" }
