@@ -2210,5 +2210,5 @@ app.get(
 
     process.exit(1);
   }
-require("./bot.js");
+// require("./bot.js");
 })();
