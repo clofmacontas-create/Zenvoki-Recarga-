@@ -301,19 +301,40 @@ Digite o número que receberá a recarga:`
 
       await bot.sendMessage(
         chatId,
-        `💳 PAGAMENTO VIA PIX
+        `💳 *PAGAMENTO VIA PIX*
 
-📡 Operadora: ${pedido.operadora}
-💰 Recarga: R$ ${pedido.recarga}
-📱 Número: ${pedido.numero}
+━━━━━━━━━━━━━━━━━━
+📡 *Operadora:* ${pedido.operadora}
+💰 *Recarga:* R$ ${pedido.recarga}
+📱 *Número:* ${pedido.numero}
+━━━━━━━━━━━━━━━━━━
 
-💵 Valor para pagamento: R$ ${(data.pix.amount_cents / 100).toFixed(2)}
+💵 *VALOR PARA PAGAMENTO*
+*R$ ${(data.pix.amount_cents / 100).toFixed(2)}*
 
-📋 PIX COPIA E COLA:
+📋 *PIX COPIA E COLA*
 
+\`\`\`
 ${data.pixCopiaCola}
+\`\`\`
 
-⚠️ Após o pagamento, aguarde a confirmação automática.`
+⚠️ *Após realizar o pagamento, aguarde a confirmação automática.*
+━━━━━━━━━━━━━━━━━━`,
+        {
+          parse_mode: "Markdown",
+          reply_markup: {
+            inline_keyboard: [
+              [
+                {
+                  text: "📋 COPIAR PIX",
+                  copy_text: {
+                    text: data.pixCopiaCola
+                  }
+                }
+              ]
+            ]
+          }
+        }
       );
 
     } catch (error) {
@@ -375,6 +396,6 @@ ${data.pixCopiaCola}
   }
 });
 
-bot.startPolling();
+if (process.env.RUN_TELEGRAM_BOT !== "false") bot.startPolling();
 
 console.log("🤖 8B RECARGAS Bot iniciado!");
