@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Operadoras - Brevon Recarga</title>
+  <link rel="stylesheet" href="/admin/style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <img src="/assets/brevon-logo.png" alt="Brevon">
+    </div>
+
+    <div class="sidebar-name">
+      <strong>Brevon</strong>
+      <span>Recarga</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a href="/admin/dashboard.html" class="nav-item">
+      <span class="nav-icon">⌂</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="/admin/pedidos.html" class="nav-item">
+      <span class="nav-icon">▣</span>
+      <span>Pedidos</span>
+    </a>
+
+    <a href="/admin/clientes.html" class="nav-item">
+      <span class="nav-icon">♙</span>
+      <span>Clientes</span>
+    </a>
+
+    <a href="/admin/operadoras.html" class="nav-item active">
+      <span class="nav-icon">◉</span>
+      <span>Operadoras</span>
+    </a>
+
+    <a href="/admin/recargas.html" class="nav-item">
+      <span class="nav-icon">◇</span>
+      <span>Recargas</span>
+    </a>
+
+    <a href="/admin/configuracoes.html" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      <span>Configurações</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-secure">
+    <div class="secure-icon">✓</div>
+
+    <div>
+      <strong>Painel Seguro</strong>
+      <span>Acesso restrito</span>
+    </div>
+
+    <i></i>
+  </div>
+
+</aside>
+
+
+<div class="admin-content">
+
+  <header class="topbar">
+
+    <div class="mobile-brand">
+      <div class="mobile-logo">
+        <img src="/assets/brevon-logo.png" alt="Brevon">
+      </div>
+      <strong>Brevon <span>Recarga</span></strong>
+    </div>
+
+    <button id="btnSair" class="logout-btn">
+      <span>↪</span>
+      Sair
+    </button>
+
+  </header>
+
+
+  <main class="dashboard">
+
+    <section class="welcome">
+      <div class="page-title">
+        <div class="page-icon">◉</div>
+        <div>
+          <span class="eyebrow">GERENCIAMENTO</span>
+          <h1>Operadoras</h1>
+          <p>Gerencie as operadoras disponíveis para os clientes.</p>
+        </div>
+      </div>
+
+      <div class="status-online">
+        <span></span>
+        Sistema online
+      </div>
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <div>
+          <span class="section-tag">OPERADORAS</span>
+          <h2>Status das Operadoras</h2>
+          <p>Ative ou desative uma operadora para os clientes.</p>
+        </div>
+      </div>
+
+      <div id="statusOperadoras" class="operator-list">
+        <p>Carregando status...</p>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+async function verificarAdmin() {
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/me"
+      );
+const dados = await resposta.json();
+
+if (
+  dados.success &&
+  dados.pedido &&
+  dados.pedido.id
+) {
+  localStorage.setItem(
+    "zenvoki_pedido_id",
+    dados.pedido.id
+  );
+}
+
+if (!resposta.ok) {
+  throw new Error(
+    dados.error || "Não foi possível gerar o Pix."
+  );
+}
+    if (!resposta.ok) {
+
+      window.location.href =
+        "/admin/";
+
+      return false;
+
+    }
+
+    return true;
+
+  } catch (erro) {
+
+    window.location.href =
+      "/admin/";
+
+    return false;
+
+  }
+
+}
+
+async function carregarStatusOperadoras() {
+
+  const container =
+    document.getElementById("statusOperadoras");
+
+  if (!container) {
+    console.error(
+      "Elemento #statusOperadoras não encontrado."
+    );
+    return;
+  }
+
+  try {
+
+    const resposta =
+      await fetch("/api/admin/operadoras");
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar status."
+      );
+    }
+
+    const operadoras =
+      dados.operadoras || {};
+
+    container.innerHTML = "";
+
+    for (
+      const operadora of ["TIM", "CLARO", "VIVO"]
+    ) {
+
+      const ativo =
+        operadoras[operadora] === true;
+
+      const nome =
+        operadora === "TIM"
+          ? "🔵 TIM"
+          : operadora === "CLARO" ? "🔴 CLARO" : "VIVO";
+
+      const div =
+        document.createElement("div");
+
+      div.style.cssText = `
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        margin-top:12px;
+        padding:14px;
+        border-radius:10px;
+        background:#222;
+      `;
+
+      div.innerHTML = `
+        <strong>${nome}</strong>
+
+        <button
+          type="button"
+          style="
+            padding:10px 14px;
+            border:0;
+            border-radius:8px;
+            cursor:pointer;
+          "
+        >
+          ${ativo ? "🟢 ON" : "🔴 OFF"}
+        </button>
+      `;
+
+      const botao =
+        div.querySelector("button");
+
+      botao.onclick =
+        async function () {
+
+          botao.disabled = true;
+          botao.textContent = "⏳";
+
+          try {
+
+            const resposta =
+              await fetch(
+                "/api/admin/operadoras",
+                {
+                  method: "POST",
+
+                  headers: {
+                    "Content-Type":
+                      "application/json"
+                  },
+
+                  body:
+                    JSON.stringify({
+                      operadora:
+                        operadora,
+
+                      ativo:
+                        !ativo
+                    })
+                }
+              );
+
+            const dados =
+              await resposta.json();
+
+            if (!resposta.ok) {
+              throw new Error(
+                dados.error ||
+                "Erro ao alterar status."
+              );
+            }
+
+            carregarStatusOperadoras();
+
+          } catch (erro) {
+
+            alert(
+              "❌ Erro: " +
+              erro.message
+            );
+
+            botao.disabled = false;
+            botao.textContent =
+              ativo
+                ? "🟢 ON"
+                : "🔴 OFF";
+          }
+
+        };
+
+      container.appendChild(div);
+    }
+
+  } catch (erro) {
+
+    console.error(
+      "Erro ao carregar status das operadoras:",
+      erro
+    );
+
+    container.innerHTML = `
+      <p style="color:#ff6b6b;">
+        Erro: ${erro.message}
+      </p>
+    `;
+  }
+}
+
+carregarStatusOperadoras();
+</script>
+
+</body>
+
+</html>

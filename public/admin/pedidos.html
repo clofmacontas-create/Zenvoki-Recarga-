@@ -1,0 +1,512 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pedidos - Brevon Recarga</title>
+  <link rel="stylesheet" href="/admin/style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <img src="/assets/brevon-logo.png" alt="Brevon">
+    </div>
+
+    <div class="sidebar-name">
+      <strong>Brevon</strong>
+      <span>Recarga</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a href="/admin/dashboard.html" class="nav-item">
+      <span class="nav-icon">⌂</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="/admin/pedidos.html" class="nav-item active">
+      <span class="nav-icon">▣</span>
+      <span>Pedidos</span>
+    </a>
+
+    <a href="/admin/clientes.html" class="nav-item">
+      <span class="nav-icon">♙</span>
+      <span>Clientes</span>
+    </a>
+
+    <a href="/admin/operadoras.html" class="nav-item">
+      <span class="nav-icon">◉</span>
+      <span>Operadoras</span>
+    </a>
+
+    <a href="/admin/recargas.html" class="nav-item">
+      <span class="nav-icon">◇</span>
+      <span>Recargas</span>
+    </a>
+
+    <a href="/admin/configuracoes.html" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      <span>Configurações</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-secure">
+    <div class="secure-icon">✓</div>
+
+    <div>
+      <strong>Painel Seguro</strong>
+      <span>Acesso restrito</span>
+    </div>
+
+    <i></i>
+  </div>
+
+</aside>
+
+
+<div class="admin-content">
+
+  <header class="topbar">
+
+    <div class="mobile-brand">
+      <div class="mobile-logo">
+        <img src="/assets/brevon-logo.png" alt="Brevon">
+      </div>
+      <strong>Brevon <span>Recarga</span></strong>
+    </div>
+
+    <button id="btnSair" class="logout-btn">
+      <span>↪</span>
+      Sair
+    </button>
+
+  </header>
+
+
+  <main class="dashboard">
+
+    <section class="welcome">
+      <div class="page-title">
+        <div class="page-icon">▣</div>
+        <div>
+          <span class="eyebrow">OPERAÇÃO</span>
+          <h1>Pedidos</h1>
+          <p>Acompanhe e gerencie as recargas realizadas pelos clientes.</p>
+        </div>
+      </div>
+
+      <div class="status-online">
+        <span></span>
+        Sistema online
+      </div>
+    </section>
+
+    <section class="panel pedidos-panel">
+
+      <div class="panel-header pedidos-header">
+        <div>
+          <span class="section-tag">PEDIDOS</span>
+          <h2>Pedidos realizados</h2>
+          <p>Gerencie os pedidos de recarga da plataforma.</p>
+        </div>
+
+        <button
+          type="button"
+          class="refresh-btn"
+          onclick="carregarPedidos()"
+        >
+          Atualizar
+        </button>
+      </div>
+
+      <div id="listaPedidos" class="orders-list">
+        <div class="empty">
+          <div class="empty-icon">▣</div>
+          <h3>Carregando pedidos</h3>
+          <p>Aguarde...</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+async function verificarAdmin() {
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/me"
+      );
+const dados = await resposta.json();
+
+if (
+  dados.success &&
+  dados.pedido &&
+  dados.pedido.id
+) {
+  localStorage.setItem(
+    "zenvoki_pedido_id",
+    dados.pedido.id
+  );
+}
+
+if (!resposta.ok) {
+  throw new Error(
+    dados.error || "Não foi possível gerar o Pix."
+  );
+}
+    if (!resposta.ok) {
+
+      window.location.href =
+        "/admin/";
+
+      return false;
+
+    }
+
+    return true;
+
+  } catch (erro) {
+
+    window.location.href =
+      "/admin/";
+
+    return false;
+
+  }
+
+}
+
+async function carregarPedidos() {
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/orders"
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Erro ao carregar pedidos."
+      );
+
+    }
+
+    const pedidos =
+      dados.orders || [];
+
+    const lista =
+      document.getElementById(
+        "listaPedidos"
+      );
+
+
+    if (
+      pedidos.length === 0
+    ) {
+
+      lista.className =
+        "empty";
+
+      lista.innerHTML = `
+
+        <div class="empty-icon">
+          📭
+        </div>
+
+        <h3>
+          Nenhum pedido ainda
+        </h3>
+
+        <p>
+          Os pedidos dos clientes
+          aparecerão aqui.
+        </p>
+
+      `;
+
+      return;
+
+    }
+
+
+    lista.className =
+      "orders-list";
+
+
+    lista.innerHTML =
+      pedidos
+        .slice()
+        .reverse()
+        .map(
+          pedido => {
+
+            const finalizado =
+              pedido.status ===
+              "completed";
+
+            const cancelado =
+              pedido.status ===
+              "cancelled";
+
+
+            return `
+
+              <div
+                class="order-item"
+                style="
+                  display:flex;
+                  justify-content:space-between;
+                  gap:20px;
+                  padding:20px;
+                  margin-bottom:15px;
+                  border-radius:15px;
+                  background:#151515;
+                  border:1px solid #292929;
+                "
+              >
+
+                <div>
+
+                  <h3>
+                    📱 ${pedido.numero}
+                  </h3>
+
+                  <p>
+                    <strong>
+                      ${pedido.operadora}
+                    </strong>
+
+                    • Recarga:
+                    R$ ${pedido.recarga}
+                  </p>
+
+                  <p>
+                    Cliente:
+                    ${pedido.nomeCliente || "Visitante"}
+                  </p>
+
+                  <p>
+                    Status:
+                    <strong>
+                      ${pedido.status}
+                    </strong>
+                  </p>
+
+                </div>
+
+
+                <div
+                  style="
+                    text-align:right;
+                    min-width:150px;
+                  "
+                >
+
+                  <h3>
+                    R$
+                    ${Number(
+                      pedido.preco
+                    ).toFixed(2)}
+                  </h3>
+
+
+                  ${
+                    !finalizado &&
+                    !cancelado
+
+                    ? `
+
+                      <button
+                        onclick="
+                          alterarStatusPedido(
+                            '${pedido.id}',
+                            'completed'
+                          )
+                        "
+                        style="
+                          padding:10px;
+                          margin:4px;
+                          border:0;
+                          border-radius:8px;
+                          cursor:pointer;
+                        "
+                      >
+                        ✅ Finalizar
+                      </button>
+
+
+                      <button
+                        onclick="
+                          alterarStatusPedido(
+                            '${pedido.id}',
+                            'cancelled'
+                          )
+                        "
+                        style="
+                          padding:10px;
+                          margin:4px;
+                          border:0;
+                          border-radius:8px;
+                          cursor:pointer;
+                        "
+                      >
+                        ❌ Cancelar
+                      </button>
+
+                    `
+
+                    : finalizado
+
+                    ? `
+                      <strong>
+                        ✅ Finalizado
+                      </strong>
+                    `
+
+                    : `
+                      <strong>
+                        ❌ Cancelado
+                      </strong>
+                    `
+
+                  }
+
+                </div>
+
+              </div>
+
+            `;
+
+          }
+        )
+        .join("");
+
+  } catch (erro) {
+
+    console.error(
+      "Erro ao carregar pedidos:",
+      erro
+    );
+
+    document.getElementById(
+      "listaPedidos"
+    ).innerHTML = `
+
+      <div class="empty-icon">
+        ⚠️
+      </div>
+
+      <h3>
+        Erro ao carregar pedidos
+      </h3>
+
+      <p>
+        ${erro.message}
+      </p>
+
+    `;
+
+  }
+
+}
+
+async function alterarStatusPedido(
+  id,
+  status
+) {
+
+  const mensagem =
+    status === "completed"
+
+      ? "Deseja realmente finalizar este pedido?"
+
+      : "Deseja realmente cancelar este pedido?";
+
+
+  if (
+    !confirm(mensagem)
+  ) {
+
+    return;
+
+  }
+
+
+  try {
+
+    const resposta =
+      await fetch(
+        `/api/admin/orders/${id}/status`,
+        {
+
+          method:
+            "POST",
+
+          headers: {
+
+            "Content-Type":
+              "application/json"
+
+          },
+
+          body:
+            JSON.stringify({
+              status
+            })
+
+        }
+      );
+
+
+    const dados =
+      await resposta.json();
+
+
+    if (!resposta.ok) {
+
+      throw new Error(
+        dados.error ||
+        "Não foi possível atualizar o pedido."
+      );
+
+    }
+
+
+    alert(
+      dados.message
+    );
+
+
+  } catch (erro) {
+
+    alert(
+      "Erro: " + erro.message
+    );
+
+  }
+}
+
+carregarPedidos();
+</script>
+
+</body>
+
+</html>

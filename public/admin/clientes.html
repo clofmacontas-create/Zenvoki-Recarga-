@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Clientes - Brevon Recarga</title>
+  <link rel="stylesheet" href="/admin/style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <img src="/assets/brevon-logo.png" alt="Brevon">
+    </div>
+
+    <div class="sidebar-name">
+      <strong>Brevon</strong>
+      <span>Recarga</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a href="/admin/dashboard.html" class="nav-item">
+      <span class="nav-icon">⌂</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="/admin/pedidos.html" class="nav-item">
+      <span class="nav-icon">▣</span>
+      <span>Pedidos</span>
+    </a>
+
+    <a href="/admin/clientes.html" class="nav-item active">
+      <span class="nav-icon">♙</span>
+      <span>Clientes</span>
+    </a>
+
+    <a href="/admin/operadoras.html" class="nav-item">
+      <span class="nav-icon">◉</span>
+      <span>Operadoras</span>
+    </a>
+
+    <a href="/admin/recargas.html" class="nav-item">
+      <span class="nav-icon">◇</span>
+      <span>Recargas</span>
+    </a>
+
+    <a href="/admin/configuracoes.html" class="nav-item">
+      <span class="nav-icon">⚙</span>
+      <span>Configurações</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-secure">
+    <div class="secure-icon">✓</div>
+
+    <div>
+      <strong>Painel Seguro</strong>
+      <span>Acesso restrito</span>
+    </div>
+
+    <i></i>
+  </div>
+
+</aside>
+
+
+<div class="admin-content">
+
+  <header class="topbar">
+
+    <div class="mobile-brand">
+      <div class="mobile-logo">
+        <img src="/assets/brevon-logo.png" alt="Brevon">
+      </div>
+      <strong>Brevon <span>Recarga</span></strong>
+    </div>
+
+    <button id="btnSair" class="logout-btn">
+      <span>↪</span>
+      Sair
+    </button>
+
+  </header>
+
+
+  <main class="dashboard">
+
+    <section class="welcome">
+      <div class="page-title">
+        <div class="page-icon">♙</div>
+
+        <div>
+          <span class="eyebrow">GERENCIAMENTO</span>
+          <h1>Clientes</h1>
+          <p>Visualize os clientes cadastrados na plataforma.</p>
+        </div>
+      </div>
+
+      <div class="status-online">
+        <span></span>
+        Sistema online
+      </div>
+    </section>
+
+    <section class="cards">
+
+      <div class="card card-purple">
+        <div class="card-top">
+          <div class="card-icon">♙</div>
+          <span class="card-label">CLIENTES</span>
+        </div>
+
+        <h3 id="totalClientes">0</h3>
+
+        <p>Total de clientes</p>
+        <small>Usuários cadastrados</small>
+      </div>
+
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <div>
+          <span class="section-tag">CLIENTES</span>
+          <h2>Clientes cadastrados</h2>
+          <p>Lista de usuários registrados na plataforma.</p>
+        </div>
+
+        <button
+          type="button"
+          class="refresh-btn"
+          onclick="carregarClientes()"
+        >
+          Atualizar
+        </button>
+      </div>
+
+      <div id="listaClientes" class="orders-list">
+
+        <div class="empty">
+          <div class="empty-icon">♙</div>
+          <h3>Carregando clientes</h3>
+          <p>Aguarde...</p>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+
+
+<script>
+
+async function verificarAdmin() {
+  try {
+    const resposta = await fetch("/api/admin/me");
+
+    if (!resposta.ok) {
+      window.location.href = "/admin/";
+      return false;
+    }
+
+    return true;
+
+  } catch (erro) {
+    window.location.href = "/admin/";
+    return false;
+  }
+}
+
+async function carregarClientes() {
+
+  const autorizado = await verificarAdmin();
+
+  if (!autorizado) return;
+
+  try {
+
+    const resposta = await fetch("/api/admin/clientes");
+    const dados = await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error || "Erro ao carregar clientes."
+      );
+    }
+
+    const clientes = dados.clientes || [];
+
+    document.getElementById("totalClientes").textContent =
+      clientes.length;
+
+    const lista = document.getElementById("listaClientes");
+
+    if (clientes.length === 0) {
+
+      lista.className = "empty";
+
+      lista.innerHTML = `
+        <div class="empty-icon">♙</div>
+        <h3>Nenhum cliente ainda</h3>
+        <p>Os clientes cadastrados aparecerão aqui.</p>
+      `;
+
+      return;
+    }
+
+    lista.className = "orders-list";
+
+    lista.innerHTML = clientes
+      .slice()
+      .reverse()
+      .map(cliente => {
+
+        const data = cliente.criadoEm
+          ? new Date(cliente.criadoEm).toLocaleDateString("pt-BR")
+          : "—";
+
+        return `
+          <div
+            class="order-item"
+            style="
+              display:flex;
+              justify-content:space-between;
+              gap:20px;
+              padding:20px;
+              margin-bottom:15px;
+              border-radius:15px;
+              background:#151515;
+              border:1px solid #292929;
+            "
+          >
+
+            <div>
+
+              <h3>
+                ♙ ${cliente.nome || "Cliente"}
+              </h3>
+
+              <p>
+                <strong>@${cliente.username || "—"}</strong>
+              </p>
+
+              <p>
+                ${cliente.email || "—"}
+              </p>
+
+            </div>
+
+            <div
+              style="
+                text-align:right;
+                min-width:150px;
+              "
+            >
+
+              <p>
+                <span style="color:#8d9bad;">
+                  Cadastro
+                </span>
+              </p>
+
+              <strong>
+                ${data}
+              </strong>
+
+            </div>
+
+          </div>
+        `;
+
+      })
+      .join("");
+
+  } catch (erro) {
+
+    console.error(
+      "Erro ao carregar clientes:",
+      erro
+    );
+
+    document.getElementById("listaClientes").innerHTML = `
+      <div class="empty">
+        <div class="empty-icon">⚠️</div>
+        <h3>Erro ao carregar clientes</h3>
+        <p>${erro.message}</p>
+      </div>
+    `;
+  }
+}
+
+carregarClientes();
+
+</script>

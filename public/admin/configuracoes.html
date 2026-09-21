@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Configurações - Brevon Recarga</title>
+  <link rel="stylesheet" href="/admin/style.css">
+</head>
+
+<body>
+
+<aside class="sidebar">
+
+  <div class="sidebar-brand">
+    <div class="sidebar-logo">
+      <img src="/assets/brevon-logo.png" alt="Brevon">
+    </div>
+
+    <div class="sidebar-name">
+      <strong>Brevon</strong>
+      <span>Recarga</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+
+    <a href="/admin/dashboard.html" class="nav-item">
+      <span class="nav-icon">⌂</span>
+      <span>Dashboard</span>
+    </a>
+
+    <a href="/admin/pedidos.html" class="nav-item">
+      <span class="nav-icon">▣</span>
+      <span>Pedidos</span>
+    </a>
+
+    <a href="/admin/clientes.html" class="nav-item">
+      <span class="nav-icon">♙</span>
+      <span>Clientes</span>
+    </a>
+
+    <a href="/admin/operadoras.html" class="nav-item">
+      <span class="nav-icon">◉</span>
+      <span>Operadoras</span>
+    </a>
+
+    <a href="/admin/recargas.html" class="nav-item">
+      <span class="nav-icon">◇</span>
+      <span>Recargas</span>
+    </a>
+
+    <a href="/admin/configuracoes.html" class="nav-item active">
+      <span class="nav-icon">⚙</span>
+      <span>Configurações</span>
+    </a>
+
+  </nav>
+
+  <div class="sidebar-secure">
+    <div class="secure-icon">✓</div>
+
+    <div>
+      <strong>Painel Seguro</strong>
+      <span>Acesso restrito</span>
+    </div>
+
+    <i></i>
+  </div>
+
+</aside>
+
+
+<div class="admin-content">
+
+  <header class="topbar">
+
+    <div class="mobile-brand">
+      <div class="mobile-logo">
+        <img src="/assets/brevon-logo.png" alt="Brevon">
+      </div>
+      <strong>Brevon <span>Recarga</span></strong>
+    </div>
+
+    <button id="btnSair" class="logout-btn">
+      <span>↪</span>
+      Sair
+    </button>
+
+  </header>
+
+
+  <main class="dashboard">
+
+    <section class="welcome">
+      <div class="page-title">
+        <div class="page-icon">⚙</div>
+        <div>
+          <span class="eyebrow">CONFIGURAÇÃO</span>
+          <h1>Configurações</h1>
+          <p>Configure o funcionamento da plataforma Brevon.</p>
+        </div>
+      </div>
+
+      <div class="status-online">
+        <span></span>
+        Sistema online
+      </div>
+    </section>
+
+    <section class="panel">
+
+      <div class="panel-header">
+        <div>
+          <span class="section-tag">CONFIGURAÇÕES</span>
+          <h2>Modo de Recarga</h2>
+          <p>Configure separadamente o modo de recarga de cada operadora.</p>
+        </div>
+      </div>
+
+      <div id="modosRecarga" class="mode-list">
+        <p>Carregando modos...</p>
+      </div>
+
+    </section>
+
+  </main>
+
+</div>
+
+<script>
+async function verificarAdmin() {
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/me"
+      );
+const dados = await resposta.json();
+
+if (
+  dados.success &&
+  dados.pedido &&
+  dados.pedido.id
+) {
+  localStorage.setItem(
+    "zenvoki_pedido_id",
+    dados.pedido.id
+  );
+}
+
+if (!resposta.ok) {
+  throw new Error(
+    dados.error || "Não foi possível gerar o Pix."
+  );
+}
+    if (!resposta.ok) {
+
+      window.location.href =
+        "/admin/";
+
+      return false;
+
+    }
+
+    return true;
+
+  } catch (erro) {
+
+    window.location.href =
+      "/admin/";
+
+    return false;
+
+  }
+
+}
+
+async function carregarModoRecarga() {
+
+  const container =
+    document.getElementById("modosRecarga");
+
+  if (!container) return;
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/recharge-mode"
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Não foi possível carregar os modos."
+      );
+    }
+
+    const modos =
+      dados.modosRecarga || {};
+
+    let html = "";
+
+    for (
+      const operadora of ["TIM", "CLARO", "VIVO"]
+    ) {
+
+      const modoAtual =
+        modos[operadora] ||
+        "sem_codigo";
+
+      const nome =
+        operadora === "TIM"
+          ? "🔵 TIM"
+          : operadora === "CLARO" ? "🔴 CLARO" : "VIVO";
+
+      html += `
+
+        <div
+          style="
+            padding:18px;
+            border-radius:14px;
+            background:#181818;
+            border:1px solid #292929;
+          "
+        >
+
+          <h3 style="margin-top:0;">
+            ${nome}
+          </h3>
+
+          <div
+            style="
+              display:flex;
+              flex-direction:column;
+              gap:10px;
+              margin-top:12px;
+            "
+          >
+
+            <label
+              style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:12px;
+                border-radius:10px;
+                background:#222;
+                cursor:pointer;
+              "
+            >
+
+              <input
+                type="radio"
+                name="modo-${operadora}"
+                value="sem_codigo"
+                ${modoAtual === "sem_codigo" ? "checked" : ""}
+              >
+
+              <span>
+                <strong>⚡ Sem código</strong>
+                <small style="display:block;opacity:.7;">
+                  Processar sem solicitar código.
+                </small>
+              </span>
+
+            </label>
+
+            <label
+              style="
+                display:flex;
+                align-items:center;
+                gap:10px;
+                padding:12px;
+                border-radius:10px;
+                background:#222;
+                cursor:pointer;
+              "
+            >
+
+              <input
+                type="radio"
+                name="modo-${operadora}"
+                value="com_codigo"
+                ${modoAtual === "com_codigo" ? "checked" : ""}
+              >
+
+              <span>
+                <strong>🔐 Com código</strong>
+                <small style="display:block;opacity:.7;">
+                  Solicitar código ao cliente.
+                </small>
+              </span>
+
+            </label>
+
+          </div>
+
+          <button
+            type="button"
+            onclick="salvarModoRecarga('${operadora}')"
+            style="
+              margin-top:15px;
+              padding:11px 16px;
+              border:0;
+              border-radius:9px;
+              cursor:pointer;
+            "
+          >
+            💾 Salvar ${operadora}
+          </button>
+
+          <p
+            id="statusModo-${operadora}"
+            style="margin-bottom:0;"
+          ></p>
+
+        </div>
+
+      `;
+    }
+
+    container.innerHTML = html;
+
+  } catch (error) {
+
+    container.innerHTML = `
+      <p style="color:#ff6b6b;">
+        Erro: ${error.message}
+      </p>
+    `;
+
+  }
+}
+
+async function salvarModoRecarga(
+  operadora
+) {
+
+  const selecionado =
+    document.querySelector(
+      `input[name="modo-${operadora}"]:checked`
+    );
+
+  const status =
+    document.getElementById(
+      `statusModo-${operadora}`
+    );
+
+  if (!selecionado) {
+
+    status.textContent =
+      "Selecione um modo.";
+
+    return;
+  }
+
+  try {
+
+    const resposta =
+      await fetch(
+        "/api/admin/recharge-mode",
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body:
+            JSON.stringify({
+              operadora,
+              modoRecarga:
+                selecionado.value
+            })
+        }
+      );
+
+    const dados =
+      await resposta.json();
+
+    if (!resposta.ok) {
+      throw new Error(
+        dados.error ||
+        "Não foi possível salvar."
+      );
+    }
+
+    status.style.color = "#4ade80";
+
+    status.textContent =
+      "✅ " +
+      dados.message;
+
+  } catch (error) {
+
+    status.style.color = "#ff6b6b";
+
+    status.textContent =
+      "❌ " +
+      error.message;
+  }
+}
+
+carregarModoRecarga();
+</script>
+
+</body>
+
+</html>
