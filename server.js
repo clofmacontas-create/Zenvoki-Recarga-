@@ -2210,5 +2210,4 @@ app.get(
 
     process.exit(1);
   }
-require("./recarga-bot.js");
 })();
