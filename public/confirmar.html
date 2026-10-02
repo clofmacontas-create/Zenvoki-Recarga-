@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>Confirmar Recarga - Zenvoki Recarga</title>
+  <title>Confirmar Recarga - Recarga Prime</title>
 
   <link rel="stylesheet" href="/style.css">
 </head>
@@ -14,7 +14,7 @@
   <main class="container">
 
     <header class="logo">
-      <h1>Zenvoki <span>Recarga</span></h1>
+      <h1>Recarga Prime</h1>
       <p>Confirme seu pedido</p>
     </header>
 
@@ -154,7 +154,7 @@ async function carregarModoRecarga() {
   try {
 
     const resposta =
-      await fetch("/api/recharge-mode");
+      await fetch("/api/recharge-mode?operadora=" + encodeURIComponent(operadora));
 
     const dados =
       await resposta.json();
