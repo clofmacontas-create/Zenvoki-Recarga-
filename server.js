@@ -2177,6 +2177,10 @@ app.get(
 // SERVIDOR
 // =========================
 
+app.get("/admin", (req, res) => {
+  res.sendFile(path.join(__dirname, "public", "admin", "index.html"));
+});
+
 (async () => {
   try {
     console.log("ENV CHECK:", {
